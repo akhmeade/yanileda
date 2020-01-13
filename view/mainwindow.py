@@ -1,5 +1,10 @@
 # This Python file uses the following encoding: utf-8
 
-class MainWindow:
+from PyQt5.QtWidgets import QMainWindow
+from PyQt5 import uic
+
+class MainWindow(QMainWindow):
     def __init__(self):
-        pass  # call __init__(self) of the custom base class here
+        super().__init__()
+        uic.loadUi("view/mainwindow.ui", self)
+
