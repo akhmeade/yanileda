@@ -1,0 +1,3 @@
+{
+    "files": ["presenter/__init__.py","view/__init__.py","main.py","view/mainwindow.py","model/__init__.py"]
+}
