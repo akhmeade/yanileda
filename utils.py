@@ -1,4 +1,6 @@
-# This Python file uses the following encoding: utf-8
+#encoding: utf-8
 
-# if__name__ == "__main__":
-#     pass
+def create_url(url, name = None):
+    if name is None:
+        name = url
+    return '<a href="' + url + '">' + name + '</a>'
