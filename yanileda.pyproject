@@ -1,3 +1,3 @@
 {
-    "files": ["view/connection_dialog.py","view/mainwindow.ui","forms/connection_dialog.ui","view/file_system.ui","presenter/__init__.py","view/iview.py","presenter/ipresenter.py","utils.py","view/mainwindow.py","forms/mainwindow.ui","presenter/presenter.py","main.py","view/file_systems.py","model/__init__.py","forms/file_system.ui","view/__init__.py","model/imodel.py","view/view.py","model/model.py"]
+    "files": ["view/connection_dialog.py","view/mainwindow.ui","magic_const.py","forms/connection_dialog.ui","view/file_system.ui","presenter/__init__.py","view/iview.py","presenter/ipresenter.py","utils.py","view/mainwindow.py","forms/mainwindow.ui","presenter/presenter.py","main.py","view/file_systems.py","model/__init__.py","forms/file_system.ui","view/__init__.py","model/imodel.py","view/view.py","model/model.py"]
 }

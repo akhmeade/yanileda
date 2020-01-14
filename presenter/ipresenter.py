@@ -2,4 +2,7 @@
 
 class IPresenter:
     def connect_to_yadisk(self):
-        pass
+        raise NotImplementedError("Not implemented")
+
+    def verificate_auth(self, code):
+        raise NotImplementedError("Not implemented")
