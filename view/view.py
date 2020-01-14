@@ -30,5 +30,12 @@ class GuiView(QObject, IView):
     def send_verification_code(self, code):
         self.presenter.verificate_auth(code)
 
+    def set_is_verified(self, is_verified):
+        if is_verified:
+            self.mainwindow.close_connection_dialog()
+        else:
+            self.mainwindow.show_warning()
+
     def set_presenter(self, presenter):
         self.presenter = presenter
+

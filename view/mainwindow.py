@@ -38,5 +38,11 @@ class MainWindow(QMainWindow):
         code = self.dialog.code_box.toPlainText()
         self.send_verification_code.emit(code)
 
+    def show_warning(self):
+        self.dialog.show_warning()
+
+    def close_connection_dialog(self):
+        self.dialog.close()
+
 
 

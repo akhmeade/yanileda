@@ -13,6 +13,7 @@ class Presenter(IPresenter):
         self.view.set_verification_url(url)
 
     def verificate_auth(self, code):
-        if not self.model.set_verification_code(code):
-            print("BAD")
+        is_verified = self.model.set_verification_code(code)
+        self.view.set_is_verified(is_verified)
+
 
