@@ -11,6 +11,7 @@ from .file_systems import FileSystem
 class MainWindow(QMainWindow):
 
     connect_to_yadisk_signal = pyqtSignal()
+    send_verification_code = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -30,8 +31,12 @@ class MainWindow(QMainWindow):
 
     def open_connection_dialog(self, url):
         self.dialog = ConnectionDialog(url)
+        self.dialog.accepted.connect(self.get_verification_code)
         self.dialog.show()
 
+    def get_verification_code(self):
+        code = self.dialog.code_box.toPlainText()
+        self.send_verification_code.emit(code)
 
 
 

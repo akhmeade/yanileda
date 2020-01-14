@@ -19,6 +19,7 @@ class GuiView(QObject, IView):
 
     def connect_to_actions(self):
         self.mainwindow.connect_to_yadisk_signal.connect(self.connect_to_yadisk)
+        self.mainwindow.send_verification_code.connect(self.send_verification_code)
 
     def connect_to_yadisk(self):
         self.presenter.connect_to_yadisk()
@@ -26,8 +27,8 @@ class GuiView(QObject, IView):
     def set_verification_url(self, url):
         self.mainwindow.open_connection_dialog(url)
 
-    def send_connection_code(self):
-        pass
+    def send_verification_code(self, code):
+        self.presenter.verificate_auth(code)
 
     def set_presenter(self, presenter):
         self.presenter = presenter

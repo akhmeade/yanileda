@@ -21,7 +21,10 @@ class Model(IModel):
         except yadisk.exceptions.BadRequestError:
             return False
 
+
         self.disk.token = response.access_token
+
+        print("Check ver", self.disk.check_token())
 
         return self.disk.check_token()
 

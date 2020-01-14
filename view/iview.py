@@ -13,7 +13,7 @@ class IView:
     def set_verification_url(self, url):
         raise NotImplementedError("Not implemented")
 
-    def send_connection_code(self, code):
+    def send_verification_code(self, code):
         raise NotImplementedError("Not implemented")
 
 
