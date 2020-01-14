@@ -1,6 +1,8 @@
 # This Python file uses the following encoding: utf-8
 import sys
-from view import view
+from view.view import GuiView
+from
+
 from PyQt5.QtWidgets import QApplication
 
 if __name__ == "__main__":
