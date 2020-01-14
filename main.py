@@ -1,10 +1,12 @@
 # This Python file uses the following encoding: utf-8
 import sys
+
+from PyQt5.QtWidgets import QApplication
+
+
 from view.view import GuiView
 from presenter.presenter import Presenter
 from model.model import Model
-
-from PyQt5.QtWidgets import QApplication
 
 if __name__ == "__main__":
     app = QApplication([])

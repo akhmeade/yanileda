@@ -1,4 +1,5 @@
 # encoding: utf-8
 
 class IPresenter:
-    pass
+    def connect_to_yadisk(self):
+        pass

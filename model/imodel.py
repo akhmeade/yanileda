@@ -1,4 +1,5 @@
 # encoding: utf-8
 
 class IModel:
-    pass
+    def get_verification_url(self):
+        raise NotImplementedError("Not implemented")

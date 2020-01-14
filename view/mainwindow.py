@@ -3,11 +3,15 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSignal
 
 from .connection_dialog import ConnectionDialog
 from .file_systems import FileSystem
 
 class MainWindow(QMainWindow):
+
+    connect_to_yadisk_signal = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         uic.loadUi("forms/mainwindow.ui", self)
@@ -19,10 +23,15 @@ class MainWindow(QMainWindow):
 
 
     def connect_to_actions(self):
-        self.connect_to_yadisk.triggered.connect(self.open_connection_dialog)
+        self.connect_to_yadisk_action.triggered.connect(self.connect_to_yadisk)
 
-    def open_connection_dialog(self):
-        self.dialog = ConnectionDialog("http:/habr.com")
+    def connect_to_yadisk(self):
+        self.connect_to_yadisk_signal.emit()
+
+    def open_connection_dialog(self, url):
+        self.dialog = ConnectionDialog(url)
         self.dialog.show()
+
+
 
 

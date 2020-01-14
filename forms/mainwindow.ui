@@ -39,18 +39,18 @@
     <property name="title">
      <string>Connect</string>
     </property>
-    <addaction name="connect_to_yadisk"/>
-    <addaction name="disconnect"/>
+    <addaction name="connect_to_yadisk_action"/>
+    <addaction name="disconnect_action"/>
    </widget>
    <addaction name="menuConnect"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="connect_to_yadisk">
+  <action name="connect_to_yadisk_action">
    <property name="text">
     <string>Connect to YaDisk</string>
    </property>
   </action>
-  <action name="disconnect">
+  <action name="disconnect_action">
    <property name="text">
     <string>Disconnect</string>
    </property>

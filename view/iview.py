@@ -7,7 +7,10 @@ class IView:
     def set_presenter(self, presenter):
         raise NotImplementedError("Not implemented")
 
-    def connect(self):
+    def connect_to_yadisk(self):
+        raise NotImplementedError("Not implemented")
+
+    def set_verification_url(self, url):
         raise NotImplementedError("Not implemented")
 
     def send_connection_code(self, code):
