@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
 
 
     def connect_to_actions(self):
-        self.connect_to_yadisk_action.triggered.connect(self.open_connection_dialog)
+        self.connect_to_yadisk.triggered.connect(self.open_connection_dialog)
 
     def open_connection_dialog(self):
         self.dialog = ConnectionDialog("http:/habr.com")
