@@ -42,3 +42,10 @@ class GuiView(QObject, IView):
         else:
             self.dialog.show_warning()
 
+    def show_local_listdir(self, listdir, path):
+        self.mainwindow.show_local_listdir(listdir, path)
+
+    def show_yadisk_listdir(self, listdir, path):
+        self.mainwindow.show_yadisk_listdir(listdir, path)
+
+

@@ -5,7 +5,6 @@ from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import pyqtSignal
 
-from .connection_dialog import ConnectionDialog
 from .file_systems import FileSystem
 
 class MainWindow(QMainWindow):
@@ -15,10 +14,10 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("forms/mainwindow.ui", self)
-        self.local_file_system = FileSystem("Local file system")
-        self.yandex_disk = FileSystem("Yandex Disk")
-        self.layout.addWidget(self.local_file_system)
-        self.layout.addWidget(self.yandex_disk)
+        self.local_files = FileSystem("Local file system")
+        self.yadisk_files = FileSystem("Yandex Disk")
+        self.layout.addWidget(self.local_files)
+        self.layout.addWidget(self.yadisk_files)
         self.connect_to_actions()
         self.show_status("Not connected")
 
@@ -31,5 +30,11 @@ class MainWindow(QMainWindow):
 
     def show_status(self, message):
         self.statusBar().showMessage(message)
+
+    def show_local_listdir(self, listdir, path):
+        self.local_files.show_listdir(listdir, path)
+
+    def show_yadisk_listdir(self, listdir, path):
+        self.yadisk_files.show_listdir(listdir, path)
 
 

@@ -15,5 +15,8 @@ class Presenter(IPresenter):
     def verificate_auth(self, code):
         is_verified = self.model.set_verification_code(code)
         self.view.set_is_verified(is_verified)
+        if is_verified:
+            self.view.show_yadisk_listdir(*self.model.get_yadisk_listdir())
+            self.view.show_local_listdir(*self.model.get_local_listdir())
 
 

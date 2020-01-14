@@ -6,3 +6,7 @@ class IModel:
 
     def set_verification_code(self, code):
         raise NotImplementedError("Not implemented")
+
+    def get_yadisk_listdir(self, path = 'disk:/'):
+        raise NotImplementedError("Not implemented")
+

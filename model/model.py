@@ -1,4 +1,5 @@
 # encoding: utf-8
+import os
 
 import yadisk
 
@@ -28,3 +29,15 @@ class Model(IModel):
 
         return self.disk.check_token()
 
+    def get_yadisk_listdir(self, path = 'disk:/'):
+        self.current_path = path
+        names = []
+        for i in self.disk.listdir(path):
+            names.append(i.name)
+        
+        return names, path
+
+    def get_local_listdir(self, path = None):
+        if path is None:
+            path = os.getcwd()
+        return os.listdir(path), path
