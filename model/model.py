@@ -1,4 +1,7 @@
 # encoding: utf-8
 
-# if__name__ == "__main__":
-#     pass
+from .imodel import IModel
+
+class Model(IModel):
+    def __init__(self):
+        super().__init__()

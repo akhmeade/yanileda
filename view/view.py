@@ -10,9 +10,13 @@ class GuiView(IView):
     def __init__(self):
         self.mainwindow = MainWindow()
         self.mainwindow.show()
+        self.presenter = None
 
     def connect(self):
         pass
 
     def send_connection_code(self):
         pass
+
+    def set_presenter(self, presenter):
+        self.presenter = presenter

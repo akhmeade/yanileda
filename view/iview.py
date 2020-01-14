@@ -4,6 +4,8 @@ class IView:
     """
     Interface of View in MVP-architecture
     """
+    def set_presenter(self, presenter):
+        raise NotImplementedError("Not implemented")
 
     def connect(self):
         raise NotImplementedError("Not implemented")
