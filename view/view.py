@@ -20,6 +20,9 @@ class GuiView(QObject, IView):
     def connect_to_actions(self):
         self.mainwindow.connect_to_yadisk_signal.connect(self.connect_to_yadisk)
 
+    def set_presenter(self, presenter):
+        self.presenter = presenter
+
     def connect_to_yadisk(self):
         self.presenter.connect_to_yadisk()
 
@@ -35,9 +38,7 @@ class GuiView(QObject, IView):
     def set_is_verified(self, is_verified):
         if is_verified:
             self.dialog.close()
+            self.mainwindow.show_status("Connected to Yandex Disk")
         else:
             self.dialog.show_warning()
-
-    def set_presenter(self, presenter):
-        self.presenter = presenter
 

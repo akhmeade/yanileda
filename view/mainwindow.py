@@ -20,6 +20,7 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.local_file_system)
         self.layout.addWidget(self.yandex_disk)
         self.connect_to_actions()
+        self.show_status("Not connected")
 
 
     def connect_to_actions(self):
@@ -27,5 +28,8 @@ class MainWindow(QMainWindow):
 
     def connect_to_yadisk(self):
         self.connect_to_yadisk_signal.emit()
+
+    def show_status(self, message):
+        self.statusBar().showMessage(message)
 
 
