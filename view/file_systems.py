@@ -55,5 +55,9 @@ class FileSystem(QWidget):
     def get_previous_folder(self):
         current = self.path_box.text()
         previous, _ = os.path.split(current)
-        previous += "/"
+
+        # if previous[-1] != '/' and previous[-1] != '\\':
+        #     previous += "/"
+        if previous == 'disk:':
+            previous = 'disk:/'
         self.double_clicked.emit(previous)

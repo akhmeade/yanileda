@@ -22,10 +22,9 @@ class Model(IModel):
         except yadisk.exceptions.BadRequestError:
             return False
 
-
         self.disk.token = response.access_token
 
-        print("Check ver", self.disk.check_token())
+        #print("Check ver", self.disk.check_token())
 
         return self.disk.check_token()
 
@@ -36,17 +35,18 @@ class Model(IModel):
         if not self.disk.is_dir(path):
             return None
 
-
         names = []
         for i in self.disk.listdir(path):
             names.append((i.name, i.created.strftime("%Y-%m-%d, %H:%M:%S")))
-        print(names, path)
+        #print(names, path)
         
         return names, path
 
     def get_local_listdir(self, path = None):
         if path is None:
             path = os.getcwd()
+        if not os.path.isdir(path):
+            return None
         names = os.listdir(path)
         names = list(map(lambda x: (x,), names))
         return names, path
