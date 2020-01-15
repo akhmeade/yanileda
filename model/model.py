@@ -33,11 +33,13 @@ class Model(IModel):
         self.current_path = path
         names = []
         for i in self.disk.listdir(path):
-            names.append(i.name)
+            names.append((i.name, i.created.strftime("%Y-%m-%d, %H:%M:%S")))
         
         return names, path
 
     def get_local_listdir(self, path = None):
         if path is None:
             path = os.getcwd()
-        return os.listdir(path), path
+        names = os.listdir(path)
+        names = list(map(lambda x: (x,), names))
+        return names, path

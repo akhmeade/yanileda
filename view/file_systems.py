@@ -16,9 +16,15 @@ class FileSystem(QWidget):
 
         self.path_box.setPlainText(path)
 
-        model = QStandardItemModel(len(listdir), 1)
+        if len(listdir) > 0:
+            model = QStandardItemModel(len(listdir), len(listdir[0]))
+        else:
+            model = QStandardItemModel(len(listdir), 1)
 
-        for n, name in enumerate(listdir):
-            item = QStandardItem(name)
-            model.setItem(n, 0, item)
+
+        for n, file_info in enumerate(listdir):
+            for m, info in enumerate(file_info):
+                item = QStandardItem(info)
+                model.setItem(n, m, item)
         self.listdir.setModel(model)
+        self.listdir.resizeColumnsToContents()
