@@ -15,7 +15,12 @@ class FileSystem(QWidget):
         super().__init__()
         uic.loadUi("forms/file_system.ui", self)
         self.file_system_name.setText(file_system_name)
+        self.connect_to_actions()
+
+    def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
+        self.path_box.editingFinished.connect(self.get_listdir)
+        self.back_button.clicked.connect(self.get_previous_folder)
 
     def show_listdir(self, listdir, path):
 
@@ -43,4 +48,12 @@ class FileSystem(QWidget):
         path = os.path.join(directory, name)
         self.double_clicked.emit(path)
 
+    def get_listdir(self):
+        path = self.path_box.text()
+        self.double_clicked.emit(path)
     
+    def get_previous_folder(self):
+        current = self.path_box.text()
+        previous, _ = os.path.split(current)
+        previous += "/"
+        self.double_clicked.emit(previous)
