@@ -7,7 +7,7 @@ from .imodel import IModel
 
 import magic_const
 
-class Model(IModel):
+class YadiskModel(IModel):
     def __init__(self):
         super().__init__()
 
@@ -28,7 +28,7 @@ class Model(IModel):
 
         return self.disk.check_token()
 
-    def get_yadisk_listdir(self, path = None):
+    def get_listdir(self, path = None):
         if path is None:
             path = "disk:/"
 
@@ -37,16 +37,8 @@ class Model(IModel):
 
         names = []
         for i in self.disk.listdir(path):
-            names.append((i.name, i.created.strftime("%Y-%m-%d, %H:%M:%S")))
+            names.append(
+                (i.name, i.created.strftime(magic_const.DATETIME_FORMAT)))
         #print(names, path)
         
-        return names, path
-
-    def get_local_listdir(self, path = None):
-        if path is None:
-            path = os.getcwd()
-        if not os.path.isdir(path):
-            return None
-        names = os.listdir(path)
-        names = list(map(lambda x: (x,), names))
         return names, path

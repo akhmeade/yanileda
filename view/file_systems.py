@@ -23,7 +23,6 @@ class FileSystem(QWidget):
         self.back_button.clicked.connect(self.get_previous_folder)
 
     def show_listdir(self, listdir, path):
-
         self.path_box.setText(path)
 
         if len(listdir) > 0:
