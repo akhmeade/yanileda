@@ -19,6 +19,8 @@ class GuiView(QObject, IView):
 
     def connect_to_actions(self):
         self.mainwindow.connect_to_yadisk_signal.connect(self.connect_to_yadisk)
+        self.mainwindow.get_local_listdir.connect(self.get_local_listdir)
+        self.mainwindow.get_yadisk_listdir.connect(self.get_yadisk_listdir)
 
     def set_presenter(self, presenter):
         self.presenter = presenter
@@ -41,11 +43,17 @@ class GuiView(QObject, IView):
             self.mainwindow.show_status("Connected to Yandex Disk")
         else:
             self.dialog.show_warning()
+    def get_yadisk_listdir(self, path):
+        self.presenter.get_yadisk_listdir(path)
+
+    def get_local_listdir(self, path):
+        self.presenter.get_local_listdir(path)
 
     def show_local_listdir(self, listdir, path):
         self.mainwindow.show_local_listdir(listdir, path)
 
     def show_yadisk_listdir(self, listdir, path):
         self.mainwindow.show_yadisk_listdir(listdir, path)
+    
 
 

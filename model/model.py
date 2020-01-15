@@ -29,11 +29,18 @@ class Model(IModel):
 
         return self.disk.check_token()
 
-    def get_yadisk_listdir(self, path = 'disk:/'):
-        self.current_path = path
+    def get_yadisk_listdir(self, path = None):
+        if path is None:
+            path = "disk:/"
+
+        if not self.disk.is_dir(path):
+            return None
+
+
         names = []
         for i in self.disk.listdir(path):
             names.append((i.name, i.created.strftime("%Y-%m-%d, %H:%M:%S")))
+        print(names, path)
         
         return names, path
 

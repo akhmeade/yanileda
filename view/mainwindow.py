@@ -10,6 +10,8 @@ from .file_systems import FileSystem
 class MainWindow(QMainWindow):
 
     connect_to_yadisk_signal = pyqtSignal()
+    get_yadisk_listdir = pyqtSignal(str)
+    get_local_listdir = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -24,6 +26,8 @@ class MainWindow(QMainWindow):
 
     def connect_to_actions(self):
         self.connect_to_yadisk_action.triggered.connect(self.connect_to_yadisk)
+        self.local_files.double_clicked.connect(self.get_local_listdir)
+        self.yadisk_files.double_clicked.connect(self.get_yadisk_listdir)
 
     def connect_to_yadisk(self):
         self.connect_to_yadisk_signal.emit()
