@@ -19,7 +19,7 @@ class FileSystem(QWidget):
 
     def show_listdir(self, listdir, path):
 
-        self.path_box.setPlainText(path)
+        self.path_box.setText(path)
 
         if len(listdir) > 0:
             self.model = QStandardItemModel(len(listdir), len(listdir[0]))
@@ -39,7 +39,7 @@ class FileSystem(QWidget):
 
         name = self.model.item(row).text()
 
-        directory = self.path_box.toPlainText()
+        directory = self.path_box.text()
         path = os.path.join(directory, name)
         self.double_clicked.emit(path)
 
