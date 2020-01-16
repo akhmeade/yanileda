@@ -16,6 +16,7 @@ class FileSystem(QWidget):
         uic.loadUi("forms/file_system.ui", self)
         self.file_system_name.setText(file_system_name)
         self.connect_to_actions()
+        self.model = None
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)

@@ -54,6 +54,3 @@ class GuiView(QObject, IView):
 
     def show_yadisk_listdir(self, listdir, path):
         self.mainwindow.show_yadisk_listdir(listdir, path)
-    
-
-
