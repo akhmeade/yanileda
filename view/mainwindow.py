@@ -1,5 +1,7 @@
 # This Python file uses the following encoding: utf-8
 
+import os
+
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
@@ -12,6 +14,7 @@ class MainWindow(QMainWindow):
     connect_to_yadisk_signal = pyqtSignal()
     get_yadisk_listdir = pyqtSignal(str)
     get_local_listdir = pyqtSignal(str)
+    move_file_signal = pyqtSignal(str, str)
 
     def __init__(self):
         super().__init__()
@@ -28,6 +31,8 @@ class MainWindow(QMainWindow):
         self.connect_to_yadisk_action.triggered.connect(self.connect_to_yadisk)
         self.local_files.double_clicked.connect(self.get_local_listdir)
         self.yadisk_files.double_clicked.connect(self.get_yadisk_listdir)
+        self.yadisk_files.move_clicked.connect(self.move_file_from_yadisk)
+        self.local_files.move_clicked.connect(self.move_file_from_local)
 
     def connect_to_yadisk(self):
         self.connect_to_yadisk_signal.emit()
@@ -40,5 +45,23 @@ class MainWindow(QMainWindow):
 
     def show_yadisk_listdir(self, listdir, path):
         self.yadisk_files.show_listdir(listdir, path)
+    def move_file_from_yadisk(self):
+        from_path = self.yadisk_files.get_folder_path()
+        to_path = self.local_files.get_folder_path()
+        
+        file_name = self.yadisk_files.get_file_name()
+        from_path = os.path.join(from_path, file_name)
+        to_path = os.path.join(to_path, file_name)
+        self.move_file_signal.emit(from_path, to_path)
+
+    def move_file_from_local(self):
+        from_path = self.local_files.get_folder_path()
+        to_path = self.yadisk_files.get_folder_path()
+        
+        file_name = self.local_files.get_file_name()
+        from_path = os.path.join(from_path, file_name)
+        to_path = os.path.join(to_path, file_name)
+        self.move_file_signal.emit(from_path, to_path)
+
 
 

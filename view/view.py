@@ -21,6 +21,7 @@ class GuiView(QObject, IView):
         self.mainwindow.connect_to_yadisk_signal.connect(self.connect_to_yadisk)
         self.mainwindow.get_local_listdir.connect(self.get_local_listdir)
         self.mainwindow.get_yadisk_listdir.connect(self.get_yadisk_listdir)
+        self.mainwindow.move_file_signal.connect(self.move_file)
 
     def set_presenter(self, presenter):
         self.presenter = presenter
@@ -54,3 +55,6 @@ class GuiView(QObject, IView):
 
     def show_yadisk_listdir(self, listdir, path):
         self.mainwindow.show_yadisk_listdir(listdir, path)
+    
+    def move_file(self, from_file, to_file):
+        self.presenter.move_file(from_file, to_file)

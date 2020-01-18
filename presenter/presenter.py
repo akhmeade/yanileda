@@ -30,5 +30,7 @@ class Presenter(IPresenter):
         local_listdir = self.local_model.get_listdir(path)
         if not local_listdir is None:
             self.view.show_local_listdir(*local_listdir)
+    def move_file(self, from_path, to_path):
+        self.yadisk_model.move_file(from_path, to_path)
 
 

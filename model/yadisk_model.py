@@ -42,3 +42,17 @@ class YadiskModel(IModel):
         #print(names, path)
         
         return names, path
+    
+    def move_file(self, from_path, to_path):
+        if from_path.startswith(magic_const.YADISK_PREFIX):
+            self.download(from_path, to_path)
+        else:
+            self.upload(from_path, to_path)
+    
+    def upload(self, from_path, to_path):
+        print('upload', from_path, to_path)
+        self.disk.upload(from_path, to_path)
+    
+    def download(self, from_path, to_path):
+        print('download', from_path, to_path)
+        self.disk.download(from_path, to_path)
