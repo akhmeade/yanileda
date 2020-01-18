@@ -46,22 +46,28 @@ class MainWindow(QMainWindow):
     def show_yadisk_listdir(self, listdir, path):
         self.yadisk_files.show_listdir(listdir, path)
     def move_file_from_yadisk(self):
-        from_path = self.yadisk_files.get_folder_path()
-        to_path = self.local_files.get_folder_path()
+        from_folder = self.yadisk_files.get_folder_path()
+        to_folder = self.local_files.get_folder_path()
         
         file_name = self.yadisk_files.get_file_name()
-        from_path = os.path.join(from_path, file_name)
-        to_path = os.path.join(to_path, file_name)
+        from_path = os.path.join(from_folder, file_name)
+        to_path = os.path.join(to_folder, file_name)
         self.move_file_signal.emit(from_path, to_path)
+
 
     def move_file_from_local(self):
-        from_path = self.local_files.get_folder_path()
-        to_path = self.yadisk_files.get_folder_path()
+        from_folder = self.local_files.get_folder_path()
+        to_folder = self.yadisk_files.get_folder_path()
         
         file_name = self.local_files.get_file_name()
-        from_path = os.path.join(from_path, file_name)
-        to_path = os.path.join(to_path, file_name)
+        from_path = os.path.join(from_folder, file_name)
+        to_path = os.path.join(to_folder, file_name)
         self.move_file_signal.emit(from_path, to_path)
-
+    
+    def get_yadisk_folder_name(self):
+        return self.yadisk_files.get_folder_path()
+    
+    def get_local_folder_name(self):
+        return self.local_files.get_folder_path()
 
 

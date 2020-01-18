@@ -30,7 +30,7 @@ class YadiskModel(IModel):
 
     def get_listdir(self, path = None):
         if path is None:
-            path = "disk:/"
+            path = magic_const.YADISK_PREFIX
 
         if not self.disk.is_dir(path):
             return None
@@ -51,7 +51,7 @@ class YadiskModel(IModel):
     
     def upload(self, from_path, to_path):
         print('upload', from_path, to_path)
-        self.disk.upload(from_path, to_path)
+        self.disk.upload(from_path, to_path, overwrite = True)
     
     def download(self, from_path, to_path):
         print('download', from_path, to_path)

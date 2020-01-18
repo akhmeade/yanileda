@@ -58,3 +58,10 @@ class GuiView(QObject, IView):
     
     def move_file(self, from_file, to_file):
         self.presenter.move_file(from_file, to_file)
+        self.update()
+    
+    def update(self):
+        yadisk_folder = self.mainwindow.get_yadisk_folder_name()
+        local_folder = self.mainwindow.get_local_folder_name()
+        self.get_yadisk_listdir(yadisk_folder)
+        self.get_local_listdir(local_folder)
