@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 
-import os
+from pathlib import Path
 
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QStandardItemModel
@@ -48,18 +48,17 @@ class FileSystem(QWidget):
 
         name = self.model.item(row).text()
 
-        directory = self.path_box.text()
-        path = os.path.join(directory, name)
-        self.double_clicked.emit(path)
+        directory = Path(self.path_box.text())
+        path = directory / name
+        self.double_clicked.emit(path.as_posix())
 
     def get_listdir(self):
         path = self.path_box.text()
         self.double_clicked.emit(path)
     
     def get_previous_folder(self):
-        current = self.path_box.text()
-        previous, _ = os.path.split(current)
-
+        current = Path(self.path_box.text())
+        previous = current.parent.as_posix()
         # if previous[-1] != '/' and previous[-1] != '\\':
         #     previous += "/"
         if previous == 'disk:':

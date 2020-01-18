@@ -1,5 +1,4 @@
 # encoding: utf-8
-import os
 
 import yadisk
 
@@ -36,7 +35,9 @@ class YadiskModel(IModel):
             return None
 
         names = []
-        for i in self.disk.listdir(path):
+        listdir = list(self.disk.listdir(path))
+        listdir.sort(key=lambda x: x.type == "dir", reverse=True)
+        for i in listdir:
             names.append(
                 (i.name, i.created.strftime(magic_const.DATETIME_FORMAT)))
         #print(names, path)
@@ -51,7 +52,7 @@ class YadiskModel(IModel):
     
     def upload(self, from_path, to_path):
         print('upload', from_path, to_path)
-        self.disk.upload(from_path, to_path, overwrite = True)
+        self.disk.upload(from_path, to_path, overwrite=True)
     
     def download(self, from_path, to_path):
         print('download', from_path, to_path)
