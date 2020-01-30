@@ -20,7 +20,7 @@ class Presenter(IPresenter):
             self.get_yadisk_listdir()
             self.get_local_listdir()
 
-    def get_yadisk_listdir(self, path = None):
+    def get_yadisk_listdir(self, path=None):
         #print(path)
         yadisk_listdir = self.yadisk_model.get_listdir(path)
         if not yadisk_listdir is None:
