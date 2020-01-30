@@ -38,6 +38,7 @@ class MainWindow(QMainWindow):
     
     def get_local_system(self):
         return self.local_files.currentWidget()
+    
     def get_yadisk(self):
         return self.yadisk_files.currentWidget()
 
@@ -49,7 +50,7 @@ class MainWindow(QMainWindow):
 
         self.local_files.addTab(file_system, "Local file system")
     
-    def add_cloud_file_system(self, name):
+    def add_bublic_file_system(self, name):
         file_system = FileSystem()
         self.yadisk_files.addTab(file_system, name)
 
@@ -62,7 +63,7 @@ class MainWindow(QMainWindow):
         #self.yadisk_files.addTab(FileSystem(), "name")
         #self.connect_to_yadisk_signal.emit()
     
-    def add_yadisk_tab(self):
+    def add_authorized_yadisk_tab(self):
         file_system = FileSystem()
         file_system.double_clicked.connect(self.get_yadisk_listdir)
         file_system.move_clicked.connect(self.move_file_from_yadisk)
@@ -70,8 +71,13 @@ class MainWindow(QMainWindow):
         self.yadisk_files.setCurrentWidget(file_system)
     
     def open_link(self):
-        self.add_yadisk_tab()
+        #self.add_yadisk_tab()
         self.open_link_signal.emit()
+    
+    def add_bublic_yadisk_tab(self, name):
+       file_system = FileSystem()
+       self.yadisk_files.addTab(file_system, name)
+       self.yadisk_files.setCurrentWidget(file_system)
 
     def show_status(self, message):
         self.statusBar().showMessage(message)

@@ -5,6 +5,7 @@ from PyQt5.QtCore import QObject
 from .iview import IView
 from .mainwindow import MainWindow
 from .connection_dialog import ConnectionDialog
+from .open_link_dialog import OpenLinkDialog
 
 class GuiView(QObject, IView):
     """
@@ -70,4 +71,11 @@ class GuiView(QObject, IView):
         self.get_local_listdir(local_folder)
     
     def open_link(self):
-        pass
+        self.dialog = OpenLinkDialog()
+        self.dialog.accepted.connect(self.send_bublic_url)
+        self.dialog.show()
+    
+    def send_bublic_url(self):
+        url = self.dialog.get_bublic_url()
+        print("bublic url", url)
+        #self.presenter.open_bublic_url(url)

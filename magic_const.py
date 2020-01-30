@@ -7,6 +7,8 @@ DATETIME_FORMAT = "%Y-%m-%d, %H:%M:%S"
 
 YADISK_PREFIX = "disk:/"
 
+LOCAL_FIL_SYSTEM_NAME = "Local file system"
+
 SECURITY_ALGORITMS = ['AES',
                       'Camellia',
                       'ChaCha20',

@@ -6,7 +6,7 @@ from .imodel import IModel
 
 import magic_const
 
-class YadiskModel(IModel):
+class AuthorizedYadiskModel(IModel):
     def __init__(self):
         super().__init__()
         self.disk = yadisk.YaDisk(magic_const.APP_ID, magic_const.APP_SECRET)
