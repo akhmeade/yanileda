@@ -23,7 +23,11 @@
       <height>551</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="layout"/>
+    <layout class="QHBoxLayout" name="h_layout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -37,10 +41,12 @@
    </property>
    <widget class="QMenu" name="menuConnect">
     <property name="title">
-     <string>Connect</string>
+     <string>File</string>
     </property>
     <addaction name="connect_to_yadisk_action"/>
     <addaction name="disconnect_action"/>
+    <addaction name="separator"/>
+    <addaction name="open_link_action"/>
    </widget>
    <addaction name="menuConnect"/>
   </widget>
@@ -53,6 +59,11 @@
   <action name="disconnect_action">
    <property name="text">
     <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="open_link_action">
+   <property name="text">
+    <string>Open link</string>
    </property>
   </action>
  </widget>

@@ -1,3 +1,3 @@
 {
-    "files": ["view/file_systems.py","magic_const.py","view/mainwindow.ui","main.py","forms/mainwindow.ui","presenter/__init__.py","presenter/ipresenter.py","forms/connection_dialog.ui","model/yadisk_model.py","model/__init__.py","view/__init__.py","view/iview.py","model/imodel.py","utils.py","view/file_system.ui","presenter/presenter.py","view/view.py","view/mainwindow.py","forms/file_system.ui","view/connection_dialog.py","model/local_model.py"]
+    "files": ["magic_const.py","view/file_system.ui","presenter/ipresenter.py","main.py","view/connection_dialog.py","view/view.py","forms/connection_dialog.ui","view/mainwindow.py","utils.py","view/file_systems.py","view/mainwindow.ui","model/yadisk_model.py","forms/file_system.ui","presenter/__init__.py","model/__init__.py","view/__init__.py","presenter/presenter.py","forms/mainwindow.ui","view/iview.py","model/local_model.py","model/imodel.py","forms/open_link_dialog.ui"]
 }

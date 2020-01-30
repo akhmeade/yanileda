@@ -22,6 +22,8 @@ class GuiView(QObject, IView):
         self.mainwindow.get_local_listdir.connect(self.get_local_listdir)
         self.mainwindow.get_yadisk_listdir.connect(self.get_yadisk_listdir)
         self.mainwindow.move_file_signal.connect(self.move_file)
+        self.mainwindow.open_link_signal.connect(self.open_link
+        )
 
     def set_presenter(self, presenter):
         self.presenter = presenter
@@ -65,3 +67,6 @@ class GuiView(QObject, IView):
         local_folder = self.mainwindow.get_local_folder_name()
         self.get_yadisk_listdir(yadisk_folder)
         self.get_local_listdir(local_folder)
+    
+    def open_link(self):
+        pass

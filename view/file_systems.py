@@ -14,10 +14,10 @@ class FileSystem(QWidget):
     double_clicked = pyqtSignal(str)
     move_clicked = pyqtSignal()
 
-    def __init__(self, file_system_name):
-        super().__init__()
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
         uic.loadUi("forms/file_system.ui", self)
-        self.file_system_name.setText(file_system_name)
+        #self.file_system_name.setText(file_system_name)
         self.connect_to_actions()
         self.model = None
 

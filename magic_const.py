@@ -6,3 +6,10 @@ APP_SECRET = '71a0be967089402a817b372a857de2ca'
 DATETIME_FORMAT = "%Y-%m-%d, %H:%M:%S"
 
 YADISK_PREFIX = "disk:/"
+
+SECURITY_ALGORITMS = ['AES',
+                      'Camellia',
+                      'ChaCha20',
+                      'TipleDES',
+                      'CAST5',
+                      'SEED']

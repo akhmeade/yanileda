@@ -9,11 +9,11 @@ import magic_const
 class YadiskModel(IModel):
     def __init__(self):
         super().__init__()
+        self.disk = yadisk.YaDisk(magic_const.APP_ID, magic_const.APP_SECRET)
 
     def get_verification_url(self):
-        self.disk = yadisk.YaDisk(magic_const.APP_ID, magic_const.APP_SECRET)
-        self.url = self.disk.get_code_url()
-        return self.url
+        url = self.disk.get_code_url()
+        return url
 
     def set_verification_code(self, code):
         try:

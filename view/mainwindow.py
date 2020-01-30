@@ -3,6 +3,10 @@
 from pathlib import Path
 
 from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QTableView
+from PyQt5.QtWidgets import QTabWidget
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QLabel
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import pyqtSignal
@@ -15,27 +19,42 @@ class MainWindow(QMainWindow):
     get_yadisk_listdir = pyqtSignal(str)
     get_local_listdir = pyqtSignal(str)
     move_file_signal = pyqtSignal(str, str)
+    open_link_signal = pyqtSignal()
 
     def __init__(self):
-        super().__init__()
+        super(MainWindow, self).__init__()
         uic.loadUi("forms/mainwindow.ui", self)
-        self.local_files = FileSystem("Local file system")
-        self.yadisk_files = FileSystem("Yandex Disk")
-        self.layout.addWidget(self.local_files)
-        self.layout.addWidget(self.yadisk_files)
+        self.local_files = QTabWidget()#FileSystem()
+        self.add_local_file_system()
+        
+        self.yadisk_files = QTabWidget()
+        
+        self.h_layout.addWidget(self.local_files)
+        self.h_layout.addWidget(self.yadisk_files)
+        
         self.connect_to_actions()
         self.show_status("Not connected")
+        self.local_files.show()
 
+    def add_local_file_system(self):
+        file_system = FileSystem()
+        
+        file_system.double_clicked.connect(self.get_local_listdir)
+        file_system.move_clicked.connect(self.move_file_from_local)
+
+        self.local_files.addTab(file_system, "Local file system")
+    
+    def add_cloud_file_system(self, name):
+        file_system = FileSystem()
+        self.yadisk_files.addTab(file_system, name)
 
     def connect_to_actions(self):
         self.connect_to_yadisk_action.triggered.connect(self.connect_to_yadisk)
-        self.local_files.double_clicked.connect(self.get_local_listdir)
-        self.yadisk_files.double_clicked.connect(self.get_yadisk_listdir)
-        self.yadisk_files.move_clicked.connect(self.move_file_from_yadisk)
-        self.local_files.move_clicked.connect(self.move_file_from_local)
-
-    def connect_to_yadisk(self):
-        self.connect_to_yadisk_signal.emit()
+        #self.local_files.double_clicked.connect(self.get_local_listdir)
+        # self.yadisk_files.double_clicked.connect(self.get_yadisk_listdir)
+        # self.yadisk_files.move_clicked.connect(self.move_file_from_yadisk)
+        #self.local_files.move_clicked.connect(self.move_file_from_local)
+        self.open_link_action.triggered.connect(self.open_link_signal)
 
     def show_status(self, message):
         self.statusBar().showMessage(message)
