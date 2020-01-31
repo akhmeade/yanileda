@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
         #self.add_yadisk_tab()
         self.open_link_signal.emit()
     
-    def add_bublic_yadisk_tab(self, name):
+    def add_bublic_yadisk_tab(self, name="name"):
        file_system = FileSystem()
        self.yadisk_files.addTab(file_system, name)
        self.yadisk_files.setCurrentWidget(file_system)

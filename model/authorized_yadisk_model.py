@@ -27,7 +27,7 @@ class AuthorizedYadiskModel(IModel):
 
         return self.disk.check_token()
 
-    def get_listdir(self, path = None):
+    def get_listdir(self, path=None):
         if path is None:
             path = magic_const.YADISK_PREFIX
 

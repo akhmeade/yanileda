@@ -35,4 +35,13 @@ class Presenter(IPresenter):
         self.yadisk_model.move_file(from_path, to_path)
 
     def open_bublic_url(self, url):
-        pass
+        is_correct_url = self.bublic_yadisk_model.check_url(url)
+        self.view.set_is_bublic_url_correct(is_correct_url)
+        if is_correct_url:
+            self.get_bublic_listdir(url)
+    
+    def get_bublic_listdir(self, url):
+        listdir = self.bublic_yadisk_model.get_listdir(url)
+
+        if not listdir is None:
+            self.view.show_yadisk_listdir(*listdir)

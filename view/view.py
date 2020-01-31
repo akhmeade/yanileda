@@ -44,7 +44,7 @@ class GuiView(QObject, IView):
         if is_verified:
             self.dialog.close()
             self.mainwindow.show_status("Connected to Yandex Disk")
-            self.mainwindow.add_yadisk_tab()
+            self.mainwindow.add_authorized_yadisk_tab()
         else:
             self.dialog.show_warning()
 
@@ -77,5 +77,12 @@ class GuiView(QObject, IView):
     
     def send_bublic_url(self):
         url = self.dialog.get_bublic_url()
-        print("bublic url", url)
-        #self.presenter.open_bublic_url(url)
+        self.presenter.open_bublic_url(url)
+    
+    def set_is_bublic_url_correct(self, is_correct):
+        if is_correct:
+            self.dialog.close()
+            name = self.dialog.get_tab_name()
+            self.mainwindow.add_bublic_yadisk_tab(name)
+        else:
+            self.dialog.show_warning()

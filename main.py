@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QApplication
 
 from view.view import GuiView
 from presenter.presenter import Presenter
+from presenter.ipresenter import IPresenter
 from model.authorized_yadisk_model import AuthorizedYadiskModel
 from model.bublic_yadisk_model import BublicYadiskModel
 from model.local_model import LocalModel

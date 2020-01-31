@@ -16,3 +16,6 @@ class OpenLinkDialog(QDialog):
 
     def show_warning(self):
         self.warning_label.show()
+    
+    def get_tab_name(self):
+        return self.name_box.text()
