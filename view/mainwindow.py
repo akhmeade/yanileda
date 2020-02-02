@@ -12,12 +12,14 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import pyqtSignal
 
 from .file_systems import FileSystem
+from .file_systems import BublicFileSystem
 
 class MainWindow(QMainWindow):
 
     connect_to_yadisk_signal = pyqtSignal()
     get_yadisk_listdir = pyqtSignal(str)
     get_local_listdir = pyqtSignal(str)
+    get_bublic_listdir = pyqtSignal(str)
     move_file_signal = pyqtSignal(str, str)
     open_link_signal = pyqtSignal()
 
@@ -36,6 +38,10 @@ class MainWindow(QMainWindow):
         self.show_status("Not connected")
         self.local_files.show()
     
+    def connect_to_actions(self):
+        self.connect_to_yadisk_action.triggered.connect(self.connect_to_yadisk)
+        self.open_link_action.triggered.connect(self.open_link)
+    
     def get_local_system(self):
         return self.local_files.currentWidget()
     
@@ -50,19 +56,6 @@ class MainWindow(QMainWindow):
 
         self.local_files.addTab(file_system, "Local file system")
     
-    def add_bublic_file_system(self, name):
-        file_system = FileSystem()
-        self.yadisk_files.addTab(file_system, name)
-
-    def connect_to_actions(self):
-        self.connect_to_yadisk_action.triggered.connect(self.connect_to_yadisk)
-        self.open_link_action.triggered.connect(self.open_link)
-
-    def connect_to_yadisk(self):
-        self.connect_to_yadisk_signal.emit()
-        #self.yadisk_files.addTab(FileSystem(), "name")
-        #self.connect_to_yadisk_signal.emit()
-    
     def add_authorized_yadisk_tab(self):
         file_system = FileSystem()
         file_system.double_clicked.connect(self.get_yadisk_listdir)
@@ -70,14 +63,20 @@ class MainWindow(QMainWindow):
         self.yadisk_files.addTab(file_system, "YaDisk")
         self.yadisk_files.setCurrentWidget(file_system)
     
+    def add_bublic_yadisk_tab(self, name="name"):
+        file_system = BublicFileSystem()
+        file_system.double_clicked.connect(self.get_bublic_listdir)
+        self.yadisk_files.addTab(file_system, name)
+        self.yadisk_files.setCurrentWidget(file_system)
+
+    def connect_to_yadisk(self):
+        self.connect_to_yadisk_signal.emit()
+        #self.yadisk_files.addTab(FileSystem(), "name")
+        #self.connect_to_yadisk_signal.emit()
+    
     def open_link(self):
         #self.add_yadisk_tab()
         self.open_link_signal.emit()
-    
-    def add_bublic_yadisk_tab(self, name="name"):
-       file_system = FileSystem()
-       self.yadisk_files.addTab(file_system, name)
-       self.yadisk_files.setCurrentWidget(file_system)
 
     def show_status(self, message):
         self.statusBar().showMessage(message)

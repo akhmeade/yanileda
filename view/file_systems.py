@@ -35,7 +35,6 @@ class FileSystem(QWidget):
         else:
             self.model = QStandardItemModel(len(listdir), 1)
 
-
         for n, file_info in enumerate(listdir):
             for m, info in enumerate(file_info):
                 item = QStandardItem(info)
@@ -76,3 +75,12 @@ class FileSystem(QWidget):
         row = selected.row()
         file_name = self.model.item(row).text()
         return file_name
+
+class BublicFileSystem(FileSystem):
+    def __init__(self, parent=None):
+        FileSystem.__init__(self, parent)
+    
+    def double_click_slot(self, index):
+        row = index.row()
+        url = self.model.item(row, 1).text()
+        self.double_clicked.emit(url)

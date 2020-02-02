@@ -22,6 +22,7 @@ class GuiView(QObject, IView):
         self.mainwindow.connect_to_yadisk_signal.connect(self.connect_to_yadisk)
         self.mainwindow.get_local_listdir.connect(self.get_local_listdir)
         self.mainwindow.get_yadisk_listdir.connect(self.get_yadisk_listdir)
+        self.mainwindow.get_bublic_listdir.connect(self.get_bublic_listdir)
         self.mainwindow.move_file_signal.connect(self.move_file)
         self.mainwindow.open_link_signal.connect(self.open_link)
 
@@ -86,3 +87,6 @@ class GuiView(QObject, IView):
             self.mainwindow.add_bublic_yadisk_tab(name)
         else:
             self.dialog.show_warning()
+    
+    def get_bublic_listdir(self, url):
+        self.presenter.get_bublic_listdir(url)

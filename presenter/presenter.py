@@ -9,6 +9,7 @@ class Presenter(IPresenter):
         self.yadisk_model = yadisk_model
         self.local_model = local_model
         self.bublic_yadisk_model = bublic_yadisk_model
+        self.get_local_listdir()
 
     def connect_to_yadisk(self):
         url = self.yadisk_model.get_verification_url()
@@ -19,7 +20,6 @@ class Presenter(IPresenter):
         self.view.set_is_verified(is_verified)
         if is_verified:
             self.get_yadisk_listdir()
-            self.get_local_listdir()
 
     def get_yadisk_listdir(self, path=None):
         #print(path)
@@ -27,10 +27,11 @@ class Presenter(IPresenter):
         if not yadisk_listdir is None:
             self.view.show_yadisk_listdir(*yadisk_listdir)
     
-    def get_local_listdir(self, path = None):
+    def get_local_listdir(self, path=None):
         local_listdir = self.local_model.get_listdir(path)
         if not local_listdir is None:
             self.view.show_local_listdir(*local_listdir)
+    
     def move_file(self, from_path, to_path):
         self.yadisk_model.move_file(from_path, to_path)
 
@@ -38,9 +39,16 @@ class Presenter(IPresenter):
         is_correct_url = self.bublic_yadisk_model.check_url(url)
         self.view.set_is_bublic_url_correct(is_correct_url)
         if is_correct_url:
-            self.get_bublic_listdir(url)
+            self.get_bublic_meta(url)
+    
+    def get_bublic_meta(self, url):
+        listdir = self.bublic_yadisk_model.get_meta(url)
+
+        if not listdir is None:
+            self.view.show_yadisk_listdir(*listdir)
     
     def get_bublic_listdir(self, url):
+        print("get bublic listdir")
         listdir = self.bublic_yadisk_model.get_listdir(url)
 
         if not listdir is None:
