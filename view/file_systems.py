@@ -20,6 +20,7 @@ class FileSystem(QWidget):
         #self.file_system_name.setText(file_system_name)
         self.connect_to_actions()
         self.model = None
+        self.protocol = []
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
@@ -28,6 +29,7 @@ class FileSystem(QWidget):
         self.load_button.clicked.connect(self.move_clicked)
 
     def show_listdir(self, listdir, path):
+        self.protocol.append(path)
         self.path_box.setText(path)
 
         if len(listdir) > 0:
@@ -56,13 +58,16 @@ class FileSystem(QWidget):
         self.double_clicked.emit(path)
     
     def get_previous_folder(self):
-        current = Path(self.path_box.text())
-        previous = current.parent.as_posix()
-        # if previous[-1] != '/' and previous[-1] != '\\':
-        #     previous += "/"
-        if previous == 'disk:':
-            previous = magic_const.YADISK_PREFIX
+        previous = self.protocol[-2]
+        self.protocol = self.protocol[:-2]
         self.double_clicked.emit(previous)
+        # current = Path(self.path_box.text())
+        # previous = current.parent.as_posix()
+        # # if previous[-1] != '/' and previous[-1] != '\\':
+        # #     previous += "/"
+        # if previous == 'disk:':
+        #     previous = magic_const.YADISK_PREFIX
+        # self.double_clicked.emit(previous)
     
     def get_folder_path(self):
         return self.path_box.text()
