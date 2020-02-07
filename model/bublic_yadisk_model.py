@@ -41,3 +41,8 @@ class BublicYadiskModel:
         #             (i.name, i.created.strftime(magic_const.DATETIME_FORMAT)))
         # else:
         #     file = self.disk.
+
+    def download(self, from_path, to_path):
+        if self.check_url(from_path):
+            self.disk.download_public(from_path, to_path)
+        

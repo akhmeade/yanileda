@@ -36,7 +36,7 @@ class Presenter(IPresenter):
         self.yadisk_model.download(from_path, to_path)
     
     def download_from_bublic_yadisk(self, from_path, to_path):
-        pass
+        self.bublic_yadisk_model.download(from_path, to_path)
     
     def upload_to_auth_yadisk(self, from_path, to_path):
         self.yadisk_model.upload(self, from_path, to_path)

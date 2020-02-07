@@ -69,21 +69,23 @@ class GuiView(QObject, IView):
     
     def download_from_auth_yadisk(self, from_file, to_file):
         self.presenter.download_from_auth_yadisk(from_file, to_file)
-        self.update()
+        self.update_local()
     
     def download_from_bublic_yadisk(self, from_file, to_file):
         self.presenter.download_from_bublic_yadisk(from_file, to_file)
-        self.update()
+        self.update_local()
     
     def upload_to_auth_yadisk(self, from_file, to_file):
         self.presenter.upload_to_auth_yadisk(from_file, to_file)
-        self.update()
+        self.update_auth_yadisk()
     
-    def update(self):
-        yadisk_folder = self.mainwindow.get_yadisk_folder_name()
+    def update_local(self):
         local_folder = self.mainwindow.get_local_folder_name()
-        self.get_yadisk_listdir(yadisk_folder)
         self.get_local_listdir(local_folder)
+    
+    def update_auth_yadisk(self):
+        yadisk_folder = self.mainwindow.get_yadisk_folder_name()
+        self.get_yadisk_listdir(yadisk_folder)
     
     def open_link(self):
         self.dialog = OpenLinkDialog()
