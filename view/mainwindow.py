@@ -20,7 +20,12 @@ class MainWindow(QMainWindow):
     get_yadisk_listdir = pyqtSignal(str)
     get_local_listdir = pyqtSignal(str)
     get_bublic_listdir = pyqtSignal(str)
+    
     move_file_signal = pyqtSignal(str, str)
+    download_from_auth_yadisk = pyqtSignal(str, str)
+    download_from_bublic_yadisk = pyqtSignal(str, str)
+    upload_to_auth_yadisk = pyqtSignal(str, str)
+    
     open_link_signal = pyqtSignal()
 
     def __init__(self):
@@ -66,6 +71,7 @@ class MainWindow(QMainWindow):
     def add_bublic_yadisk_tab(self, name="name"):
         file_system = BublicFileSystem()
         file_system.double_clicked.connect(self.get_bublic_listdir)
+        file_system.move_clicked.connect(self.move_file_from_bublic_yadisk)
         self.yadisk_files.addTab(file_system, name)
         self.yadisk_files.setCurrentWidget(file_system)
 
@@ -96,8 +102,8 @@ class MainWindow(QMainWindow):
         file_name = yadisk_files.get_file_name()
         from_path = from_folder / file_name
         to_path = to_folder / file_name
-        self.move_file_signal.emit(from_path.as_posix(), to_path.as_posix())
-
+        self.download_from_auth_yadisk.emit(from_path.as_posix(), to_path.as_posix())
+        #self.move_file_signal.emit(from_path.as_posix(), to_path.as_posix())
 
     def move_file_from_local(self):
         local_system = self.get_local_system()
@@ -109,7 +115,19 @@ class MainWindow(QMainWindow):
         file_name = local_system.get_file_name()
         from_path = from_folder / file_name
         to_path = to_folder  / file_name
-        self.move_file_signal.emit(from_path.as_posix(), to_path.as_posix())
+        self.upload_to_auth_yadisk.emit(from_path.as_posix(), to_path.as_posix())
+    
+    def move_file_from_bublic_yadisk(self):
+        local_system = self.get_local_system()
+        yadisk_files = self.get_yadisk()
+
+        from_url = yadisk_files.get_folder_path()
+
+        to_folder = Path(local_system.get_folder_path())
+        file_name = yadisk_files.get_file_name()
+
+        to_path = to_folder / file_name
+        self.download_from_bublic_yadisk.emit(from_url, to_path.as_posix())
     
     def get_yadisk_folder_name(self):
         return self.yadisk_files.currentWidget().get_folder_path()

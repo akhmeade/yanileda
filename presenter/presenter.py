@@ -32,8 +32,14 @@ class Presenter(IPresenter):
         if not local_listdir is None:
             self.view.show_local_listdir(*local_listdir)
     
-    def move_file(self, from_path, to_path):
-        self.yadisk_model.move_file(from_path, to_path)
+    def download_from_auth_yadisk(self, from_path, to_path):
+        self.yadisk_model.download(from_path, to_path)
+    
+    def download_from_bublic_yadisk(self, from_path, to_path):
+        pass
+    
+    def upload_to_auth_yadisk(self, from_path, to_path):
+        self.yadisk_model.upload(self, from_path, to_path)
 
     def open_bublic_url(self, url):
         is_correct_url = self.bublic_yadisk_model.check_url(url)

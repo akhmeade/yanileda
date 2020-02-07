@@ -81,6 +81,7 @@ class FileSystem(QWidget):
         file_name = self.model.item(row).text()
         return file_name
 
+
 class BublicFileSystem(FileSystem):
     def __init__(self, parent=None):
         FileSystem.__init__(self, parent)

@@ -23,7 +23,13 @@ class GuiView(QObject, IView):
         self.mainwindow.get_local_listdir.connect(self.get_local_listdir)
         self.mainwindow.get_yadisk_listdir.connect(self.get_yadisk_listdir)
         self.mainwindow.get_bublic_listdir.connect(self.get_bublic_listdir)
-        self.mainwindow.move_file_signal.connect(self.move_file)
+        
+        # download/upload files
+        self.mainwindow.download_from_auth_yadisk.connect(self.download_from_auth_yadisk)
+        self.mainwindow.download_from_bublic_yadisk.connect(self.download_from_bublic_yadisk)
+        self.mainwindow.upload_to_auth_yadisk.connect(self.upload_to_auth_yadisk)
+        
+        # add new tab
         self.mainwindow.open_link_signal.connect(self.open_link)
 
     def set_presenter(self, presenter):
@@ -61,8 +67,16 @@ class GuiView(QObject, IView):
     def show_yadisk_listdir(self, listdir, path):
         self.mainwindow.show_yadisk_listdir(listdir, path)
     
-    def move_file(self, from_file, to_file):
-        self.presenter.move_file(from_file, to_file)
+    def download_from_auth_yadisk(self, from_file, to_file):
+        self.presenter.download_from_auth_yadisk(from_file, to_file)
+        self.update()
+    
+    def download_from_bublic_yadisk(self, from_file, to_file):
+        self.presenter.download_from_bublic_yadisk(from_file, to_file)
+        self.update()
+    
+    def upload_to_auth_yadisk(self, from_file, to_file):
+        self.presenter.upload_to_auth_yadisk(from_file, to_file)
         self.update()
     
     def update(self):
