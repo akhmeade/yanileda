@@ -58,6 +58,8 @@ class FileSystem(QWidget):
         self.double_clicked.emit(path)
     
     def get_previous_folder(self):
+        if len(self.protocol) < 2:
+            return
         previous = self.protocol[-2]
         self.protocol = self.protocol[:-2]
         self.double_clicked.emit(previous)

@@ -39,7 +39,7 @@ class Presenter(IPresenter):
         self.bublic_yadisk_model.download(from_path, to_path)
     
     def upload_to_auth_yadisk(self, from_path, to_path):
-        self.yadisk_model.upload(self, from_path, to_path)
+        self.yadisk_model.upload(from_path, to_path)
 
     def open_bublic_url(self, url):
         is_correct_url = self.bublic_yadisk_model.check_url(url)
