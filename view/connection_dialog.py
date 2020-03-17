@@ -15,7 +15,7 @@ class ConnectionDialog(QDialog):
         self.accepted.emit()
     
     def get_verification_code(self):
-        return self.code_box.toPlainText()
+        return self.code_box.text()
 
     def show_warning(self):
         self.warning.show()
