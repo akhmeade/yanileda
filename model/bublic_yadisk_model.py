@@ -17,7 +17,7 @@ class BublicYadiskModel:
     
     def get_meta(self, url):
         info = self.disk.get_public_meta(url)
-        return [(info.name, info.public_url,
+        return [(info.type, info.name, info.public_url,
              info.created.strftime(magic_const.DATETIME_FORMAT))], url
     
     def get_listdir(self, url):
@@ -28,7 +28,7 @@ class BublicYadiskModel:
                 
                 names = []
                 for i in listdir:
-                    names.append((i.name, i.public_url, i.created.strftime(magic_const.DATETIME_FORMAT)))
+                    names.append((i.type, i.name, i.public_url, i.created.strftime(magic_const.DATETIME_FORMAT)))
 
                 return names, url
         return None

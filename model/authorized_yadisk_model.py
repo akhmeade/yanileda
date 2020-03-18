@@ -28,6 +28,7 @@ class AuthorizedYadiskModel(IModel):
         return self.disk.check_token()
 
     def get_listdir(self, path=None):
+        print(path)
         if path is None:
             path = magic_const.YADISK_PREFIX
 
@@ -39,7 +40,7 @@ class AuthorizedYadiskModel(IModel):
         listdir.sort(key=lambda x: x.type == "dir", reverse=True)
         for i in listdir:
             names.append(
-                (i.name, i.created.strftime(magic_const.DATETIME_FORMAT)))
+                (i.type, i.name, i.created.strftime(magic_const.DATETIME_FORMAT)))
         #print(names, path)
         
         return names, path

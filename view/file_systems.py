@@ -3,12 +3,17 @@
 from pathlib import Path
 
 from PyQt5.QtWidgets import QWidget
+
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtGui import QStandardItem
+from PyQt5.QtGui import QIcon
+
 from PyQt5.QtCore import pyqtSignal
 from PyQt5 import uic
 
 import magic_const
+
+import resources
 
 class FileSystem(QWidget):
     double_clicked = pyqtSignal(str)
@@ -21,6 +26,9 @@ class FileSystem(QWidget):
         self.connect_to_actions()
         self.model = None
         self.protocol = []
+
+        self.folder_icon = QIcon(":/img/images/folder_icon.png")
+        self.file_icon = QIcon(":/img/images/file_icon.png")
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
@@ -38,9 +46,16 @@ class FileSystem(QWidget):
             self.model = QStandardItemModel(len(listdir), 1)
 
         item = QStandardItem("..")
+        self.model.setItem(0, 1, item)
+        item = QStandardItem(self.folder_icon, "")
         self.model.setItem(0, 0, item)
         for n, file_info in enumerate(listdir):
-            for m, info in enumerate(file_info):
+            if file_info[0] == "dir":
+                item = QStandardItem(self.folder_icon, "")
+            elif file_info[0] == "file":
+                item = QStandardItem(self.file_icon, "")
+            self.model.setItem(n+1, 0, item)
+            for m, info in enumerate(file_info[1:], 1):
                 item = QStandardItem(info)
                 self.model.setItem(n + 1, m, item)
         self.listdir.setModel(self.model)
@@ -50,7 +65,7 @@ class FileSystem(QWidget):
         row = index.row()
 
 
-        name = self.model.item(row).text()
+        name = self.model.item(row, 1).text()
 
         directory = Path(self.path_box.text())
         if row == 0:
@@ -85,9 +100,9 @@ class FileSystem(QWidget):
         selected = self.listdir.selectedIndexes()
         if len(selected) < 1:
             print("BAD SELECTED")
-        selected = selected[0]
+        selected = selected[1]
         row = selected.row()
-        file_name = self.model.item(row).text()
+        file_name = self.model.item(row, 1).text()
         return file_name
 
 
@@ -97,7 +112,7 @@ class BublicFileSystem(FileSystem):
     
     def double_click_slot(self, index):
         row = index.row()
-        url = self.model.item(row, 1).text()
+        url = self.model.item(row, 2).text()
         self.double_clicked.emit(url)
 
 # def get_drives():
