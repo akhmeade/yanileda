@@ -37,20 +37,26 @@ class FileSystem(QWidget):
         else:
             self.model = QStandardItemModel(len(listdir), 1)
 
+        item = QStandardItem("..")
+        self.model.setItem(0, 0, item)
         for n, file_info in enumerate(listdir):
             for m, info in enumerate(file_info):
                 item = QStandardItem(info)
-                self.model.setItem(n, m, item)
+                self.model.setItem(n + 1, m, item)
         self.listdir.setModel(self.model)
         self.listdir.resizeColumnsToContents()
     
     def double_click_slot(self, index):
         row = index.row()
 
+
         name = self.model.item(row).text()
 
         directory = Path(self.path_box.text())
-        path = directory / name
+        if row == 0:
+            path = directory.parent
+        else:
+            path = directory / name
         self.double_clicked.emit(path.as_posix())
 
     def get_listdir(self):
@@ -92,3 +98,13 @@ class BublicFileSystem(FileSystem):
         row = index.row()
         url = self.model.item(row, 1).text()
         self.double_clicked.emit(url)
+
+# def get_drives():
+#     drives = []
+#     bitmask = windll.kernel32.GetLogicalDrives()
+#     for letter in string.ascii_uppercase:
+#         if bitmask & 1:
+#             drives.append(letter)
+#         bitmask >>= 1
+        
+#     return drives

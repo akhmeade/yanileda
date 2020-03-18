@@ -88,6 +88,7 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage(message)
 
     def show_local_listdir(self, listdir, path):
+        #print("show local listdir", path)
         self.get_local_system().show_listdir(listdir, path)
 
     def show_yadisk_listdir(self, listdir, path):
