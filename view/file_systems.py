@@ -63,8 +63,6 @@ class FileSystem(QWidget):
     
     def double_click_slot(self, index):
         row = index.row()
-
-
         name = self.model.item(row, 1).text()
 
         directory = Path(self.path_box.text())
@@ -72,7 +70,10 @@ class FileSystem(QWidget):
             path = directory.parent
         else:
             path = directory / name
-        self.double_clicked.emit(path.as_posix())
+        if path.as_posix() == "disk:":
+            self.double_clicked.emit(magic_const.YADISK_PREFIX)
+        else:
+            self.double_clicked.emit(path.as_posix())
 
     def get_listdir(self):
         path = self.path_box.text()
