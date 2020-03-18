@@ -61,7 +61,8 @@ class FileSystem(QWidget):
 
     def get_listdir(self):
         path = self.path_box.text()
-        self.double_clicked.emit(path)
+        path = Path(path)
+        self.double_clicked.emit(path.as_posix())
     
     def get_previous_folder(self):
         if len(self.protocol) < 2:
