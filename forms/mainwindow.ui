@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Yanileda</string>
   </property>
   <widget class="QWidget" name="h_layout">
    <layout class="QHBoxLayout" name="horizontalLayout"/>
