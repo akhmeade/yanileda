@@ -6,36 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>936</width>
-    <height>612</height>
+    <width>1193</width>
+    <height>889</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>9</y>
-      <width>921</width>
-      <height>551</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="h_layout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
-     </property>
-    </layout>
-   </widget>
+  <widget class="QWidget" name="h_layout">
+   <layout class="QHBoxLayout" name="horizontalLayout"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>936</width>
+     <width>1193</width>
      <height>26</height>
     </rect>
    </property>

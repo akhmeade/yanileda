@@ -36,8 +36,8 @@ class MainWindow(QMainWindow):
         
         self.yadisk_files = QTabWidget()
         
-        self.h_layout.addWidget(self.local_files)
-        self.h_layout.addWidget(self.yadisk_files)
+        self.h_layout.layout().addWidget(self.local_files)
+        self.h_layout.layout().addWidget(self.yadisk_files)
         
         self.connect_to_actions()
         self.show_status("Not connected")
