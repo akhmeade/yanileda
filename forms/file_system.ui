@@ -61,6 +61,9 @@
       <property name="textElideMode">
        <enum>Qt::ElideRight</enum>
       </property>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
      </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1,1,0,0">
