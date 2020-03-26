@@ -7,6 +7,8 @@ from .imodel import IModel
 import magic_const
 
 class AuthorizedYadiskModel(IModel):
+    header = ("Type", "Name", "Last modified")
+
     def __init__(self):
         super().__init__()
         self.disk = yadisk.YaDisk(magic_const.APP_ID, magic_const.APP_SECRET)
@@ -35,12 +37,12 @@ class AuthorizedYadiskModel(IModel):
         if not self.disk.is_dir(path):
             return None
 
-        names = []
+        names = [self.header,]
         listdir = list(self.disk.listdir(path))
         listdir.sort(key=lambda x: x.type == "dir", reverse=True)
         for i in listdir:
             names.append(
-                (i.type, i.name, i.created.strftime(magic_const.DATETIME_FORMAT)))
+                (i.type, i.name, i.modified.strftime(magic_const.DATETIME_FORMAT)))
         #print(names, path)
         
         return names, path

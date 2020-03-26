@@ -5,6 +5,7 @@ import yadisk
 import magic_const
 
 class BublicYadiskModel:
+    header = ("Type", "Name", "Public Url", "Last modified")
     def __init__(self):
         self.disk = yadisk.YaDisk()
     
@@ -26,9 +27,9 @@ class BublicYadiskModel:
                 listdir = list(self.disk.public_listdir(url))            
                 listdir.sort(key=lambda x: x.type == "dir", reverse=True)
                 
-                names = []
+                names = [self.header,]
                 for i in listdir:
-                    names.append((i.type, i.name, i.public_url, i.created.strftime(magic_const.DATETIME_FORMAT)))
+                    names.append((i.type, i.name, i.public_url, i.modified.strftime(magic_const.DATETIME_FORMAT)))
 
                 return names, url
         return None

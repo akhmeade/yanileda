@@ -53,6 +53,8 @@ class FileSystem(QWidget):
         list(map(add_item, items))
 
     def show_listdir(self, listdir, path):
+        header = listdir[0]
+        listdir = listdir[1:]
         self.protocol.append(path)
         self.path_box.setText(path)
 
@@ -61,6 +63,7 @@ class FileSystem(QWidget):
         else:
             self.model = QStandardItemModel(len(listdir), 1)
 
+        self.model.setHorizontalHeaderLabels(header)
         item = QStandardItem("..")
         self.model.setItem(0, 1, item)
         item = QStandardItem(self.folder_icon, "")
