@@ -19,7 +19,7 @@ class FileSystem(QWidget):
     double_clicked = pyqtSignal(str)
     move_clicked = pyqtSignal()
 
-    def __init__(self, parent=None):
+    def __init__(self, label_names, parent=None):
         QWidget.__init__(self, parent)
         uic.loadUi("forms/file_system.ui", self)
         #self.file_system_name.setText(file_system_name)
@@ -30,11 +30,20 @@ class FileSystem(QWidget):
         self.folder_icon = QIcon(":/img/images/folder_icon.png")
         self.file_icon = QIcon(":/img/images/file_icon.png")
 
+        self.set_label_names(label_names)
+
+
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
         self.path_box.editingFinished.connect(self.get_listdir)
         self.back_button.clicked.connect(self.get_previous_folder)
         self.load_button.clicked.connect(self.move_clicked)
+    
+    def set_label_names(self, label_names):
+        self.message_label.setText(label_names["message_label"])
+        self.algorithm_label.setText(label_names["algorithm_label"])
+        self.key_type_label.setText(label_names["key_type_label"])
+        self.load_button.setText(label_names["load_button"])
 
     def show_listdir(self, listdir, path):
         self.protocol.append(path)

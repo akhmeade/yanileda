@@ -14,6 +14,8 @@ from PyQt5.QtCore import pyqtSignal
 from .file_systems import FileSystem
 from .file_systems import BublicFileSystem
 
+import magic_const
+
 class MainWindow(QMainWindow):
 
     connect_to_yadisk_signal = pyqtSignal()
@@ -54,7 +56,7 @@ class MainWindow(QMainWindow):
         return self.yadisk_files.currentWidget()
 
     def add_local_file_system(self):
-        file_system = FileSystem()
+        file_system = FileSystem(magic_const.LOCAL_FILE_SYSTEM_LABELS)
         
         file_system.double_clicked.connect(self.get_local_listdir)
         file_system.move_clicked.connect(self.move_file_from_local)
@@ -62,14 +64,14 @@ class MainWindow(QMainWindow):
         self.local_files.addTab(file_system, "Local file system")
     
     def add_authorized_yadisk_tab(self):
-        file_system = FileSystem()
+        file_system = FileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS)
         file_system.double_clicked.connect(self.get_yadisk_listdir)
         file_system.move_clicked.connect(self.move_file_from_yadisk)
         self.yadisk_files.addTab(file_system, "YaDisk")
         self.yadisk_files.setCurrentWidget(file_system)
     
     def add_bublic_yadisk_tab(self, name="name"):
-        file_system = BublicFileSystem()
+        file_system = BublicFileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS)
         file_system.double_clicked.connect(self.get_bublic_listdir)
         file_system.move_clicked.connect(self.move_file_from_bublic_yadisk)
         self.yadisk_files.addTab(file_system, name)
