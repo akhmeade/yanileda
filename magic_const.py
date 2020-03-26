@@ -24,7 +24,7 @@ YADISK_FILE_SYSTEM_LABELS = {
     "load_button": "Download file"
 }
 
-class SecurityAlgorithms(Enum):
+class SecurityAlgorithm(Enum):
     """
         Enumaration class with encryption algorithms
     """
@@ -36,10 +36,13 @@ class SecurityAlgorithms(Enum):
     cast5 = "CAST5"
     seed = "SEED"
 
-# SECURITY_ALGORITMS = ['AES',
-#                       'Camellia',
-#                       'ChaCha20',
-#                       'TipleDES',
-#                       'CAST5',
-#                       'SEED']
-
+class KeyType(Enum):
+    """
+        Enumaration class with encryption key types
+    """
+    new_symbols = "New key as symbols"
+    new_binary = "New key for binary file"
+    new_media = "New key for media"
+    existing_symbols = "Existing symbols"
+    existing_binary = "Existing binary file"
+    existing_media = "Existing media"
