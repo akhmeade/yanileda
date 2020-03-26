@@ -1,4 +1,5 @@
 # encoding: utf-8
+from enum import Enum
 
 APP_ID = 'f82dd3ae4b2946a6a58b5bcca099bdc0'
 APP_SECRET = '71a0be967089402a817b372a857de2ca'
@@ -7,7 +8,7 @@ DATETIME_FORMAT = "%Y-%m-%d, %H:%M:%S"
 
 YADISK_PREFIX = "disk:/"
 
-LOCAL_FIL_SYSTEM_NAME = "Local file system"
+LOCAL_FILE_SYSTEM_NAME = "Local file system"
 
 LOCAL_FILE_SYSTEM_LABELS = {
     "message_label":  '''Choose encryption mode for uploading your file to the cloud:''',
@@ -23,9 +24,22 @@ YADISK_FILE_SYSTEM_LABELS = {
     "load_button": "Download file"
 }
 
-SECURITY_ALGORITMS = ['AES',
-                      'Camellia',
-                      'ChaCha20',
-                      'TipleDES',
-                      'CAST5',
-                      'SEED']
+class SecurityAlgorithms(Enum):
+    """
+        Enumaration class with encryption algorithms
+    """
+    none = "None"
+    aes = "AES"
+    camellia = "Camellia"
+    chacha20 = "ChaCha20"
+    tripleDes = "Triple DES"
+    cast5 = "CAST5"
+    seed = "SEED"
+
+# SECURITY_ALGORITMS = ['AES',
+#                       'Camellia',
+#                       'ChaCha20',
+#                       'TipleDES',
+#                       'CAST5',
+#                       'SEED']
+

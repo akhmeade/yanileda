@@ -109,6 +109,8 @@ class MainWindow(QMainWindow):
         #self.move_file_signal.emit(from_path.as_posix(), to_path.as_posix())
 
     def move_file_from_local(self):
+        # TODO : add algorithm and key type
+
         local_system = self.get_local_system()
         yadisk_files = self.get_yadisk()
 

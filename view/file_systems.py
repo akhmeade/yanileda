@@ -32,6 +32,8 @@ class FileSystem(QWidget):
 
         self.set_label_names(label_names)
 
+        self.fill_algorithms()
+
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
@@ -44,6 +46,14 @@ class FileSystem(QWidget):
         self.algorithm_label.setText(label_names["algorithm_label"])
         self.key_type_label.setText(label_names["key_type_label"])
         self.load_button.setText(label_names["load_button"])
+    
+    def fill_algorithms(self):
+        algorithms = list(magic_const.SecurityAlgorithms)
+
+        add_item = lambda algorithm: \
+            self.algorithms_box.addItem(algorithm.value, algorithm)
+
+        list(map(add_item, algorithms))
 
     def show_listdir(self, listdir, path):
         self.protocol.append(path)
@@ -114,6 +124,9 @@ class FileSystem(QWidget):
         row = selected.row()
         file_name = self.model.item(row, 1).text()
         return file_name
+    
+    def get_algorithm(self):
+        return self.algorithms_box.currentData()
 
 
 class BublicFileSystem(FileSystem):
