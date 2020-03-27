@@ -50,3 +50,5 @@ class SecurityAlgorithm(Enum):
     tripleDes = "Triple DES"
     cast5 = "CAST5"
     seed = "SEED"
+
+SYMBOL_KEY_LENGTH = 256
