@@ -32,8 +32,8 @@ class FileSystem(QWidget):
 
         self.set_label_names(label_names)
 
-        self.fill_combobox(self.algorithms_box, magic_const.SecurityAlgorithm)
-        self.fill_combobox(self.key_type_box, magic_const.KeyType)
+        self.fill_combobox(self.algorithms_box, list(magic_const.SecurityAlgorithm))
+        self.fill_combobox(self.key_type_box, label_names["key_type"])
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
@@ -47,8 +47,7 @@ class FileSystem(QWidget):
         self.key_type_label.setText(label_names["key_type_label"])
         self.load_button.setText(label_names["load_button"])
     
-    def fill_combobox(self, combobox, EnumClass):
-        items = list(EnumClass)
+    def fill_combobox(self, combobox, items):
         add_item = lambda item: combobox.addItem(item.value, item)
         list(map(add_item, items))
 
