@@ -1,11 +1,12 @@
 #coding: utf-8
-import secrets
+import os
+import base64
 
 def generate_key(length):
     """
     Generate key for encoding
     
     Arguments:
-        length {int} -- [length of key in BYTES]
+        length {int} -- [length of key in BITS]
     """
-    return secrets.randbits(length * 8).to_bytes(length, "big")
+    return base64.urlsafe_b64encode(os.urandom(length))
