@@ -7,6 +7,8 @@ from .mainwindow import MainWindow
 from .connection_dialog import ConnectionDialog
 from .open_link_dialog import OpenLinkDialog
 
+import magic_const
+
 class GuiView(QObject, IView):
     """
     Graphical User Interface
@@ -31,6 +33,10 @@ class GuiView(QObject, IView):
         
         # add new tab
         self.mainwindow.open_link_signal.connect(self.open_link)
+
+        #browse clicked
+        self.mainwindow.local_browse_clicked.connect(self.local_browse_request)
+        #self.mainwindow.yadisk_browse_clicked.connect(self.browse)
 
     def set_presenter(self, presenter):
         self.presenter = presenter
@@ -106,3 +112,9 @@ class GuiView(QObject, IView):
     
     def get_bublic_listdir(self, url):
         self.presenter.get_bublic_listdir(url)
+    
+    def local_browse_request(self, key_type):
+        self.presenter.local_browse(key_type)
+    
+    def local_browse(self, result):
+        self.mainwindow.local_browse(result)

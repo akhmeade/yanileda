@@ -15,11 +15,10 @@ import magic_const
 
 import resources
 
-import security.utils
-
 class FileSystem(QWidget):
     double_clicked = pyqtSignal(str)
     move_clicked = pyqtSignal()
+    browse_clicked = pyqtSignal(magic_const.KeyType)
 
     def __init__(self, label_names, parent=None):
         QWidget.__init__(self, parent)
@@ -42,7 +41,7 @@ class FileSystem(QWidget):
         self.path_box.editingFinished.connect(self.get_listdir)
         self.back_button.clicked.connect(self.get_previous_folder)
         self.load_button.clicked.connect(self.move_clicked)
-        self.key_type_box.currentIndexChanged.connect(self.key_type_changed)
+        self.browse_button.clicked.connect(self.browse_slot)
     
     def set_label_names(self, label_names):
         self.message_label.setText(label_names["message_label"])
@@ -126,23 +125,17 @@ class FileSystem(QWidget):
         row = selected.row()
         file_name = self.model.item(row, 1).text()
         return file_name
-    
+
     def get_algorithm(self):
         return self.algorithms_box.currentData()
     
     def get_key_type(self):
         return self.key_type_box.currentData()
 
-    def key_type_changed(self, index):
-        print(index)
-        if self.get_key_type() == magic_const.KeyType.new_symbols:
-            print("ha")
-            key = security.utils.generate_key(magic_const.SYMBOL_KEY_LENGTH)
-            self.key_box.setText(key.decode("utf-8"))
-        else:
-            self.key_box.clear()
-
-
+    def browse_slot(self):
+        self.browse_clicked.emit(self.get_key_type())
+    def put_key(self, result):
+        self.key_box.setText(result)
 
 class BublicFileSystem(FileSystem):
     def __init__(self, parent=None):

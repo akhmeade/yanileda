@@ -30,6 +30,9 @@ class MainWindow(QMainWindow):
     
     open_link_signal = pyqtSignal()
 
+    local_browse_clicked = pyqtSignal(magic_const.KeyType)
+    yadisk_browse_clicked = pyqtSignal(magic_const.KeyType)
+
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi("forms/mainwindow.ui", self)
@@ -60,6 +63,7 @@ class MainWindow(QMainWindow):
         
         file_system.double_clicked.connect(self.get_local_listdir)
         file_system.move_clicked.connect(self.move_file_from_local)
+        file_system.browse_clicked.connect(self.local_browse_clicked)
 
         self.local_files.addTab(file_system, "Local file system")
     
@@ -67,6 +71,8 @@ class MainWindow(QMainWindow):
         file_system = FileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS)
         file_system.double_clicked.connect(self.get_yadisk_listdir)
         file_system.move_clicked.connect(self.move_file_from_yadisk)
+        file_system.browse_clicked.connect(self.yadisk_browse_clicked)
+        
         self.yadisk_files.addTab(file_system, "YaDisk")
         self.yadisk_files.setCurrentWidget(file_system)
     
@@ -139,3 +145,7 @@ class MainWindow(QMainWindow):
     
     def get_local_folder_name(self):
         return self.local_files.currentWidget().get_folder_path()
+
+    def local_browse(self, result):
+        filesystem = self.get_local_system()
+        filesystem.put_key(result)
