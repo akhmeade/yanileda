@@ -3,12 +3,16 @@
 from .ipresenter import IPresenter
 
 class Presenter(IPresenter):
-    def __init__(self, view, yadisk_model, local_model, bublic_yadisk_model):
+    def __init__(self, view, yadisk_model, local_model, bublic_yadisk_model,
+        security_model):
         super().__init__()
         self.view = view
+        
         self.yadisk_model = yadisk_model
         self.local_model = local_model
         self.bublic_yadisk_model = bublic_yadisk_model
+        self.security_model = security_model
+
         self.get_local_listdir()
 
     def connect_to_yadisk(self):
