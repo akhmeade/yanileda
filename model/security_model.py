@@ -27,5 +27,25 @@ class SecurityModel:
         
         if  key_type == KeyType.new_symbols:
             key = self.generate_key(magic_const.SYMBOL_KEY_LENGTH)
-            return key.decode("utf-8")
+            return {"action": "show",
+                "key": key.decode("utf-8")}
+                
+        elif key_type == KeyType.existing_symbols:
+            return {"action": "nothing"}
+
+        elif key_type == KeyType.new_media:
+            return {"action": "get_save_filename",
+                "limits" : "Images (*.png *.jpg)"}
+        
+        elif key_type == KeyType.existing_media:
+            return {"action": "get_open_filename",
+                "limits" : "Images (*.png *.jpg)"}
+        
+        elif key_type == KeyType.new_binary:
+                return {"action": "get_save_filename",
+                "limits" : "Binary file (*.key)"}
+        
+        elif key_type == KeyType.existing_binary:
+            return {"action": "get_open_filename",
+                "limits" : "Binary file (*.key)"}
         

@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import QTableView
 from PyQt5.QtWidgets import QTabWidget
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QFileDialog
+
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import pyqtSignal
@@ -148,4 +150,19 @@ class MainWindow(QMainWindow):
 
     def local_browse(self, result):
         filesystem = self.get_local_system()
-        filesystem.put_key(result)
+        
+        if result["action"] == "show":
+            filesystem.put_key(result["key"])
+        
+        elif result["action"] == "get_save_filename":
+            path = QFileDialog.getSaveFileName(self, "Create file", "new",
+                result["limits"])
+            print(type(path), path)
+            filesystem.put_key(path[0])
+        
+        elif result["action"] == "get_open_filename":
+            path = QFileDialog.getOpenFileName(self, "Open file", "",
+                result["limits"])
+            filesystem.put_key(path[0])
+        else:
+            filesystem.put_key("")
