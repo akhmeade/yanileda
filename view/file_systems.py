@@ -14,6 +14,8 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5 import uic
 
 import magic_const
+from magic_const import KeyType
+
 
 import resources
 
@@ -48,6 +50,10 @@ class FileSystem(QWidget):
         self.fill_combobox(self.algorithms_box, list(magic_const.SecurityAlgorithm))
         self.fill_combobox(self.key_type_box, label_names["key_type"])
 
+        self.key_type_box.currentIndexChanged.connect(self.key_type_changed)
+
+        self.key_type_changed()
+
         if self.system_type == "yadisk_auth":
             self.listdir.setContextMenuPolicy(Qt.CustomContextMenu)
             self.listdir.customContextMenuRequested.connect(self.show_context_menu)
@@ -58,6 +64,7 @@ class FileSystem(QWidget):
         self.back_button.clicked.connect(self.get_previous_folder)
         self.load_button.clicked.connect(self.move_clicked)
         self.browse_button.clicked.connect(self.browse_slot)
+        self.from_yadisk_button.toggled.connect(self.from_yadisk_button_toggled)
     
     def set_label_names(self, label_names):
         self.message_label.setText(label_names["message_label"])
@@ -133,6 +140,59 @@ class FileSystem(QWidget):
             set_folder.triggered.connect(self.set_as_media_folder)
             self.menu.addAction(set_folder)
             self.menu.exec_(self.listdir.mapToGlobal(pos))
+    def key_type_changed(self):
+        key_type = self.get_key_type()
+
+        if key_type == KeyType.new_symbols:
+            self.key_label.setVisible(True)
+            self.key_box.setVisible(True)
+            self.path_label.setVisible(False)
+            self.file_path_box.setVisible(False)
+            self.browse_button.setVisible(False)
+            self.from_yadisk_button.setVisible(False)
+        elif key_type == KeyType.existing_symbols:
+            self.key_label.setVisible(True)
+            self.key_box.setVisible(True)
+            self.path_label.setVisible(False)
+            self.file_path_box.setVisible(False)
+            self.browse_button.setVisible(False)
+            self.from_yadisk_button.setVisible(False)
+        elif key_type == KeyType.new_binary:
+            self.key_label.setVisible(False)
+            self.key_box.setVisible(False)
+            self.path_label.setVisible(True)
+            self.file_path_box.setVisible(True)
+            self.browse_button.setVisible(True)
+            self.from_yadisk_button.setVisible(False)
+        elif key_type == KeyType.existing_binary:
+            self.key_label.setVisible(False)
+            self.key_box.setVisible(False)
+            self.path_label.setVisible(True)
+            self.file_path_box.setVisible(True)
+            self.browse_button.setVisible(True)
+            self.from_yadisk_button.setVisible(False)
+        elif key_type == KeyType.new_media:
+            self.key_label.setVisible(True)
+            self.key_box.setVisible(True)
+            self.path_label.setVisible(True)
+            self.file_path_box.setVisible(True)
+            self.browse_button.setVisible(True)
+            self.from_yadisk_button.setVisible(False)
+        elif key_type == KeyType.existing_media:
+            self.key_label.setVisible(True)
+            self.key_box.setVisible(True)
+            self.path_label.setVisible(True)
+            self.file_path_box.setVisible(True)
+            #self.browse_button.setVisible(True) processed in function below
+            self.from_yadisk_button.setVisible(True)
+            self.from_yadisk_button_toggled(self.from_yadisk_button.isChecked())
+    
+    def from_yadisk_button_toggled(self, from_yadisk):
+        if from_yadisk:
+            self.browse_button.setVisible(False)
+        else:
+            self.browse_button.setVisible(True)
+        
 
     def get_listdir(self):
         path = self.path_box.text()

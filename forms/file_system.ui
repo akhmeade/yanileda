@@ -146,7 +146,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Your key:</string>
+            <string>Your key/password:</string>
            </property>
           </widget>
          </item>
@@ -186,7 +186,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QLineEdit" name="path_box_2"/>
+            <widget class="QLineEdit" name="file_path_box"/>
            </item>
            <item>
             <widget class="QPushButton" name="browse_button">
@@ -198,6 +198,13 @@
           </layout>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="from_yadisk_button">
+         <property name="text">
+          <string>Take file from YaDisk</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="load_button">
