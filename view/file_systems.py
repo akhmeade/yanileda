@@ -150,6 +150,7 @@ class FileSystem(QWidget):
             self.file_path_box.setVisible(False)
             self.browse_button.setVisible(False)
             self.from_yadisk_button.setVisible(False)
+            self.browse_slot()
         elif key_type == KeyType.existing_symbols:
             self.key_label.setVisible(True)
             self.key_box.setVisible(True)
@@ -157,6 +158,7 @@ class FileSystem(QWidget):
             self.file_path_box.setVisible(False)
             self.browse_button.setVisible(False)
             self.from_yadisk_button.setVisible(False)
+            self.key_box.clear()
         elif key_type == KeyType.new_binary:
             self.key_label.setVisible(False)
             self.key_box.setVisible(False)
@@ -164,6 +166,7 @@ class FileSystem(QWidget):
             self.file_path_box.setVisible(True)
             self.browse_button.setVisible(True)
             self.from_yadisk_button.setVisible(False)
+            self.file_path_box.clear()
         elif key_type == KeyType.existing_binary:
             self.key_label.setVisible(False)
             self.key_box.setVisible(False)
@@ -171,6 +174,7 @@ class FileSystem(QWidget):
             self.file_path_box.setVisible(True)
             self.browse_button.setVisible(True)
             self.from_yadisk_button.setVisible(False)
+            self.file_path_box.clear()
         elif key_type == KeyType.new_media:
             self.key_label.setVisible(True)
             self.key_box.setVisible(True)
@@ -178,6 +182,8 @@ class FileSystem(QWidget):
             self.file_path_box.setVisible(True)
             self.browse_button.setVisible(True)
             self.from_yadisk_button.setVisible(False)
+            self.key_box.clear()
+            self.file_path_box.clear()
         elif key_type == KeyType.existing_media:
             self.key_label.setVisible(True)
             self.key_box.setVisible(True)
@@ -186,6 +192,8 @@ class FileSystem(QWidget):
             #self.browse_button.setVisible(True) processed in function below
             self.from_yadisk_button.setVisible(True)
             self.from_yadisk_button_toggled(self.from_yadisk_button.isChecked())
+            self.key_box.clear()
+            self.file_path_box.clear()
     
     def from_yadisk_button_toggled(self, from_yadisk):
         if from_yadisk:
