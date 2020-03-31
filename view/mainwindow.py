@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
         return self.yadisk_files.currentWidget()
 
     def add_local_file_system(self):
-        file_system = FileSystem(magic_const.LOCAL_FILE_SYSTEM_LABELS)
+        file_system = FileSystem(magic_const.LOCAL_FILE_SYSTEM_LABELS, "local")
         
         file_system.double_clicked.connect(self.get_local_listdir)
         file_system.move_clicked.connect(self.move_file_from_local)
@@ -70,7 +70,7 @@ class MainWindow(QMainWindow):
         self.local_files.addTab(file_system, "Local file system")
     
     def add_authorized_yadisk_tab(self):
-        file_system = FileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS)
+        file_system = FileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS, "yadisk_auth")
         file_system.double_clicked.connect(self.get_yadisk_listdir)
         file_system.move_clicked.connect(self.move_file_from_yadisk)
         file_system.browse_clicked.connect(self.yadisk_browse_clicked)
@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
         self.yadisk_files.setCurrentWidget(file_system)
     
     def add_bublic_yadisk_tab(self, name="name"):
-        file_system = BublicFileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS)
+        file_system = BublicFileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS, "bublic")
         file_system.double_clicked.connect(self.get_bublic_listdir)
         file_system.move_clicked.connect(self.move_file_from_bublic_yadisk)
         self.yadisk_files.addTab(file_system, name)

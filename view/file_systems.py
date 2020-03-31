@@ -3,10 +3,12 @@
 from pathlib import Path
 
 from PyQt5.QtWidgets import QWidget
-
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtGui import QStandardItem
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QMenu
+from PyQt5.QtWidgets import QAction
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5 import uic
@@ -20,13 +22,23 @@ class FileSystem(QWidget):
     move_clicked = pyqtSignal()
     browse_clicked = pyqtSignal(magic_const.KeyType)
 
-    def __init__(self, label_names, parent=None):
+    def __init__(self, label_names, system_type, parent=None):
+        """[summary]
+        
+        Arguments:
+            label_names {[type]} -- [description]
+            system_type {str} -- [local/yadisk_auth/bublic]
+        
+        Keyword Arguments:
+            parent {[type]} -- [description] (default: {None})
+        """
         QWidget.__init__(self, parent)
         uic.loadUi("forms/file_system.ui", self)
         #self.file_system_name.setText(file_system_name)
         self.connect_to_actions()
         self.model = None
         self.protocol = []
+        self.system_type = system_type
 
         self.folder_icon = QIcon(":/img/images/folder_icon.png")
         self.file_icon = QIcon(":/img/images/file_icon.png")
@@ -35,6 +47,10 @@ class FileSystem(QWidget):
 
         self.fill_combobox(self.algorithms_box, list(magic_const.SecurityAlgorithm))
         self.fill_combobox(self.key_type_box, label_names["key_type"])
+
+        if self.system_type == "yadisk_auth":
+            self.listdir.setContextMenuPolicy(Qt.CustomContextMenu)
+            self.listdir.customContextMenuRequested.connect(self.show_context_menu)
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
@@ -56,6 +72,7 @@ class FileSystem(QWidget):
     def show_listdir(self, listdir, path):
         header = listdir[0]
         listdir = listdir[1:]
+        self.listdir_info = listdir.copy()
         self.protocol.append(path)
         self.path_box.setText(path)
 
@@ -94,6 +111,28 @@ class FileSystem(QWidget):
             self.double_clicked.emit(magic_const.YADISK_PREFIX)
         else:
             self.double_clicked.emit(path.as_posix())
+    
+    def get_selected_row(self):
+        selected = self.listdir.selectedIndexes()
+        if len(selected) < 1:
+            print("BAD SELECTED")
+        selected = selected[1]
+        row = selected.row()
+        return row
+
+    def set_as_media_folder(self):
+        print("triggereddd")
+
+    def show_context_menu(self, pos):
+            #print(pos, self.listdir.mapToGlobal(pos), 
+        row = self.get_selected_row()
+        #print(self.listdir_info[row - 1][1])
+        if self.listdir_info[row - 1][0] == "dir":
+            self.menu = QMenu(self)
+            set_folder = QAction("Set as media folder")
+            set_folder.triggered.connect(self.set_as_media_folder)
+            self.menu.addAction(set_folder)
+            self.menu.exec_(self.listdir.mapToGlobal(pos))
 
     def get_listdir(self):
         path = self.path_box.text()
@@ -134,12 +173,13 @@ class FileSystem(QWidget):
 
     def browse_slot(self):
         self.browse_clicked.emit(self.get_key_type())
+    
     def put_key(self, result):
         self.key_box.setText(result)
 
 class BublicFileSystem(FileSystem):
-    def __init__(self, parent=None):
-        FileSystem.__init__(self, parent)
+    def __init__(self, system_type,  parent=None):
+        FileSystem.__init__(self, system_type, parent)
     
     def double_click_slot(self, index):
         row = index.row()
