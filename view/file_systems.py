@@ -37,7 +37,7 @@ class FileSystem(QWidget):
         QWidget.__init__(self, parent)
         uic.loadUi("forms/file_system.ui", self)
         #self.file_system_name.setText(file_system_name)
-        self.connect_to_actions()
+        #self.connect_to_actions()
         self.model = None
         self.protocol = []
         self.system_type = system_type
@@ -57,6 +57,7 @@ class FileSystem(QWidget):
         if self.system_type == "yadisk_auth":
             self.listdir.setContextMenuPolicy(Qt.CustomContextMenu)
             self.listdir.customContextMenuRequested.connect(self.show_context_menu)
+        self.connect_to_actions()
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
@@ -246,6 +247,9 @@ class FileSystem(QWidget):
         self.key_box.setText(result)
     def put_file_path(self, text):
         self.file_path_box.setText(text)
+    
+    def set_load_button_enable(self, enabled):
+        self.load_button.setEnabled(enabled)
 
 class BublicFileSystem(FileSystem):
     def __init__(self, system_type,  parent=None):

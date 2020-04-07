@@ -53,6 +53,7 @@ class MainWindow(QMainWindow):
     def connect_to_actions(self):
         self.connect_to_yadisk_action.triggered.connect(self.connect_to_yadisk)
         self.open_link_action.triggered.connect(self.open_link)
+        self.yadisk_files.currentChanged.connect(self.yadisk_tab_changed)
     
     def get_local_system(self):
         return self.local_files.currentWidget()
@@ -68,6 +69,7 @@ class MainWindow(QMainWindow):
         file_system.browse_clicked.connect(self.local_browse_clicked)
 
         self.local_files.addTab(file_system, "Local file system")
+        file_system.set_load_button_enable(False)
     
     def add_authorized_yadisk_tab(self):
         file_system = FileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS, "yadisk_auth")
@@ -153,7 +155,7 @@ class MainWindow(QMainWindow):
         
         filesystem.put_key("")
         filesystem.put_file_path("")
-        
+
         if result["action"] == "show":
             filesystem.put_key(result["key"])
         
@@ -169,3 +171,13 @@ class MainWindow(QMainWindow):
             filesystem.put_file_path(path[0])
         else:
             pass
+    
+    def yadisk_tab_changed(self):
+        yadisk_filesystem = self.yadisk_files.currentWidget()
+        local_filesystem = self.local_files.currentWidget()
+        if yadisk_filesystem.system_type == "yadisk_auth":
+            local_filesystem.set_load_button_enable(True)
+        elif yadisk_filesystem.system_type == "bublic":
+            local_filesystem.set_load_button_enable(False)
+        else:
+            print("BAD")

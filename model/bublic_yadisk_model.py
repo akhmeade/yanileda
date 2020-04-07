@@ -10,16 +10,21 @@ class BublicYadiskModel:
         self.disk = yadisk.YaDisk()
     
     def check_url(self, url):
+        print(url)
         try:
             is_correct = self.disk.public_exists(url)
+            print(True)
             return is_correct
-        except Exception:
+        except Exception as e:
+            print(e, False)
             return False
     
     def get_meta(self, url):
+        print(url)
         info = self.disk.get_public_meta(url)
-        return [(info.type, info.name, info.public_url,
-             info.created.strftime(magic_const.DATETIME_FORMAT))], url
+        return [self.header, 
+            (info.type, info.name, info.public_url,
+                info.created.strftime(magic_const.DATETIME_FORMAT))], url
     
     def get_listdir(self, url):
         if self.check_url(url):
