@@ -1,6 +1,7 @@
 #coding: utf-8
 
 import yadisk
+from yadisk.exceptions import TooManyRequestsError
 
 import magic_const
 
@@ -11,13 +12,20 @@ class BublicYadiskModel:
     
     def check_url(self, url):
         print(url)
-        try:
-            is_correct = self.disk.public_exists(url)
-            print(True)
-            return is_correct
-        except Exception as e:
-            print(e, False)
-            return False
+        result = None
+        while result is None:
+
+            try:
+                is_correct = self.disk.public_exists(url)
+                print(True)
+                result = is_correct
+            except TooManyRequestsError:
+                print("too many")
+                result = None
+            except Exception as e:
+                print(False)
+                result = False
+        return result
     
     def get_meta(self, url):
         print(url)
