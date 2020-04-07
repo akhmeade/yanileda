@@ -244,6 +244,8 @@ class FileSystem(QWidget):
     
     def put_key(self, result):
         self.key_box.setText(result)
+    def put_file_path(self, text):
+        self.file_path_box.setText(text)
 
 class BublicFileSystem(FileSystem):
     def __init__(self, system_type,  parent=None):

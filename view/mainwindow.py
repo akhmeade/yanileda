@@ -151,6 +151,9 @@ class MainWindow(QMainWindow):
     def local_browse(self, result):
         filesystem = self.get_local_system()
         
+        filesystem.put_key("")
+        filesystem.put_file_path("")
+        
         if result["action"] == "show":
             filesystem.put_key(result["key"])
         
@@ -158,11 +161,11 @@ class MainWindow(QMainWindow):
             path = QFileDialog.getSaveFileName(self, "Create file", "new",
                 result["limits"])
             print(type(path), path)
-            filesystem.put_key(path[0])
+            filesystem.put_file_path(path[0])
         
         elif result["action"] == "get_open_filename":
             path = QFileDialog.getOpenFileName(self, "Open file", "",
                 result["limits"])
-            filesystem.put_key(path[0])
+            filesystem.put_file_path(path[0])
         else:
-            filesystem.put_key("")
+            pass
