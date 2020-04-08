@@ -47,7 +47,7 @@ class SecurityAlgorithm(Enum):
     aes = "AES"
     camellia = "Camellia"
     chacha20 = "ChaCha20"
-    tripleDes = "Triple DES"
+    triple_des = "Triple DES"
     cast5 = "CAST5"
     seed = "SEED"
 
