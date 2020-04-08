@@ -2,6 +2,9 @@
 
 from .ipresenter import IPresenter
 
+import tempfile
+from pathlib import Path
+
 class Presenter(IPresenter):
     def __init__(self, view, yadisk_model, local_model, bublic_yadisk_model,
         security_model):
@@ -14,6 +17,9 @@ class Presenter(IPresenter):
         self.security_model = security_model
 
         self.get_local_listdir()
+
+        self.temp_dir = tempfile.TemporaryDirectory()
+        print(self.temp_dir)
 
     def connect_to_yadisk(self):
         url = self.yadisk_model.get_verification_url()
@@ -36,14 +42,19 @@ class Presenter(IPresenter):
         if not local_listdir is None:
             self.view.show_local_listdir(*local_listdir)
     
-    def download_from_auth_yadisk(self, from_path, to_path):
+    def download_from_auth_yadpisk(self, from_path, to_path, encryption_data):
+        print(encryption_data)
         self.yadisk_model.download(from_path, to_path)
     
-    def download_from_bublic_yadisk(self, from_path, to_path):
+    def download_from_bublic_yadisk(self, from_path, to_path, encryption_data):
+        print(encryption_data)
         self.bublic_yadisk_model.download(from_path, to_path)
     
-    def upload_to_auth_yadisk(self, from_path, to_path):
-        self.yadisk_model.upload(from_path, to_path)
+    def upload_to_auth_yadisk(self, from_path, to_path, encryption_data):
+        print(encryption_data)
+        temp_filename = self.get_temp_path(from_path)
+        self.security_model.encrypt(from_path, temp_filename, encryption_data)
+        self.yadisk_model.upload(temp_filename, to_path)
 
     def open_bublic_url(self, url):
         is_correct_url = self.bublic_yadisk_model.check_url(url)
@@ -67,3 +78,8 @@ class Presenter(IPresenter):
     def local_browse(self, key_type):
         result = self.security_model.browse(key_type)
         self.view.local_browse(result)
+
+    def get_temp_path(self, filename):
+        file_path = Path(filename)
+        temp_dir_path = Path(self.temp_dir.name)
+        return (temp_dir_path / file_path.name).as_posix() 

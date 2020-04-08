@@ -28,6 +28,7 @@ class BublicYadiskModel:
         print(url)
         result = self.disk.public_exists(url)
         return result
+
     @avoid_too_many_requests_error
     def get_meta(self, url):
         print(url)

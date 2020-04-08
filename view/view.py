@@ -73,16 +73,16 @@ class GuiView(QObject, IView):
     def show_yadisk_listdir(self, listdir, path):
         self.mainwindow.show_yadisk_listdir(listdir, path)
     
-    def download_from_auth_yadisk(self, from_file, to_file):
-        self.presenter.download_from_auth_yadisk(from_file, to_file)
+    def download_from_auth_yadisk(self, from_file, to_file, encryption_data):
+        self.presenter.download_from_auth_yadisk(from_file, to_file, encryption_data)
         self.update_local()
     
-    def download_from_bublic_yadisk(self, from_file, to_file):
-        self.presenter.download_from_bublic_yadisk(from_file, to_file)
+    def download_from_bublic_yadisk(self, from_file, to_file, encryption_data):
+        self.presenter.download_from_bublic_yadisk(from_file, to_file, encryption_data)
         self.update_local()
     
-    def upload_to_auth_yadisk(self, from_file, to_file):
-        self.presenter.upload_to_auth_yadisk(from_file, to_file)
+    def upload_to_auth_yadisk(self, from_file, to_file, encryption_data):
+        self.presenter.upload_to_auth_yadisk(from_file, to_file, encryption_data)
         self.update_auth_yadisk()
     
     def update_local(self):

@@ -26,9 +26,9 @@ class MainWindow(QMainWindow):
     get_bublic_listdir = pyqtSignal(str)
     
     move_file_signal = pyqtSignal(str, str)
-    download_from_auth_yadisk = pyqtSignal(str, str)
-    download_from_bublic_yadisk = pyqtSignal(str, str)
-    upload_to_auth_yadisk = pyqtSignal(str, str)
+    download_from_auth_yadisk = pyqtSignal(str, str, tuple)
+    download_from_bublic_yadisk = pyqtSignal(str, str, tuple)
+    upload_to_auth_yadisk = pyqtSignal(str, str, tuple)
     
     open_link_signal = pyqtSignal()
 
@@ -115,7 +115,10 @@ class MainWindow(QMainWindow):
         file_name = yadisk_files.get_file_name()
         from_path = from_folder / file_name
         to_path = to_folder / file_name
-        self.download_from_auth_yadisk.emit(from_path.as_posix(), to_path.as_posix())
+
+        encryption_data = (yadisk_files.get_algorithm(), yadisk_files.get_key_type(), \
+            yadisk_files.get_key(), yadisk_files.get_file_path())
+        self.download_from_auth_yadisk.emit(from_path.as_posix(), to_path.as_posix(), encryption_data)
         #self.move_file_signal.emit(from_path.as_posix(), to_path.as_posix())
 
     def move_file_from_local(self):
@@ -130,7 +133,10 @@ class MainWindow(QMainWindow):
         file_name = local_system.get_file_name()
         from_path = from_folder / file_name
         to_path = to_folder  / file_name
-        self.upload_to_auth_yadisk.emit(from_path.as_posix(), to_path.as_posix())
+
+        encryption_data = (local_system.get_algorithm(), local_system.get_key_type(), \
+            local_system.get_key(), local_system.get_file_path())
+        self.upload_to_auth_yadisk.emit(from_path.as_posix(), to_path.as_posix(), encryption_data)
     
     def move_file_from_bublic_yadisk(self):
         local_system = self.get_local_system()
@@ -142,7 +148,10 @@ class MainWindow(QMainWindow):
         file_name = yadisk_files.get_file_name()
 
         to_path = to_folder / file_name
-        self.download_from_bublic_yadisk.emit(from_url, to_path.as_posix())
+
+        encryption_data = (yadisk_files.get_algorithm(), yadisk_files.get_key_type(), \
+            yadisk_files.get_key(), yadisk_files.get_file_path())
+        self.download_from_bublic_yadisk.emit(from_url, to_path.as_posix(), encryption_data)
     
     def get_yadisk_folder_name(self):
         return self.yadisk_files.currentWidget().get_folder_path()
