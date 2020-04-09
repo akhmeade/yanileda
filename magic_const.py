@@ -51,4 +51,11 @@ class SecurityAlgorithm(Enum):
     cast5 = "CAST5"
     seed = "SEED"
 
-SYMBOL_KEY_LENGTH = 32
+KEY_LENGTH = {
+    SecurityAlgorithm.aes: 32,
+    SecurityAlgorithm.camellia: 32,
+    SecurityAlgorithm.chacha20: 32,
+    SecurityAlgorithm.triple_des: 21,
+    SecurityAlgorithm.cast5: 16,
+    SecurityAlgorithm.seed: 16
+}
