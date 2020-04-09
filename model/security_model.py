@@ -4,9 +4,30 @@ import base64
 import os
 
 import magic_const
+
+import tempfile
+from pathlib import Path
+
+from magic_const import SecurityAlgorithm
 from magic_const import KeyType
 
+import cryptography
+from cryptography.hazmat.primitives.ciphers import algorithms
+from cryptography.hazmat.primitives.ciphers import Cipher
+from cryptography.hazmat.backends import default_backend
+
+
+class EchoObject:
+    def encryptor(self):
+        return self
+    def decryptor(self):
+        return self
+    def update(self, text):
+        return text
+
 class SecurityModel:
+    def __init__(self):
+        print(SecurityModel)
 
     def generate_key(self, length):
         """
@@ -48,4 +69,78 @@ class SecurityModel:
         elif key_type == KeyType.existing_binary:
             return {"action": "get_open_filename",
                 "limits" : "Binary file (*.key)"}
+
+    def encrypt(self, from_path, to_path, encryption_data):
+        cipher = self.get_cipher(encryption_data)
+        encrypter = cipher.encryptor()
+        self.update(encrypter, from_path, to_path)
+    
+    def decrypt(self, from_path, to_path, encryption_data):
+        cipher = self.get_cipher(encryption_data)
+        decryptor = cipher.decryptor()
+        self.update(decryptor, from_path, to_path)
+
+    def update(self, crypter, from_path, to_path):
+        with open(from_path, "rb") as f:
+            data = f.read()
+        crypted = crypter.update(data)
+
+        with open(to_path, "wb") as f:
+            f.write(crypted)
+
+    def get_cipher(self, encryption_data):
+        assert len(encryption_data) == 4
+        algorithm_type, key_type, key, media_path = encryption_data
+        # get key from media if need it
+        key = self.get_key(key_type, key, media_path)
+        algorithm = self.get_algorithm(algorithm_type, key)
         
+        if algorithm is None:
+            cipher = EchoObject()
+        else:
+            cipher = Cipher(algorithm, mode = None, backend = default_backend())
+
+        return cipher
+
+
+    def get_algorithm(self, algorithm, key):
+        if algorithm == SecurityAlgorithm.none:
+            return None
+        elif algorithm == SecurityAlgorithm.aes:
+            return algorithms.AES(key)
+        elif algorithms == SecurityAlgorithm.camellia:
+            return algorithms.Camellia(key)
+        #elif algorithm == SecurityAlgorithm.chacha20:
+        #    return algorithms.ChaCha20(key)
+        elif algorithm == SecurityAlgorithm.triple_des:
+            return algorithms.TripleDES(key)
+        elif algorithms == SecurityAlgorithm.cast5:
+            return algorithms.CAST5(key)
+        elif algorithms == SecurityAlgorithm.seed:
+            return algorithms.SEED(key)
+        else:
+            print("Bad algorithm")
+
+    def get_key(self, key_type, key, media_path):
+        if key_type == KeyType.new_symbols:
+            return key
+        
+        elif key_type == KeyType.existing_symbols:
+            return key
+        
+        elif key_type == KeyType.new_binary:
+            key = self.generate_key(magic_const.SYMBOL_KEY_LENGTH)
+            with open(media_path, "rb") as f:
+                f.write(key)
+            return key
+        
+        elif key_type == KeyType.existing_binary:
+            with open(media_path, "rb") as f:
+                key = f.read()
+            return key
+
+        elif key_type == KeyType.new_media:
+            pass
+        elif key_type == KeyType.existing_media:
+            pass
+
