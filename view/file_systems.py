@@ -66,6 +66,7 @@ class FileSystem(QWidget):
         self.browse_button.clicked.connect(self.browse_slot)
         self.from_yadisk_button.toggled.connect(self.from_yadisk_button_toggled)
         self.key_type_box.currentIndexChanged.connect(self.key_type_changed)
+        # TODO: create its own signal/slot
         self.algorithms_box.currentIndexChanged.connect(self.browse_slot)
     
     def set_label_names(self, label_names):
