@@ -15,7 +15,7 @@ import cryptography
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.ciphers.modes import CBC
+from cryptography.hazmat.primitives.ciphers import modes
 
 
 class EchoObject:
@@ -30,7 +30,7 @@ class SecurityModel:
     def __init__(self):
         print(SecurityModel)
 
-    def generate_key(self, length):
+    def generate_key_by_length(self, length):
         """
         Generate key for encoding
     
@@ -40,6 +40,9 @@ class SecurityModel:
         key = base64.urlsafe_b64encode(os.urandom(length))
         print(len(key), type(key))
         return key[:length]
+    
+    def generate_key(self, alg_type):
+        return self.generate_key(magic_const.KEY_LENGTH[alg_type])
 
     def browse(self, key_type):
         # возможно надо возвращать словарь с инфой что делать
@@ -50,7 +53,7 @@ class SecurityModel:
         # и потом view решает что делать
         
         if  key_type == KeyType.new_symbols:
-            key = self.generate_key(magic_const.SYMBOL_KEY_LENGTH)
+            key = self.generate_key(32)
             return {"action": "show",
                 "key": key.decode("utf-8")}
                 
@@ -103,8 +106,7 @@ class SecurityModel:
         if algorithm is None:
             cipher = EchoObject()
         else:
-            iv = key[:16]
-            cipher = Cipher(algorithm, mode=CBC(iv), backend=default_backend())
+            cipher = Cipher(algorithm, mode=modes.ECB(), backend=default_backend())
 
         return cipher
 
@@ -127,7 +129,7 @@ class SecurityModel:
         else:
             print("Bad algorithm")
 
-    def get_key(self, key_type, key, media_path):
+    def get_key(self, key_type, key, media_path, algorithm_type):
         print(media_path)
         if key_type == KeyType.new_symbols:
             return key
@@ -136,7 +138,7 @@ class SecurityModel:
             return key
         
         elif key_type == KeyType.new_binary:
-            key = self.generate_key(magic_const.SYMBOL_KEY_LENGTH)
+            key = self.generate_key(algorithm_type)
             with open(media_path, "wb") as f:
                 f.write(key)
             return key
@@ -150,4 +152,3 @@ class SecurityModel:
             pass
         elif key_type == KeyType.existing_media:
             pass
-
