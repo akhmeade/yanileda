@@ -51,4 +51,4 @@ class SecurityAlgorithm(Enum):
     cast5 = "CAST5"
     seed = "SEED"
 
-SYMBOL_KEY_LENGTH = 256
+SYMBOL_KEY_LENGTH = 32

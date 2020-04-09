@@ -3,3 +3,5 @@ __pycache__
 *.user
 my_venv
 *.autosave
+trash/
+*checkpoint.ipynb

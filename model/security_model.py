@@ -15,6 +15,7 @@ import cryptography
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers.modes import CBC
 
 
 class EchoObject:
@@ -36,7 +37,9 @@ class SecurityModel:
         Arguments:
             length {int} -- [length of key in BITS]
         """
-        return base64.urlsafe_b64encode(os.urandom(length))
+        key = base64.urlsafe_b64encode(os.urandom(length))
+        print(len(key), type(key))
+        return key[:length]
 
     def browse(self, key_type):
         # возможно надо возвращать словарь с инфой что делать
@@ -83,8 +86,9 @@ class SecurityModel:
     def update(self, crypter, from_path, to_path):
         with open(from_path, "rb") as f:
             data = f.read()
+        #print(data)
         crypted = crypter.update(data)
-
+        #print(crypted)
         with open(to_path, "wb") as f:
             f.write(crypted)
 
@@ -92,13 +96,15 @@ class SecurityModel:
         assert len(encryption_data) == 4
         algorithm_type, key_type, key, media_path = encryption_data
         # get key from media if need it
-        key = self.get_key(key_type, key, media_path)
+        if algorithm_type != SecurityAlgorithm.none:
+            key = self.get_key(key_type, key, media_path)
         algorithm = self.get_algorithm(algorithm_type, key)
         
         if algorithm is None:
             cipher = EchoObject()
         else:
-            cipher = Cipher(algorithm, mode = None, backend = default_backend())
+            iv = key[:16]
+            cipher = Cipher(algorithm, mode=CBC(iv), backend=default_backend())
 
         return cipher
 
@@ -108,20 +114,21 @@ class SecurityModel:
             return None
         elif algorithm == SecurityAlgorithm.aes:
             return algorithms.AES(key)
-        elif algorithms == SecurityAlgorithm.camellia:
+        elif algorithm == SecurityAlgorithm.camellia:
             return algorithms.Camellia(key)
         #elif algorithm == SecurityAlgorithm.chacha20:
         #    return algorithms.ChaCha20(key)
         elif algorithm == SecurityAlgorithm.triple_des:
             return algorithms.TripleDES(key)
-        elif algorithms == SecurityAlgorithm.cast5:
+        elif algorithm == SecurityAlgorithm.cast5:
             return algorithms.CAST5(key)
-        elif algorithms == SecurityAlgorithm.seed:
+        elif algorithm == SecurityAlgorithm.seed:
             return algorithms.SEED(key)
         else:
             print("Bad algorithm")
 
     def get_key(self, key_type, key, media_path):
+        print(media_path)
         if key_type == KeyType.new_symbols:
             return key
         
@@ -130,7 +137,7 @@ class SecurityModel:
         
         elif key_type == KeyType.new_binary:
             key = self.generate_key(magic_const.SYMBOL_KEY_LENGTH)
-            with open(media_path, "rb") as f:
+            with open(media_path, "wb") as f:
                 f.write(key)
             return key
         
