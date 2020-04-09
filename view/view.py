@@ -113,8 +113,8 @@ class GuiView(QObject, IView):
     def get_bublic_listdir(self, url):
         self.presenter.get_bublic_listdir(url)
     
-    def local_browse_request(self, key_type):
-        self.presenter.local_browse(key_type)
+    def local_browse_request(self, key_type, algorithm):
+        self.presenter.local_browse(key_type, algorithm)
     
     def local_browse(self, result):
         self.mainwindow.local_browse(result)

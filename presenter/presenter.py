@@ -75,8 +75,8 @@ class Presenter(IPresenter):
         if not listdir is None:
             self.view.show_yadisk_listdir(*listdir)
 
-    def local_browse(self, key_type):
-        result = self.security_model.browse(key_type)
+    def local_browse(self, key_type, algorithm):
+        result = self.security_model.browse(key_type, algorithm)
         self.view.local_browse(result)
 
     def get_temp_path(self, filename):

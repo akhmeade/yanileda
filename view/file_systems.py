@@ -15,6 +15,7 @@ from PyQt5 import uic
 
 import magic_const
 from magic_const import KeyType
+from magic_const import SecurityAlgorithm
 
 
 import resources
@@ -22,7 +23,7 @@ import resources
 class FileSystem(QWidget):
     double_clicked = pyqtSignal(str)
     move_clicked = pyqtSignal()
-    browse_clicked = pyqtSignal(magic_const.KeyType)
+    browse_clicked = pyqtSignal(KeyType, SecurityAlgorithm)
 
     def __init__(self, label_names, system_type, parent=None):
         """[summary]
@@ -247,7 +248,7 @@ class FileSystem(QWidget):
         return self.file_path_box.text()
 
     def browse_slot(self):
-        self.browse_clicked.emit(self.get_key_type())
+        self.browse_clicked.emit(self.get_key_type(), self.get_algorithm())
     
     def put_key(self, result):
         self.key_box.setText(result)

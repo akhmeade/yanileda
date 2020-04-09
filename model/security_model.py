@@ -42,9 +42,12 @@ class SecurityModel:
         return key[:length]
     
     def generate_key(self, alg_type):
-        return self.generate_key(magic_const.KEY_LENGTH[alg_type])
+        if alg_type == SecurityAlgorithm.none:
+            return b""
+        else:
+            return self.generate_key_by_length(magic_const.KEY_LENGTH[alg_type])
 
-    def browse(self, key_type):
+    def browse(self, key_type, algorithm):
         # возможно надо возвращать словарь с инфой что делать
         # типа если просто ключ, то например
         # {"action": "show", "key": key}
@@ -53,7 +56,7 @@ class SecurityModel:
         # и потом view решает что делать
         
         if  key_type == KeyType.new_symbols:
-            key = self.generate_key(32)
+            key = self.generate_key(algorithm)
             return {"action": "show",
                 "key": key.decode("utf-8")}
                 

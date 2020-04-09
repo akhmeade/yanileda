@@ -17,6 +17,8 @@ from .file_systems import FileSystem
 from .file_systems import BublicFileSystem
 
 import magic_const
+from magic_const import KeyType
+from magic_const import SecurityAlgorithm
 
 class MainWindow(QMainWindow):
 
@@ -32,8 +34,8 @@ class MainWindow(QMainWindow):
     
     open_link_signal = pyqtSignal()
 
-    local_browse_clicked = pyqtSignal(magic_const.KeyType)
-    yadisk_browse_clicked = pyqtSignal(magic_const.KeyType)
+    local_browse_clicked = pyqtSignal(KeyType, SecurityAlgorithm)
+    yadisk_browse_clicked = pyqtSignal(KeyType, SecurityAlgorithm)
 
     def __init__(self):
         super(MainWindow, self).__init__()
