@@ -51,9 +51,7 @@ class FileSystem(QWidget):
         self.fill_combobox(self.algorithms_box, list(magic_const.SecurityAlgorithm))
         self.fill_combobox(self.key_type_box, label_names["key_type"])
 
-        self.key_type_box.currentIndexChanged.connect(self.key_type_changed)
-
-        self.key_type_changed()
+        
 
         if self.system_type == "yadisk_auth":
             self.listdir.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -67,6 +65,8 @@ class FileSystem(QWidget):
         self.load_button.clicked.connect(self.move_clicked)
         self.browse_button.clicked.connect(self.browse_slot)
         self.from_yadisk_button.toggled.connect(self.from_yadisk_button_toggled)
+        self.key_type_box.currentIndexChanged.connect(self.key_type_changed)
+        self.algorithms_box.currentIndexChanged.connect(self.browse_slot)
     
     def set_label_names(self, label_names):
         self.message_label.setText(label_names["message_label"])
