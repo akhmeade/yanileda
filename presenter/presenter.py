@@ -41,20 +41,6 @@ class Presenter(IPresenter):
         local_listdir = self.local_model.get_listdir(path)
         if not local_listdir is None:
             self.view.show_local_listdir(*local_listdir)
-    
-    def download_from_auth_yadpisk(self, from_path, to_path, encryption_data):
-        print(encryption_data)
-        self.yadisk_model.download(from_path, to_path)
-    
-    def download_from_bublic_yadisk(self, from_path, to_path, encryption_data):
-        print(encryption_data)
-        self.bublic_yadisk_model.download(from_path, to_path)
-    
-    def upload_to_auth_yadisk(self, from_path, to_path, encryption_data):
-        print(encryption_data)
-        temp_filename = self.get_temp_path(from_path)
-        self.security_model.encrypt(from_path, temp_filename, encryption_data)
-        self.yadisk_model.upload(temp_filename, to_path)
 
     def open_bublic_url(self, url):
         is_correct_url = self.bublic_yadisk_model.check_url(url)
@@ -82,4 +68,19 @@ class Presenter(IPresenter):
     def get_temp_path(self, filename):
         file_path = Path(filename)
         temp_dir_path = Path(self.temp_dir.name)
-        return (temp_dir_path / file_path.name).as_posix() 
+        return (temp_dir_path / file_path.name).as_posix()
+    
+    def download_from_auth_yadisk(self, from_path, to_path, encryption_data):
+        temp_filename = self.get_temp_path(to_path)
+        self.yadisk_model.download(from_path, temp_filename)
+        self.security_model.decrypt(temp_filename, to_path, encryption_data)
+    
+    def download_from_bublic_yadisk(self, from_path, to_path, encryption_data):
+        temp_filename = self.get_temp_path(to_path)
+        self.bublic_yadisk_model.download(from_path, to_path)
+        self.security_model.decypt(temp_filename, to_path, encryption_data)
+    
+    def upload_to_auth_yadisk(self, from_path, to_path, encryption_data):
+        temp_filename = self.get_temp_path(from_path)
+        self.security_model.encrypt(from_path, temp_filename, encryption_data)
+        self.yadisk_model.upload(temp_filename, to_path)

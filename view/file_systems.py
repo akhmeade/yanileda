@@ -57,6 +57,7 @@ class FileSystem(QWidget):
             self.listdir.setContextMenuPolicy(Qt.CustomContextMenu)
             self.listdir.customContextMenuRequested.connect(self.show_context_menu)
         self.connect_to_actions()
+        self.key_type_changed()
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)

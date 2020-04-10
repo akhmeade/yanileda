@@ -5,26 +5,28 @@ import os
 
 import magic_const
 
-import tempfile
-from pathlib import Path
-
 from magic_const import SecurityAlgorithm
 from magic_const import KeyType
 
-import cryptography
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import modes
+from cryptography.hazmat.primitives import padding
 
 
 class EchoObject:
+    block_size = 8
     def encryptor(self):
         return self
     def decryptor(self):
         return self
     def update(self, text):
         return text
+    @property
+    def algorithm(self):
+        return self
+
 
 class SecurityModel:
     def __init__(self):
@@ -82,34 +84,66 @@ class SecurityModel:
     def encrypt(self, from_path, to_path, encryption_data):
         cipher = self.get_cipher(encryption_data)
         encrypter = cipher.encryptor()
-        self.update(encrypter, from_path, to_path)
+        block_size = cipher.algorithm.block_size
+
+        padder = padding.PKCS7(block_size).padder()
+
+        with open(from_path, "rb") as file:
+            data = file.read()
+
+        padded_data = padder.update(data)
+        padded_data += padder.finalize()
+        crypted = encrypter.update(padded_data)
+        print(len(data), len(padded_data), len(crypted))
+        with open(to_path, "wb") as file:
+            file.write(crypted)
+        #self.update(encrypter, from_path, to_path, padder.padder())
     
     def decrypt(self, from_path, to_path, encryption_data):
         cipher = self.get_cipher(encryption_data)
         decryptor = cipher.decryptor()
-        self.update(decryptor, from_path, to_path)
+        block_size = cipher.algorithm.block_size
 
-    def update(self, crypter, from_path, to_path):
-        with open(from_path, "rb") as f:
-            data = f.read()
-        #print(data)
-        crypted = crypter.update(data)
-        #print(crypted)
-        with open(to_path, "wb") as f:
-            f.write(crypted)
+        padder = padding.PKCS7(block_size).unpadder()
+
+        with open(from_path, "rb") as file:
+            data = file.read()
+
+        crypted = decryptor.update(data)
+
+        padded_data = padder.update(crypted)
+        padded_data += padder.finalize()
+        
+        print(len(data), len(crypted), len(padded_data))
+        
+        with open(to_path, "wb") as file:
+            file.write(padded_data)
+        #self.update(decryptor, from_path, to_path, padder.unpadder())
+
+    # def update(self, crypter, from_path, to_path, padder):
+    #     with open(from_path, "rb") as file:
+    #         data = file.read()
+    #     #print(data)
+    #     crypted = crypter.update(padded_data)
+    #     print(len(padded_data), len(crypted))
+    #     #print(crypted)
+    #     with open(to_path, "wb") as file:
+    #         file.write(crypted)
 
     def get_cipher(self, encryption_data):
         assert len(encryption_data) == 4
         algorithm_type, key_type, key, media_path = encryption_data
         # get key from media if need it
         if algorithm_type != SecurityAlgorithm.none:
-            key = self.get_key(key_type, key, media_path)
+            key = self.get_key(key_type, key, media_path, algorithm_type)
         algorithm = self.get_algorithm(algorithm_type, key)
-        
+
         if algorithm is None:
             cipher = EchoObject()
         else:
             cipher = Cipher(algorithm, mode=modes.ECB(), backend=default_backend())
+            #print(cipher.algorithm.block_size)
+            #print(cipher.block_size)
 
         return cipher
 
