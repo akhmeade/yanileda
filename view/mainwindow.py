@@ -119,7 +119,7 @@ class MainWindow(QMainWindow):
         to_path = to_folder / file_name
 
         encryption_data = (yadisk_files.get_algorithm(), yadisk_files.get_key_type(), \
-            yadisk_files.get_key(), yadisk_files.get_file_path())
+            yadisk_files.get_key().encode("utf-8"), yadisk_files.get_file_path())
         self.download_from_auth_yadisk.emit(from_path.as_posix(), to_path.as_posix(), encryption_data)
         #self.move_file_signal.emit(from_path.as_posix(), to_path.as_posix())
 
@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
         to_path = to_folder  / file_name
 
         encryption_data = (local_system.get_algorithm(), local_system.get_key_type(), \
-            local_system.get_key(), local_system.get_file_path())
+            local_system.get_key().encode("utf-8"), local_system.get_file_path())
         self.upload_to_auth_yadisk.emit(from_path.as_posix(), to_path.as_posix(), encryption_data)
     
     def move_file_from_bublic_yadisk(self):
@@ -152,7 +152,7 @@ class MainWindow(QMainWindow):
         to_path = to_folder / file_name
 
         encryption_data = (yadisk_files.get_algorithm(), yadisk_files.get_key_type(), \
-            yadisk_files.get_key(), yadisk_files.get_file_path())
+            yadisk_files.get_key().encode("utf-8"), yadisk_files.get_file_path())
         self.download_from_bublic_yadisk.emit(from_url, to_path.as_posix(), encryption_data)
     
     def get_yadisk_folder_name(self):
