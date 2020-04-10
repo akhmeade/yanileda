@@ -55,7 +55,7 @@ KEY_LENGTH = {
     SecurityAlgorithm.aes: 32,
     SecurityAlgorithm.camellia: 32,
     SecurityAlgorithm.chacha20: 32,
-    SecurityAlgorithm.triple_des: 21,
+    SecurityAlgorithm.triple_des: 24,
     SecurityAlgorithm.cast5: 16,
     SecurityAlgorithm.seed: 16
 }
