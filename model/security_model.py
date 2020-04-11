@@ -3,6 +3,11 @@
 import base64
 import os
 
+import sys
+# sys.path.append(".")
+sys.path.append("f5steganography/")
+#print(sys.path)
+
 import magic_const
 
 from magic_const import SecurityAlgorithm
@@ -13,6 +18,12 @@ from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import modes
 from cryptography.hazmat.primitives import padding
+
+from f5steganography.utity import embed_into_image
+from f5steganography.utity import extract_from_image
+
+#from test.utity import embed_into_image
+#from test.utity import extract_from_image
 
 import logging
 logger = logging.getLogger(__name__)
@@ -67,7 +78,7 @@ class SecurityModel:
             return {"action": "nothing"}
 
         elif key_type == KeyType.new_media:
-            return {"action": "get_save_filename",
+            return {"action": "get_open_filename",
                 "limits" : "Images (*.png *.jpg)"}
         
         elif key_type == KeyType.existing_media:
@@ -185,6 +196,8 @@ class SecurityModel:
             return key
 
         elif key_type == KeyType.new_media:
-            pass
+            key_key = self.generate_key(algorithm_type)
+            embed_into_image(media_path, key_key, key)
+            
         elif key_type == KeyType.existing_media:
-            pass
+            return extract_from_image(media_path, key)
