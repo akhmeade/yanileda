@@ -5,6 +5,9 @@ from .ipresenter import IPresenter
 import tempfile
 from pathlib import Path
 
+import logging
+logger = logging.getLogger(__name__)
+
 class Presenter(IPresenter):
     def __init__(self, view, yadisk_model, local_model, bublic_yadisk_model,
         security_model):
@@ -19,7 +22,7 @@ class Presenter(IPresenter):
         self.get_local_listdir()
 
         self.temp_dir = tempfile.TemporaryDirectory()
-        print(self.temp_dir)
+        logger.info("temp.dir:" + self.temp_dir.name)
 
     def connect_to_yadisk(self):
         url = self.yadisk_model.get_verification_url()
@@ -32,7 +35,6 @@ class Presenter(IPresenter):
             self.get_yadisk_listdir()
 
     def get_yadisk_listdir(self, path=None):
-        #print(path)
         yadisk_listdir = self.yadisk_model.get_listdir(path)
         if not yadisk_listdir is None:
             self.view.show_yadisk_listdir(*yadisk_listdir)
@@ -55,7 +57,6 @@ class Presenter(IPresenter):
             self.view.show_yadisk_listdir(*listdir)
     
     def get_bublic_listdir(self, url):
-        print("get bublic listdir")
         listdir = self.bublic_yadisk_model.get_listdir(url)
 
         if not listdir is None:

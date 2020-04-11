@@ -14,6 +14,8 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import modes
 from cryptography.hazmat.primitives import padding
 
+import logging
+logger = logging.getLogger(__name__)
 
 class EchoObject:
     block_size = 8
@@ -30,7 +32,7 @@ class EchoObject:
 
 class SecurityModel:
     def __init__(self):
-        print(SecurityModel)
+        pass
 
     def generate_key_by_length(self, length):
         """
@@ -40,7 +42,6 @@ class SecurityModel:
             length {int} -- [length of key in BITS]
         """
         key = base64.urlsafe_b64encode(os.urandom(length))
-        print(len(key), type(key))
         return key[:length]
     
     def generate_key(self, alg_type):
@@ -94,7 +95,7 @@ class SecurityModel:
         padded_data = padder.update(data)
         padded_data += padder.finalize()
         crypted = encrypter.update(padded_data)
-        print(len(data), len(padded_data), len(crypted))
+
         with open(to_path, "wb") as file:
             file.write(crypted)
         #self.update(encrypter, from_path, to_path, padder.padder())
@@ -113,9 +114,7 @@ class SecurityModel:
 
         padded_data = padder.update(crypted)
         padded_data += padder.finalize()
-        
-        print(len(data), len(crypted), len(padded_data))
-        
+                
         with open(to_path, "wb") as file:
             file.write(padded_data)
         #self.update(decryptor, from_path, to_path, padder.unpadder())
@@ -164,10 +163,10 @@ class SecurityModel:
         elif algorithm == SecurityAlgorithm.seed:
             return algorithms.SEED(key)
         else:
-            print("Bad algorithm")
+            logger.error("Not supportable algorithm")
 
     def get_key(self, key_type, key, media_path, algorithm_type):
-        print(media_path)
+        logger.info("Key-file path"+media_path)
         if key_type == KeyType.new_symbols:
             return key
         

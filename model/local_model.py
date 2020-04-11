@@ -5,6 +5,8 @@ from datetime import datetime
 
 import magic_const
 
+import logging
+logger = logging.getLogger(__name__)
 def get_type(name):
     if name.is_dir():
         #print(name, "dir")

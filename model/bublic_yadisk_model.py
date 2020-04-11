@@ -5,15 +5,16 @@ from yadisk.exceptions import TooManyRequestsError
 
 import magic_const
 
+import logging
+logger = logging.getLogger(__name__)
 def avoid_too_many_requests_error(fn):
     def wrapped(*args):
         result = None
         while result is None:
             try:
-                #print(args)
                 result = fn(*args)
             except TooManyRequestsError:
-                print('too many')
+                logger.info("Too many requests")
                 result = None
         return result
     return wrapped
@@ -25,13 +26,13 @@ class BublicYadiskModel:
     
     @avoid_too_many_requests_error
     def check_url(self, url):
-        print(url)
+        logger.info(url)
         result = self.disk.public_exists(url)
         return result
 
     @avoid_too_many_requests_error
     def get_meta(self, url):
-        print(url)
+        logger.info(url)
         info = self.disk.get_public_meta(url)
         return [self.header, 
             (info.type, info.name, info.public_url,

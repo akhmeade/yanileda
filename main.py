@@ -13,6 +13,11 @@ from model.bublic_yadisk_model import BublicYadiskModel
 from model.local_model import LocalModel
 from model.security_model import SecurityModel
 
+import logging
+
+import magic_const
+logging.basicConfig(**magic_const.LOGGING_CONFIG)
+
 if __name__ == "__main__":
     app = QApplication([])
 

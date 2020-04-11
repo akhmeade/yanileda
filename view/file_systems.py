@@ -17,8 +17,12 @@ import magic_const
 from magic_const import KeyType
 from magic_const import SecurityAlgorithm
 
-
 import resources
+
+import logging
+
+#logging.basicConfig(**magic_const.LOGGING_CONFIG)
+logger = logging.getLogger(__name__)
 
 class FileSystem(QWidget):
     double_clicked = pyqtSignal(str)
@@ -58,6 +62,7 @@ class FileSystem(QWidget):
             self.listdir.customContextMenuRequested.connect(self.show_context_menu)
         self.connect_to_actions()
         self.key_type_changed()
+        logger.critical("testing")
 
     def connect_to_actions(self):
         self.listdir.doubleClicked.connect(self.double_click_slot)
@@ -126,18 +131,18 @@ class FileSystem(QWidget):
     def get_selected_row(self):
         selected = self.listdir.selectedIndexes()
         if len(selected) < 1:
-            print("BAD SELECTED")
+            logger.error("selected more than one tow")
+
         selected = selected[1]
         row = selected.row()
         return row
 
     def set_as_media_folder(self):
-        print("triggereddd")
+        logger.info("set as media folder triggered")
 
     def show_context_menu(self, pos):
-            #print(pos, self.listdir.mapToGlobal(pos), 
         row = self.get_selected_row()
-        #print(self.listdir_info[row - 1][1])
+
         if self.listdir_info[row - 1][0] == "dir":
             self.menu = QMenu(self)
             set_folder = QAction("Set as media folder")
@@ -231,7 +236,8 @@ class FileSystem(QWidget):
     def get_file_name(self):
         selected = self.listdir.selectedIndexes()
         if len(selected) < 1:
-            print("BAD SELECTED")
+            logger.error("Selected more than one")
+
         selected = selected[1]
         row = selected.row()
         file_name = self.model.item(row, 1).text()

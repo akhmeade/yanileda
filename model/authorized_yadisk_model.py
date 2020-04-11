@@ -6,6 +6,9 @@ from .imodel import IModel
 
 import magic_const
 
+import logging
+logger = logging.getLogger(__name__)
+
 class AuthorizedYadiskModel(IModel):
     header = ("Type", "Name", "Last modified")
 
@@ -25,12 +28,10 @@ class AuthorizedYadiskModel(IModel):
 
         self.disk.token = response.access_token
 
-        #print("Check ver", self.disk.check_token())
-
         return self.disk.check_token()
 
     def get_listdir(self, path=None):
-        print(path)
+        logger.info(path)
         if path is None:
             path = magic_const.YADISK_PREFIX
 
@@ -43,14 +44,13 @@ class AuthorizedYadiskModel(IModel):
         for i in listdir:
             names.append(
                 (i.type, i.name, i.modified.strftime(magic_const.DATETIME_FORMAT)))
-        #print(names, path)
         
         return names, path
     
     def upload(self, from_path, to_path):
-        print('upload', from_path, to_path)
+        logger.info("upload {} to {}".format(from_path, to_path))
         self.disk.upload(from_path, to_path, overwrite=True)
     
     def download(self, from_path, to_path):
-        print('download', from_path, to_path)
+        logger.info("download {} to {}".format(from_path, to_path))
         self.disk.download(from_path, to_path)

@@ -20,6 +20,9 @@ import magic_const
 from magic_const import KeyType
 from magic_const import SecurityAlgorithm
 
+import logging
+logger = logging.getLogger(__name__)
+
 class MainWindow(QMainWindow):
 
     connect_to_yadisk_signal = pyqtSignal()
@@ -173,7 +176,6 @@ class MainWindow(QMainWindow):
         elif result["action"] == "get_save_filename":
             path = QFileDialog.getSaveFileName(self, "Create file", "new",
                 result["limits"])
-            print(type(path), path)
             filesystem.put_file_path(path[0])
         
         elif result["action"] == "get_open_filename":
@@ -191,4 +193,4 @@ class MainWindow(QMainWindow):
         elif yadisk_filesystem.system_type == "bublic":
             local_filesystem.set_load_button_enable(False)
         else:
-            print("BAD")
+            logger.error("In yadisk tab wrong system type")
