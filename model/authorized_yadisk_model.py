@@ -27,8 +27,14 @@ class AuthorizedYadiskModel(IModel):
             return False
 
         self.disk.token = response.access_token
-
-        return self.disk.check_token()
+         
+        result = self.disk.check_token()
+        if result:
+            logger.info("Connected to Yadisk")
+        else:
+            logger.error("Cannot connect to Yadisk")
+        
+        return result
 
     def get_listdir(self, path=None):
         logger.info(path)

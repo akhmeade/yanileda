@@ -164,9 +164,7 @@ class MainWindow(QMainWindow):
     def get_local_folder_name(self):
         return self.local_files.currentWidget().get_folder_path()
 
-    def local_browse(self, result):
-        filesystem = self.get_local_system()
-        
+    def browse(self, filesystem, result):
         filesystem.put_key("")
         filesystem.put_file_path("")
 
@@ -184,6 +182,14 @@ class MainWindow(QMainWindow):
             filesystem.put_file_path(path[0])
         else:
             pass
+
+    def local_browse(self, result):
+        filesystem = self.get_local_system()
+        self.browse(filesystem, result)
+    
+    def yadisk_browse(self, result):
+        filesystem = self.get_yadisk()
+        self.browse(filesystem, result)
     
     def yadisk_tab_changed(self):
         yadisk_filesystem = self.yadisk_files.currentWidget()
