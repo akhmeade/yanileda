@@ -3,7 +3,6 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-
 from view.view import GuiView
 from presenter.presenter import Presenter
 from presenter.ipresenter import IPresenter

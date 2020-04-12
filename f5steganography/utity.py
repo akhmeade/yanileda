@@ -2,7 +2,7 @@
 #import PIL
 
 from PIL import Image
-from past.builtins import raw_input
+#from past.builtins import raw_input
 
 from jpeg_encoder import JpegEncoder
 import sys
