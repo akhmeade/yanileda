@@ -6,12 +6,10 @@ import re
 class Painter:
     def __init__(self):
         self.values = []
-        self.turtle = Worm()
-        #self.turtle = turtle.Turtle()
+        #self.turtle = Worm()
+        self.turtle = turtle.Turtle()
 
     def append_unique_values(self):
-        print(self.turtle.pos(), self.turtle.angle)
-        return
         w, h = self.image.size
         x_coord, y_coord = self.turtle.pos()
         if x_coord < w and y_coord < h:
@@ -34,6 +32,7 @@ class SquarePainter(Painter):
             self.turtle.forward(50)
             self.append_unique_values()
             self.turtle.left(90)
+            self.append_unique_values()
 
     def fractal_elements(self, image):
         Painter.fractal_elements(self, image)

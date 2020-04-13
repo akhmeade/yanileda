@@ -9,7 +9,7 @@ class Worm:
         self.angle = 0.0
     
     def pos(self):
-        return round(self.x, 2), round(self.y, 2)
+        return self.x, self.y
     
     def get_bias(self, length):
         rad_angle = math.radians(self.angle)
@@ -32,3 +32,6 @@ class Worm:
     
     def right(self, angle):
         self.angle = (self.angle - angle) % 360
+
+    def goto(self, x, y):
+        self.x, self.y = x, y
