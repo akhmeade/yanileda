@@ -30,7 +30,7 @@ class DCT(object):
 
     def cal_divisors(j, quant):
         AAN_scale_factor = [1.0, 1.387039845, 1.306562965, 1.175875602, 1.0, 0.785694958, 0.541196100, 0.275899379]
-        return 1.0 / float(quant[1]) / (AAN_scale_factor[quant[0] / 8] * AAN_scale_factor[quant[0] % 8] * 8.0)
+        return 1.0 / float(quant[1]) / (AAN_scale_factor[quant[0] // 8] * AAN_scale_factor[quant[0] % 8] * 8.0)
 
     def init_matrix(self, quality):
         AAN_scale_factor = [1.0, 1.387039845, 1.306562965, 1.175875602, 1.0, 0.785694958, 0.541196100, 0.275899379]
@@ -44,11 +44,11 @@ class DCT(object):
             quality = 200 - quality * 2
 
         validate = lambda val: 1 if val <= 0 else (255 if val > 255 else val)
-        cal_quantum = lambda quantum: validate((quantum * quality + 50) / 100)
+        cal_quantum = lambda quantum: validate((quantum * quality + 50) // 100)
 
         for i in range(2):
-            self.quantum[i] = map(cal_quantum, self.QUANTUM[i])
-            self.divisors[i] = map(self.cal_divisors, enumerate(self.quantum[i]))
+            self.quantum[i] = list(map(cal_quantum, self.QUANTUM[i]))
+            self.divisors[i] = list(map(self.cal_divisors, enumerate(self.quantum[i])))
 
     def forward_dct_extreme(self, indata):
         output = create_array(0.0, self.N, self.N)

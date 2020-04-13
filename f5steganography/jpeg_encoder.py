@@ -64,11 +64,11 @@ class JpegInfo(object):
 
         for i in range(self.comp_num):
             self.comp_width[i] = int(math.ceil(self.image_width / 8.0) * 8)
-            self.comp_width[i] = self.comp_width[i] / max_hsamp_factor * self.hsamp_factor[i]
+            self.comp_width[i] = self.comp_width[i] // max_hsamp_factor * self.hsamp_factor[i]
             self.block_width[i] = int(math.ceil(self.comp_width[i] / 8.0))
 
             self.comp_height[i] = int(math.ceil(self.image_height / 8.0) * 8)
-            self.comp_height[i] = self.comp_height[i] / max_vsamp_factor * self.vsamp_factor[i]
+            self.comp_height[i] = self.comp_height[i] // max_vsamp_factor * self.vsamp_factor[i]
             self.block_height[i] = int(math.ceil(self.comp_height[i] / 8.0))
 
         values = self.pixels
@@ -78,7 +78,10 @@ class JpegInfo(object):
 
         for y in range(self.image_height):
             for x in range(self.image_width):
-                r, g, b = values[x, y]
+                if len(values[x, y]) == 4:
+                    r, g, b, _ = values[x, y]
+                else:
+                    r, g, b = values[x, y]
                 Y[y][x]  =  0.299   * r + 0.587   * g + 0.114   * b
                 Cb[y][x] = -0.16874 * r - 0.33126 * g + 0.5     * b + 128
                 Cr[y][x] =  0.5     * r - 0.41869 * g - 0.08131 * b + 128
@@ -337,7 +340,7 @@ class JpegEncoder(object):
                                 if not self.embedded_data.available():
                                     is_last_byte = True
                                     break
-                                byte_to_embed = self.embedded_data.read()
+                                byte_to_embed = ord(self.embedded_data.read())
                                 byte_to_embed ^= random.get_next_byte()
                                 available_bits_to_embed = 8
                             next_bit_to_embed = byte_to_embed & 1

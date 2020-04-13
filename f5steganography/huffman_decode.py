@@ -179,9 +179,9 @@ class HuffmanDecode(object):
     def get_block_count(self):
         square = lambda x: x * x
         if self.nf == 1:
-            return square((self.x + 7) / 8)
+            return square((self.x + 7) // 8)
         elif self.nf == 3:
-            return 6 * square((self.x + 15) / 16)
+            return 6 * square((self.x + 15) // 16)
         else:
             logger.error('nf is not 1 neither 3')
 

@@ -33,7 +33,7 @@ import logging
 
 def embed_into_image(path_to_image, data, password):
     image = Image.open(path_to_image)
-    output_path = "d:/yanileda/trash/output.png"
+    output_path = "output.png"
     with open(output_path, "wb") as output:
         encoder = JpegEncoder(image, 80, output, comment=None)
         encoder.compress(data, password)
@@ -47,7 +47,14 @@ def extract_from_image(path_to_image, password):
         result = output.getvalue()
     return result
 
-            
+if __name__ == "__main__":
+    path = "write down the path"  
+    data = "Hello world"
+    password = "12345"
+    embed_into_image(path, data, password)
+
+    output_path = "output.png"
+    print(extract_from_image(output_path, password))
 
 # if __name__ == '__main__':
 #     logging.basicConfig(format='%(asctime)-15s [%(name)-9s] %(message)s', 

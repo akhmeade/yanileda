@@ -82,7 +82,8 @@ class Huffman(object):
         cal(self.BITS_AC_CHROMINANCE, self.VAL_AC_CHROMINANCE, self.ac_matrix[1])
 
     def write_byte(self, out, byte):
-        out.write(chr(byte))
+        out.write(byte.to_bytes(1, "big"))
+        #out.write(chr(byte))
 
     def buffer_it(self, out, code, size):
         put_buffer = code

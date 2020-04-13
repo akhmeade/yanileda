@@ -22,7 +22,7 @@ class JpegExtract(object):
 
     def write_extracted_byte(self):
         self.extracted_byte ^= self.f5random.get_next_byte()
-        self.out.write((chr(self.extracted_byte & 0xff).decode('utf-8')))
+        self.out.write(chr(self.extracted_byte & 0xff))
 
         self.extracted_byte = 0
         self.available_extracted_bits = 0

@@ -27,14 +27,16 @@ class EmbedData(object):
         self.now += 1
         if self.now > self.len:
             return 0
-        return ord(self._data[self.now - 1])
+        #print(self._data[self.now - 1])
+        #return ord(str(self._data[self.now - 1]))
+        return self._data[self.now - 1]
 
     def available(self):
         return self.len - self.now
 
 class Permutation(object):
     def __init__(self, size, f5random):
-        self.shuffled = range(size)
+        self.shuffled = list(range(size))
         max_random = size
         for i in range(size):
             random_index = f5random.get_next_value(max_random)

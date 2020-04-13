@@ -197,7 +197,9 @@ class SecurityModel:
 
         elif key_type == KeyType.new_media:
             key_key = self.generate_key(algorithm_type)
-            embed_into_image(media_path, key_key, key)
+            print(key_key, key)
+            embed_into_image(media_path, key_key.decode("utf-8"), key)
+            return key_key
             
         elif key_type == KeyType.existing_media:
             return extract_from_image(media_path, key)
