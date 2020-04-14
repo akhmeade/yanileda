@@ -5,6 +5,7 @@ from yadisk.exceptions import TooManyRequestsError
 from yadisk.exceptions import NotFoundError
 
 import magic_const
+import utils
 
 import logging
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ def avoid_too_many_requests_error(fn):
     return wrapped
 
 class BublicYadiskModel:
-    header = ("Type", "Name", "Public Url", "Last modified")
+    header = ("Type", "Name", "Public Url", "Last modified", "Size")
     def __init__(self):
         self.disk = yadisk.YaDisk()
     
@@ -52,7 +53,7 @@ class BublicYadiskModel:
                 
                 names = [self.header,]
                 for i in listdir:
-                    names.append((i.type, i.name, i.public_url, i.modified.strftime(magic_const.DATETIME_FORMAT)))
+                    names.append(self.get_info(i))
 
                 return names, url
         return None
@@ -65,6 +66,15 @@ class BublicYadiskModel:
         #             (i.name, i.created.strftime(magic_const.DATETIME_FORMAT)))
         # else:
         #     file = self.disk.
+    def get_info(self, file):
+        file_type = file.type
+        name = file.name
+        public_url = file.public_url
+        mod_tyme = file.modified.strftime(magic_const.DATETIME_FORMAT)
+        size = utils.sizeof_fmt(file.size)
+
+        return file_type, name, public_url, mod_tyme, size
+        
     @avoid_too_many_requests_error
     def download(self, from_path, to_path):
         if self.check_url(from_path):

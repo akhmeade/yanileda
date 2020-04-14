@@ -5,12 +5,13 @@ import yadisk
 from .imodel import IModel
 
 import magic_const
+import utils
 
 import logging
 logger = logging.getLogger(__name__)
 
 class AuthorizedYadiskModel(IModel):
-    header = ("Type", "Name", "Last modified")
+    header = ("Type", "Name", "Last modified", "Size")
 
     def __init__(self):
         super().__init__()
@@ -48,10 +49,15 @@ class AuthorizedYadiskModel(IModel):
         listdir = list(self.disk.listdir(path))
         listdir.sort(key=lambda x: x.type == "dir", reverse=True)
         for i in listdir:
-            names.append(
-                (i.type, i.name, i.modified.strftime(magic_const.DATETIME_FORMAT)))
+            names.append(self.get_info(i))
         
         return names, path
+    def get_info(self, file):
+        file_type = file.type
+        name = file.name
+        mod_tyme = file.modified.strftime(magic_const.DATETIME_FORMAT)
+        size = utils.sizeof_fmt(file.size)
+        return file_type, name, mod_tyme, size
     
     def upload(self, from_path, to_path):
         logger.info("upload {} to {}".format(from_path, to_path))
