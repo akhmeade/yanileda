@@ -1,6 +1,8 @@
 # This Python file uses the following encoding: utf-8
 
 from PyQt5.QtCore import QObject
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QProgressDialog
 
 from .iview import IView
 from .mainwindow import MainWindow
@@ -8,6 +10,9 @@ from .connection_dialog import ConnectionDialog
 from .open_link_dialog import OpenLinkDialog
 
 import magic_const
+
+import logging
+logger = logging.getLogger(__name__)
 
 class GuiView(QObject, IView):
     """
@@ -39,9 +44,6 @@ class GuiView(QObject, IView):
         self.mainwindow.yadisk_browse_clicked.connect(self.yadisk_browse_request)
         #self.mainwindow.yadisk_browse_clicked.connect(self.browse)
 
-    def show_error(self, message):
-        self.mainwindow.show_error(message)
-        
     def set_presenter(self, presenter):
         self.presenter = presenter
 
@@ -56,6 +58,16 @@ class GuiView(QObject, IView):
     def send_verification_code(self):
         code = self.dialog.get_verification_code()
         self.presenter.verificate_auth(code)
+    
+    def show_error(self, message):
+        msg_box = QMessageBox(QMessageBox.Warning, "Warning", message)
+        msg_box.exec()
+    
+    def show_progress_dialog(self, message, value=0, minmax=None):
+        self.mainwindow.show_progress_dialog(message, value, minmax)
+
+    def close_progress_dialog(self):
+        self.mainwindow.close_progress_dialog()
 
     def set_is_verified(self, is_verified):
         if is_verified:

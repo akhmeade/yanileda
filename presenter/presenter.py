@@ -36,9 +36,12 @@ class Presenter(IPresenter):
         self.view.set_verification_url(url)
 
     def verificate_auth(self, code):
+        self.view.show_progress_dialog("Code verification...")
         is_verified = self.yadisk_model.set_verification_code(code)
+        self.view.close_progress_dialog()
         if not self.check_result(is_verified):
             return
+        
         
         self.view.set_is_verified(is_verified.result())
         

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QTabWidget
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QProgressDialog
 
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
@@ -202,7 +202,20 @@ class MainWindow(QMainWindow):
             local_filesystem.set_load_button_enable(False)
         else:
             logger.error("In yadisk tab wrong system type")
+    def show_progress_dialog(self, message, value=0, minmax=None):
     
-    def show_error(self, message):
-        msg_box = QMessageBox(QMessageBox.Warning, "Warning", message)
-        msg_box.exec()
+        if minmax == None:
+            minmax = (0, 0)
+        self.progress = QProgressDialog(self)
+        self.progress.setWindowTitle("Please, wait")
+        self.progress.setLabelText(message)
+        self.progress.setRange(*minmax)
+        self.progress.setValue(value)
+        self.progress.setCancelButton(None)
+        #self.progress.show()
+        
+        logger.info("Progress bar is opened")
+
+    def close_progress_dialog(self):
+        self.progress.close()
+        logger.info("Progress bar is closed")
