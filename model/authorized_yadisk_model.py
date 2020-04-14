@@ -76,10 +76,15 @@ class AuthorizedYadiskModel(IModel):
         size = utils.sizeof_fmt(file.size)
         return file_type, name, mod_tyme, size
     
+    @yadisk_error_handle
     def upload(self, from_path, to_path):
         logger.info("upload {} to {}".format(from_path, to_path))
+
         self.disk.upload(from_path, to_path, overwrite=True)
+        return Result.success(True)
     
+    @yadisk_error_handle
     def download(self, from_path, to_path):
         logger.info("download {} to {}".format(from_path, to_path))
         self.disk.download(from_path, to_path)
+        return Result.success(True)

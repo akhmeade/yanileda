@@ -84,15 +84,37 @@ class Presenter(IPresenter):
     
     def download_from_auth_yadisk(self, from_path, to_path, encryption_data):
         temp_filename = self.get_temp_path(to_path)
-        self.yadisk_model.download(from_path, temp_filename)
-        self.security_model.decrypt(temp_filename, to_path, encryption_data)
+        download_result = self.yadisk_model.download(from_path, temp_filename)
+        if not download_result.is_ok():
+            self.view.show_error(download_result.error_message())
+            return
+
+        decrypt_result = self.security_model.decrypt(temp_filename, to_path, encryption_data)
+        if not decrypt_result.is_ok():
+            self.view.show_error(decrypt_result.error_message())
+            return
     
     def download_from_bublic_yadisk(self, from_path, to_path, encryption_data):
         temp_filename = self.get_temp_path(to_path)
-        self.bublic_yadisk_model.download(from_path, to_path)
-        self.security_model.decypt(temp_filename, to_path, encryption_data)
+        download_result = self.bublic_yadisk_model.download(from_path, to_path)
+        if not download_result.is_ok():
+            self.view.show_error(download_result.error_message())
+            return
+
+        decrypt_result = self.security_model.decypt(temp_filename, to_path, encryption_data)
+        if not decrypt_result.is_ok():
+            self.view.show_error(decrypt_result.error_message())
+            return
     
     def upload_to_auth_yadisk(self, from_path, to_path, encryption_data):
         temp_filename = self.get_temp_path(from_path)
-        self.security_model.encrypt(from_path, temp_filename, encryption_data)
-        self.yadisk_model.upload(temp_filename, to_path)
+        encrypt_result = self.security_model.encrypt(from_path, temp_filename, encryption_data)
+        
+        if not encrypt_result.is_ok():
+            self.view.show_error(encrypt_result.error_message())
+            return
+        
+        upload_result = self.yadisk_model.upload(temp_filename, to_path)
+        if not upload_result.is_ok():
+            self.view.show_error(upload_result.error_message())
+            return
