@@ -212,7 +212,7 @@ class MainWindow(QMainWindow):
         self.progress.setRange(*minmax)
         self.progress.setValue(value)
         self.progress.setCancelButton(None)
-        #self.progress.show()
+        self.progress.show()
         
         logger.info("Progress bar is opened")
 

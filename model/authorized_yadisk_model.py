@@ -1,10 +1,9 @@
 # encoding: utf-8
 
 import yadisk
-from yadisk.exceptions import YaDiskError
 
 from .imodel import IModel
-
+import time
 import magic_const
 import utils
 from utils import Result
@@ -26,6 +25,8 @@ class AuthorizedYadiskModel(IModel):
     @utils.yadisk_error_handle
     def set_verification_code(self, code):
         logger.info("Checking ver.code %s" % code)
+        #time.sleep(5)
+        
         try:
             response = self.disk.get_token(code)
         except yadisk.exceptions.BadRequestError:

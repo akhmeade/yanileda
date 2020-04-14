@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
-
+from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QProgressDialog
 
@@ -13,6 +14,20 @@ import magic_const
 
 import logging
 logger = logging.getLogger(__name__)
+
+# class Progress(QObject):
+#     def do_work(self):
+#         logger.info("do work")
+#         self.progress = QProgressDialog()
+#         self.progress.setWindowTitle("Please, wait")
+#         self.progress.setLabelText("message")
+#         self.progress.setRange(0, 0)
+#         self.progress.setValue(0)
+#         self.progress.setCancelButton(None)
+#         self.progress.setWindowModality(Qt.WindowModal)
+#         #self.progress.show()
+#     def close(self):
+#         self.progress.close()
 
 class GuiView(QObject, IView):
     """
@@ -63,11 +78,44 @@ class GuiView(QObject, IView):
         msg_box = QMessageBox(QMessageBox.Warning, "Warning", message)
         msg_box.exec()
     
+    # def _show(self):
+    #     self.progress = QProgressDialog()
+    #     self.progress.setWindowTitle("Please, wait")
+    #     self.progress.setLabelText("aSDASD")
+    #     self.progress.setRange(0,0)
+    #     self.progress.setValue(0)
+    #     self.progress.setCancelButton(None)
+        
     def show_progress_dialog(self, message, value=0, minmax=None):
-        self.mainwindow.show_progress_dialog(message, value, minmax)
+        pass
+        # if minmax == None:
+        #     minmax = (0, 0)
+        # self.progress = QProgressDialog()
+        # self.progress.setWindowTitle("Please, wait")
+        # self.progress.setLabelText(message)
+        # self.progress.setRange(*minmax)
+        # self.progress.setValue(value)
+        # self.progress.setCancelButton(None)
+        # self.progress.setWindowModality(Qt.WindowModal)
+        # self.progress.show()
+        
+        # self.progress = Progress()
+        
+        # self.thread = QThread()
+        # self.progress.moveToThread(self.thread)
+        # #self.progress.moveToThread(self.thread)
+        # self.thread.started.connect(self.progress.do_work)
+        # self.thread.finished.connect(self.progress.close)
+        # self.thread.start()
+        # #logger.info("Thread run")
+        # #self.thread.run()
+        # logger.info("Progress bar is opened")
 
     def close_progress_dialog(self):
-        self.mainwindow.close_progress_dialog()
+        pass
+        #logger.info("Progress bar is closed")
+        #self.thread.quit()
+        #self.progress.close()
 
     def set_is_verified(self, is_verified):
         if is_verified:
