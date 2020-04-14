@@ -22,6 +22,16 @@ def sizeof_fmt(num, suffix='b'):
         num /= 1024.0
     return "%.1f %s%s" % (num, 'Y', suffix)
 
+def yadisk_error_handle(fn):
+    def wrapped(*args):
+        try:
+            result = fn(*args)
+        except YaDiskError:
+            logger.info("Connection problems")
+            result = Result.failed("Connection problems to Yadisk")
+        return result
+    return wrapped
+    
 class Result:
     def __init__(self):
         self._is_ok = False

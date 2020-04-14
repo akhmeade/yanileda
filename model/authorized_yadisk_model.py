@@ -12,17 +12,6 @@ from utils import Result
 import logging
 logger = logging.getLogger(__name__)
 
-
-def yadisk_error_handle(fn):
-    def wrapped(*args):
-        try:
-            result = fn(*args)
-        except YaDiskError:
-            logger.info("Connection problems")
-            result = Result.failed("Connection problems to Yadisk")
-        return result
-    return wrapped
-
 class AuthorizedYadiskModel(IModel):
     header = ("Type", "Name", "Last modified", "Size")
 
@@ -34,7 +23,7 @@ class AuthorizedYadiskModel(IModel):
         url = self.disk.get_code_url()
         return url
     
-    @yadisk_error_handle
+    @utils.yadisk_error_handle
     def set_verification_code(self, code):
         logger.info("Checking ver.code %s" % code)
         try:
@@ -52,7 +41,7 @@ class AuthorizedYadiskModel(IModel):
         
         return Result.success(result)
     
-    @yadisk_error_handle
+    @utils.yadisk_error_handle
     def get_listdir(self, path=None):
         logger.info("Open path %s" % path)
         if path is None:
@@ -76,14 +65,14 @@ class AuthorizedYadiskModel(IModel):
         size = utils.sizeof_fmt(file.size)
         return file_type, name, mod_tyme, size
     
-    @yadisk_error_handle
+    @utils.yadisk_error_handle
     def upload(self, from_path, to_path):
         logger.info("upload {} to {}".format(from_path, to_path))
 
         self.disk.upload(from_path, to_path, overwrite=True)
         return Result.success(True)
     
-    @yadisk_error_handle
+    @utils.yadisk_error_handle
     def download(self, from_path, to_path):
         logger.info("download {} to {}".format(from_path, to_path))
         self.disk.download(from_path, to_path)
