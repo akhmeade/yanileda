@@ -29,7 +29,7 @@ class AuthorizedYadiskModel(IModel):
         try:
             response = self.disk.get_token(code)
         except yadisk.exceptions.BadRequestError:
-            return Result.failed("Wrong verification code")
+            return Result.success(False)
 
         self.disk.token = response.access_token
          
