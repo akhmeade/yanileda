@@ -113,6 +113,12 @@ class FileSystem(QWidget):
         self.listdir.setModel(self.model)
         self.listdir.resizeColumnsToContents()
     
+    def correct_path(self, path):
+        if path.as_posix() == "disk:":
+            return magic_const.YADISK_PREFIX
+        else:
+            return path.as_posix()
+
     def double_click_slot(self, index):
         row = index.row()
         name = self.model.item(row, 1).text()
@@ -122,10 +128,8 @@ class FileSystem(QWidget):
             path = directory.parent
         else:
             path = directory / name
-        if path.as_posix() == "disk:":
-            self.double_clicked.emit(magic_const.YADISK_PREFIX)
-        else:
-            self.double_clicked.emit(path.as_posix())
+        
+        self.double_clicked.emit(self.correct_path(path))
     
     def get_selected_row(self):
         selected = self.listdir.selectedIndexes()
@@ -211,9 +215,10 @@ class FileSystem(QWidget):
         
 
     def get_listdir(self):
+        logger.info("Get listdir clicked %s" % self.system_type)
         path = self.path_box.text()
         path = Path(path)
-        self.double_clicked.emit(path.as_posix())
+        self.double_clicked.emit(self.correct_path(path))
     
     def get_previous_folder(self):
         if len(self.protocol) < 2:

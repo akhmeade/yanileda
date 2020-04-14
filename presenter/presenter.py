@@ -22,7 +22,7 @@ class Presenter(IPresenter):
         self.get_local_listdir()
 
         self.temp_dir = tempfile.TemporaryDirectory()
-        logger.info("temp.dir:" + self.temp_dir.name)
+        logger.info("temp.dir: %s" % self.temp_dir.name)
 
     def connect_to_yadisk(self):
         url = self.yadisk_model.get_verification_url()
@@ -30,14 +30,21 @@ class Presenter(IPresenter):
 
     def verificate_auth(self, code):
         is_verified = self.yadisk_model.set_verification_code(code)
-        self.view.set_is_verified(is_verified)
-        if is_verified:
+        if not is_verified.is_ok():
+            self.view.set_is_verified(False)
+        else:
+            self.view.set_is_verified(is_verified.result())
+        
+        if is_verified.result():
             self.get_yadisk_listdir()
 
     def get_yadisk_listdir(self, path=None):
         yadisk_listdir = self.yadisk_model.get_listdir(path)
-        if not yadisk_listdir is None:
-            self.view.show_yadisk_listdir(*yadisk_listdir)
+        if yadisk_listdir.is_ok():
+            self.view.show_yadisk_listdir(*yadisk_listdir.result())
+        else:
+            self.view.show_error(yadisk_listdir.error_message())
+            
     
     def get_local_listdir(self, path=None):
         local_listdir = self.local_model.get_listdir(path)

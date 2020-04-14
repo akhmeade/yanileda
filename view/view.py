@@ -39,6 +39,9 @@ class GuiView(QObject, IView):
         self.mainwindow.yadisk_browse_clicked.connect(self.yadisk_browse_request)
         #self.mainwindow.yadisk_browse_clicked.connect(self.browse)
 
+    def show_error(self, message):
+        self.mainwindow.show_error(message)
+        
     def set_presenter(self, presenter):
         self.presenter = presenter
 

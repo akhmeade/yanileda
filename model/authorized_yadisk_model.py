@@ -1,14 +1,27 @@
 # encoding: utf-8
 
 import yadisk
+from yadisk.exceptions import YaDiskError
 
 from .imodel import IModel
 
 import magic_const
 import utils
+from utils import Result
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+def yadisk_error_handle(fn):
+    def wrapped(*args):
+        try:
+            result = fn(*args)
+        except YaDiskError:
+            logger.info("Connection problems")
+            result = Result.failed("Connection problems to Yadisk")
+        return result
+    return wrapped
 
 class AuthorizedYadiskModel(IModel):
     header = ("Type", "Name", "Last modified", "Size")
@@ -20,12 +33,14 @@ class AuthorizedYadiskModel(IModel):
     def get_verification_url(self):
         url = self.disk.get_code_url()
         return url
-
+    
+    @yadisk_error_handle
     def set_verification_code(self, code):
+        logger.info("Checking ver.code %s" % code)
         try:
             response = self.disk.get_token(code)
         except yadisk.exceptions.BadRequestError:
-            return False
+            return Result.failed("Wrong verification code")
 
         self.disk.token = response.access_token
          
@@ -35,15 +50,16 @@ class AuthorizedYadiskModel(IModel):
         else:
             logger.error("Cannot connect to Yadisk")
         
-        return result
-
+        return Result.success(result)
+    
+    @yadisk_error_handle
     def get_listdir(self, path=None):
-        logger.info(path)
+        logger.info("Open path %s" % path)
         if path is None:
             path = magic_const.YADISK_PREFIX
 
         if not self.disk.is_dir(path):
-            return None
+            return Result.failed("Path doesn't exist")
 
         names = [self.header,]
         listdir = list(self.disk.listdir(path))
@@ -51,7 +67,8 @@ class AuthorizedYadiskModel(IModel):
         for i in listdir:
             names.append(self.get_info(i))
         
-        return names, path
+        return Result.success((names, path))
+
     def get_info(self, file):
         file_type = file.type
         name = file.name

@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QTabWidget
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QMessageBox
 
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
@@ -22,6 +23,7 @@ from magic_const import SecurityAlgorithm
 
 import logging
 logger = logging.getLogger(__name__)
+
 
 class MainWindow(QMainWindow):
 
@@ -200,3 +202,7 @@ class MainWindow(QMainWindow):
             local_filesystem.set_load_button_enable(False)
         else:
             logger.error("In yadisk tab wrong system type")
+    
+    def show_error(self, message):
+        msg_box = QMessageBox(QMessageBox.Warning, "Warning", message)
+        msg_box.exec()
