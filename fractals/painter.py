@@ -6,8 +6,8 @@ import re
 class Painter:
     def __init__(self):
         self.values = []
-        #self.turtle = Worm()
-        self.turtle = turtle.Turtle()
+        self.turtle = Worm()
+        #self.turtle = turtle.Turtle()
 
     def append_unique_values(self):
         w, h = self.image.size

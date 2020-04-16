@@ -75,8 +75,8 @@ class GuiView(QObject, IView):
         self.presenter.verificate_auth(code)
     
     def show_error(self, message):
-        msg_box = QMessageBox(QMessageBox.Warning, "Warning", message)
-        msg_box.exec()
+        self.msg_box = QMessageBox(QMessageBox.Warning, "Warning", message)
+        self.msg_box.show()
     
     # def _show(self):
     #     self.progress = QProgressDialog()
