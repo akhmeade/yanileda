@@ -130,4 +130,16 @@ class Presenter(IPresenter):
         upload_result = self.yadisk_model.upload(temp_filename, to_path)
         if not self.check_result(upload_result):
             return
+    
+    def get_key(self, algorithm, key_type):
+        return self.security_model.get_key_for_presenter(algorithm, key_type)
+    
+    def get_local_key(self, algorithm, key_type):
+        key = self.get_key(algorithm, key_type)
+        logger.info("Key %s" % key)
+        self.view.put_local_key(key)
+
+    def get_yadisk_key(self, algorithm, key_type):
+        key = self.get_key(algorithm, key_type)
+        self.view.put_yadisk_key(key)
             

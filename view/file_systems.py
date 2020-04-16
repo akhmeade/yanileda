@@ -28,6 +28,7 @@ class FileSystem(QWidget):
     double_clicked = pyqtSignal(str)
     move_clicked = pyqtSignal()
     browse_clicked = pyqtSignal(KeyType, SecurityAlgorithm)
+    algorithm_changed = pyqtSignal(SecurityAlgorithm, KeyType)
 
     def __init__(self, label_names, system_type, parent=None):
         """[summary]
@@ -55,8 +56,6 @@ class FileSystem(QWidget):
         self.fill_combobox(self.algorithms_box, list(magic_const.SecurityAlgorithm))
         self.fill_combobox(self.key_type_box, label_names["key_type"])
 
-        
-
         if self.system_type == "yadisk_auth":
             self.listdir.setContextMenuPolicy(Qt.CustomContextMenu)
             self.listdir.customContextMenuRequested.connect(self.show_context_menu)
@@ -72,7 +71,7 @@ class FileSystem(QWidget):
         self.from_yadisk_button.toggled.connect(self.from_yadisk_button_toggled)
         self.key_type_box.currentIndexChanged.connect(self.key_type_changed)
         # TODO: create its own signal/slot
-        self.algorithms_box.currentIndexChanged.connect(self.browse_slot)
+        self.algorithms_box.currentIndexChanged.connect(self.on_algorithm_changed)
     
     def set_label_names(self, label_names):
         self.message_label.setText(label_names["message_label"])
@@ -264,11 +263,16 @@ class FileSystem(QWidget):
     
     def put_key(self, result):
         self.key_box.setText(result)
+        
     def put_file_path(self, text):
         self.file_path_box.setText(text)
     
     def set_load_button_enable(self, enabled):
         self.load_button.setEnabled(enabled)
+    
+    def on_algorithm_changed(self):
+        logger.info("Get key")
+        self.algorithm_changed.emit(self.get_algorithm(), self.get_key_type())
 
 class BublicFileSystem(FileSystem):
     def __init__(self, system_type,  parent=None):

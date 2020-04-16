@@ -42,6 +42,9 @@ class MainWindow(QMainWindow):
     local_browse_clicked = pyqtSignal(KeyType, SecurityAlgorithm)
     yadisk_browse_clicked = pyqtSignal(KeyType, SecurityAlgorithm)
 
+    local_algorithm_changed = pyqtSignal(SecurityAlgorithm, KeyType)
+    yadisk_algorithm_changed = pyqtSignal(SecurityAlgorithm, KeyType)
+
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi("forms/mainwindow.ui", self)
@@ -74,6 +77,7 @@ class MainWindow(QMainWindow):
         file_system.double_clicked.connect(self.get_local_listdir)
         file_system.move_clicked.connect(self.move_file_from_local)
         file_system.browse_clicked.connect(self.local_browse_clicked)
+        file_system.algorithm_changed.connect(self.local_algorithm_changed)
 
         self.local_files.addTab(file_system, "Local file system")
         file_system.set_load_button_enable(False)
@@ -83,6 +87,7 @@ class MainWindow(QMainWindow):
         file_system.double_clicked.connect(self.get_yadisk_listdir)
         file_system.move_clicked.connect(self.move_file_from_yadisk)
         file_system.browse_clicked.connect(self.yadisk_browse_clicked)
+        file_system.algorithm_changed.connect(self.yadisk_algorithm_changed)
         
         self.yadisk_files.addTab(file_system, "YaDisk")
         self.yadisk_files.setCurrentWidget(file_system)
@@ -91,6 +96,7 @@ class MainWindow(QMainWindow):
         file_system = BublicFileSystem(magic_const.YADISK_FILE_SYSTEM_LABELS, "bublic")
         file_system.double_clicked.connect(self.get_bublic_listdir)
         file_system.move_clicked.connect(self.move_file_from_bublic_yadisk)
+        file_system.algorithm_changed.connect(self.yadisk_algorithm_changed)
         self.yadisk_files.addTab(file_system, name)
         self.yadisk_files.setCurrentWidget(file_system)
 
@@ -192,6 +198,14 @@ class MainWindow(QMainWindow):
     def yadisk_browse(self, result):
         filesystem = self.get_yadisk()
         self.browse(filesystem, result)
+    
+    def put_local_key(self, key):
+        filesystem = self.get_local_system()
+        filesystem.put_key(key)       
+    
+    def put_yadisk_key(self, key):
+        filesystem = self.get_yadisk()
+        filesystem.put_key(key)
     
     def yadisk_tab_changed(self):
         yadisk_filesystem = self.yadisk_files.currentWidget()

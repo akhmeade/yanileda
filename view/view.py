@@ -59,6 +59,9 @@ class GuiView(QObject, IView):
         self.mainwindow.yadisk_browse_clicked.connect(self.yadisk_browse_request)
         #self.mainwindow.yadisk_browse_clicked.connect(self.browse)
 
+        self.mainwindow.local_algorithm_changed.connect(self.on_local_algorithm_changed)
+        self.mainwindow.yadisk_algorithm_changed.connect(self.on_yadisk_algorithm_changed)
+
     def set_presenter(self, presenter):
         self.presenter = presenter
 
@@ -188,3 +191,15 @@ class GuiView(QObject, IView):
     
     def yadisk_browse(self, result):
         self.mainwindow.yadisk_browse(result)
+    
+    def on_local_algorithm_changed(self, algorithm, key_type):
+        self.presenter.get_local_key(algorithm, key_type)
+
+    def on_yadisk_algorithm_changed(self, algorithm, key_type):
+        self.presenter.get_yadisk_key(algorithm, key_type)
+    
+    def put_local_key(self, key):
+        self.mainwindow.put_local_key(key)
+    
+    def put_yadisk_key(self, key):
+        self.mainwindow.put_yadisk_key(key)

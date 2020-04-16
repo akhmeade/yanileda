@@ -177,7 +177,7 @@ class SecurityModel:
             logger.error("Not supportable algorithm")
 
     def get_key(self, key_type, key, media_path, algorithm_type):
-        logger.info("Key-file path"+media_path)
+        logger.info("Key-file path %s" % media_path)
         if key_type == KeyType.new_symbols:
             return key
         
@@ -203,3 +203,9 @@ class SecurityModel:
             
         elif key_type == KeyType.existing_media:
             return extract_from_image(media_path, key)
+    
+    def get_key_for_presenter(self, algorithm, key_type):
+        if key_type == KeyType.new_symbols:
+            return self.generate_key(algorithm).decode("utf-8")
+        else:
+            return ""
