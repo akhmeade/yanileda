@@ -34,14 +34,14 @@ def generate_key(path_to_image, password, key_size):
     painter.fractal_elements(grey)
     pixel_values = painter.values
 
-    print(len(pixel_values))
+    #print(len(pixel_values))
 
     random = F5Random(password)
     permutation = Permutation(pixel_values, random)
     print(permutation.shuffled)
 
     key1 = bytes(permutation.shuffled[:key_size])
-    print(key1, len(key1))
+    #print(key1, len(key1))
     return key1
 
 if __name__ == "__main__":

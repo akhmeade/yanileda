@@ -217,7 +217,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>TextLabel</string>
+            <string>Media type:</string>
            </property>
           </widget>
          </item>

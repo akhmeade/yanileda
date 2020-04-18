@@ -12,6 +12,7 @@ import magic_const
 
 from magic_const import SecurityAlgorithm
 from magic_const import KeyType
+from magic_const import MediaType
 
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat.primitives.ciphers import Cipher
@@ -21,6 +22,9 @@ from cryptography.hazmat.primitives import padding
 
 from f5steganography.utity import embed_into_image
 from f5steganography.utity import extract_from_image
+from fractals import fractals
+
+from utils import Result
 
 #from test.utity import embed_into_image
 #from test.utity import extract_from_image
@@ -95,6 +99,9 @@ class SecurityModel:
 
     def encrypt(self, from_path, to_path, encryption_data):
         cipher = self.get_cipher(encryption_data)
+        if not cipher.is_ok():
+            return cipher
+        cipher = cipher.result()
         encrypter = cipher.encryptor()
         block_size = cipher.algorithm.block_size
 
@@ -113,6 +120,9 @@ class SecurityModel:
     
     def decrypt(self, from_path, to_path, encryption_data):
         cipher = self.get_cipher(encryption_data)
+        if not cipher.is_ok():
+            return cipher
+        cipher = cipher.result()
         decryptor = cipher.decryptor()
         block_size = cipher.algorithm.block_size
 
@@ -140,12 +150,22 @@ class SecurityModel:
     #     with open(to_path, "wb") as file:
     #         file.write(crypted)
 
-    def get_cipher(self, encryption_data):
-        assert len(encryption_data) == 4
-        algorithm_type, key_type, key, media_path = encryption_data
+    def get_cipher(self, crypto_data):
+        #assert len(encryption_data) == 4
+        algorithm_type = crypto_data["algorithm"]
+        key_type = crypto_data["key_type"]
+        media_path = crypto_data["media_path"]
+        key = crypto_data["key"]
+        media_type = crypto_data["media_type"]
+
         # get key from media if need it
         if algorithm_type != SecurityAlgorithm.none:
-            key = self.get_key(key_type, key, media_path, algorithm_type)
+            key = self.get_key(algorithm_type, key_type, key, media_path, media_type)
+            if not key.is_ok():
+                return key
+            else:
+                key = key.result()
+
         algorithm = self.get_algorithm(algorithm_type, key)
 
         if algorithm is None:
@@ -155,7 +175,7 @@ class SecurityModel:
             #print(cipher.algorithm.block_size)
             #print(cipher.block_size)
 
-        return cipher
+        return Result.success(cipher)
 
 
     def get_algorithm(self, algorithm, key):
@@ -176,30 +196,50 @@ class SecurityModel:
         else:
             logger.error("Not supportable algorithm")
 
-    def get_key(self, key_type, key, media_path, algorithm_type):
+    def get_key(self, algorithm_type, key_type, key, media_path, media_type):
         logger.info("Key-file path %s" % media_path)
         if key_type == KeyType.new_symbols:
-            return key
+            if not key:
+                return Result.failed("Empty key")
+            return Result.success(key)
         
         elif key_type == KeyType.existing_symbols:
-            return key
+            if not key:
+                return Result.failed("Empty key")
+            return Result.success(key)
         
         elif key_type == KeyType.new_binary:
+            if not media_path:
+                return Result.failed("Empty file path")
+            
             key = self.generate_key(algorithm_type)
             with open(media_path, "wb") as f:
                 f.write(key)
-            return key
+            return Result.success(key)
         
         elif key_type == KeyType.existing_binary:
+            if not media_path:
+                return Result.failed("Empty file path")
+
             with open(media_path, "rb") as f:
                 key = f.read()
             return key
 
         elif key_type == KeyType.new_media:
-            key_key = self.generate_key(algorithm_type)
-            print(key_key, key)
-            embed_into_image(media_path, key_key.decode("utf-8"), key)
-            return key_key
+            
+            if not key:
+                return Result.failed("Empty key")
+            if not media_path:
+                return Result.failed("Empty media path")
+            if media_type == MediaType.f5steganography:
+                key_key = self.generate_key(algorithm_type)
+                embed_into_image(media_path, key_key.decode("utf-8"), key)
+            elif media_type == MediaType.fractals:
+                key_size = magic_const.KEY_LENGTH[algorithm_type]
+                key_key = fractals.generate_key(media_path, key.decode("utf-8"), key_size)
+            else:
+                logger.error("Bad media type %s" % media_type)
+            return Result.success(key_key)
             
         elif key_type == KeyType.existing_media:
             return extract_from_image(media_path, key)
