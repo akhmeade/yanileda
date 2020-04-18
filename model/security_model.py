@@ -200,17 +200,17 @@ class SecurityModel:
         logger.info("Key-file path %s" % media_path)
         if key_type == KeyType.new_symbols:
             if not key:
-                return Result.failed("Empty key")
+                return Result.failed("Why have you deleted the key?")
             return Result.success(key)
         
         elif key_type == KeyType.existing_symbols:
             if not key:
-                return Result.failed("Empty key")
+                return Result.failed("Write down password")
             return Result.success(key)
         
         elif key_type == KeyType.new_binary:
             if not media_path:
-                return Result.failed("Empty file path")
+                return Result.failed("Select file for key")
             
             key = self.generate_key(algorithm_type)
             with open(media_path, "wb") as f:
@@ -219,7 +219,7 @@ class SecurityModel:
         
         elif key_type == KeyType.existing_binary:
             if not media_path:
-                return Result.failed("Empty file path")
+                return Result.failed("Select file with key")
 
             with open(media_path, "rb") as f:
                 key = f.read()
@@ -227,9 +227,9 @@ class SecurityModel:
 
         elif key_type == KeyType.new_media:
             if not key:
-                return Result.failed("Empty key")
+                return Result.failed("Write down password")
             if not media_path:
-                return Result.failed("Empty media path")
+                return Result.failed("Select media file")
             
             if media_type == MediaType.f5steganography:
                 key_key = self.generate_key(algorithm_type)
@@ -243,9 +243,9 @@ class SecurityModel:
             
         elif key_type == KeyType.existing_media:
             if not key:
-                return Result.failed("Empty key")
+                return Result.failed("Write down password")
             if not media_path:
-                return Result.failed("Empty media path")
+                return Result.failed("Select media file")
 
             if media_type == MediaType.f5steganography:
                 key_key = extract_from_image(media_path, key.decode("utf-8"))
