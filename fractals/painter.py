@@ -1,6 +1,6 @@
 #coding: utf-8
 import turtle
-from worm import Worm
+from .worm import Worm
 import re
 
 class Painter:

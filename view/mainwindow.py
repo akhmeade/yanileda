@@ -33,9 +33,9 @@ class MainWindow(QMainWindow):
     get_bublic_listdir = pyqtSignal(str)
     
     move_file_signal = pyqtSignal(str, str)
-    download_from_auth_yadisk = pyqtSignal(str, str, tuple)
-    download_from_bublic_yadisk = pyqtSignal(str, str, tuple)
-    upload_to_auth_yadisk = pyqtSignal(str, str, tuple)
+    download_from_auth_yadisk = pyqtSignal(str, str, dict)
+    download_from_bublic_yadisk = pyqtSignal(str, str, dict)
+    upload_to_auth_yadisk = pyqtSignal(str, str, dict)
     
     open_link_signal = pyqtSignal()
 
@@ -182,13 +182,10 @@ class MainWindow(QMainWindow):
         return self.local_files.currentWidget().get_folder_path()
 
     def browse(self, filesystem, result):
-        filesystem.put_key("")
+        #filesystem.put_key("")
         filesystem.put_file_path("")
-
-        if result["action"] == "show":
-            filesystem.put_key(result["key"])
         
-        elif result["action"] == "get_save_filename":
+        if result["action"] == "get_save_filename":
             path = QFileDialog.getSaveFileName(self, "Create file", "new",
                 result["limits"])
             filesystem.put_file_path(path[0])

@@ -1,17 +1,17 @@
-import turtle
+#import turtle
 import numpy as np
 from PIL import Image
 
-from util import PythonF5Random as F5Random
-from util import Permutation
-from painter import SquarePainter
-from painter import TreePainter
-from painter import KochPainter
+from .util import PythonF5Random as F5Random
+from .util import Permutation
+from .painter import SquarePainter
+from .painter import TreePainter
+from .painter import KochPainter
 
 import logging
 import turtle
 logger = logging.getLogger(__name__)
-turtle.tracer(False)
+#turtle.tracer(False)
 
 def generate_key(path_to_image, password, key_size):
     image = Image.open(path_to_image)
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     
     logging.basicConfig(level=logging.INFO)
     print(generate_key("images/lena.png", "Adelina", 16))
-    turtle.bgpic("images/lena.png")
+    #turtle.bgpic("images/lena.png")
     #turtle.bye()
     input()
     

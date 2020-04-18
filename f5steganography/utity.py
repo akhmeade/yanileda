@@ -33,7 +33,7 @@ import logging
 
 def embed_into_image(path_to_image, data, password):
     image = Image.open(path_to_image)
-    output_path = "output.png"
+    output_path = "trash/output.png"
     with open(output_path, "wb") as output:
         encoder = JpegEncoder(image, 80, output, comment=None)
         encoder.compress(data, password)

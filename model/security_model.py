@@ -74,9 +74,7 @@ class SecurityModel:
         # и потом view решает что делать
         
         if  key_type == KeyType.new_symbols:
-            key = self.generate_key(algorithm)
-            return {"action": "show",
-                "key": key.decode("utf-8")}
+            return {"action": "nothing"}
                 
         elif key_type == KeyType.existing_symbols:
             return {"action": "nothing"}
@@ -116,6 +114,7 @@ class SecurityModel:
 
         with open(to_path, "wb") as file:
             file.write(crypted)
+        return Result.success(True)
         #self.update(encrypter, from_path, to_path, padder.padder())
     
     def decrypt(self, from_path, to_path, encryption_data):
@@ -138,6 +137,7 @@ class SecurityModel:
                 
         with open(to_path, "wb") as file:
             file.write(padded_data)
+        return Result.success(True)
         #self.update(decryptor, from_path, to_path, padder.unpadder())
 
     # def update(self, crypter, from_path, to_path, padder):
@@ -223,14 +223,14 @@ class SecurityModel:
 
             with open(media_path, "rb") as f:
                 key = f.read()
-            return key
+            return Result.success(key)
 
         elif key_type == KeyType.new_media:
-            
             if not key:
                 return Result.failed("Empty key")
             if not media_path:
                 return Result.failed("Empty media path")
+            
             if media_type == MediaType.f5steganography:
                 key_key = self.generate_key(algorithm_type)
                 embed_into_image(media_path, key_key.decode("utf-8"), key)
@@ -242,7 +242,22 @@ class SecurityModel:
             return Result.success(key_key)
             
         elif key_type == KeyType.existing_media:
-            return extract_from_image(media_path, key)
+            if not key:
+                return Result.failed("Empty key")
+            if not media_path:
+                return Result.failed("Empty media path")
+
+            if media_type == MediaType.f5steganography:
+                key_key = extract_from_image(media_path, key.decode("utf-8"))
+                key_key = key_key.encode("utf-8")
+            
+            elif media_type == MediaType.fractals:
+                key_size = magic_const.KEY_LENGTH[algorithm_type]
+                key_key = fractals.generate_key(media_path, key.decode("utf-8"), key_size)
+            else:
+                logger.error("Bad media type %s" % media_type)
+            
+            return Result.success(key_key)
     
     def get_key_for_presenter(self, algorithm, key_type):
         if key_type == KeyType.new_symbols:
