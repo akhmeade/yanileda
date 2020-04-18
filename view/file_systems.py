@@ -16,6 +16,7 @@ from PyQt5 import uic
 import magic_const
 from magic_const import KeyType
 from magic_const import SecurityAlgorithm
+from magic_const import MediaType
 
 import resources
 
@@ -53,8 +54,9 @@ class FileSystem(QWidget):
 
         self.set_label_names(label_names)
 
-        self.fill_combobox(self.algorithms_box, list(magic_const.SecurityAlgorithm))
+        self.fill_combobox(self.algorithms_box, list(SecurityAlgorithm))
         self.fill_combobox(self.key_type_box, label_names["key_type"])
+        self.fill_combobox(self.media_type_box, list(MediaType))
 
         if self.system_type == "yadisk_auth":
             self.listdir.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -161,7 +163,9 @@ class FileSystem(QWidget):
             self.file_path_box.setVisible(False)
             self.browse_button.setVisible(False)
             self.from_yadisk_button.setVisible(False)
-            self.browse_slot()
+            self.media_type_label.setVisible(False)
+            self.media_type_box.setVisible(False)
+            self.on_algorithm_changed()
         elif key_type == KeyType.existing_symbols:
             self.key_label.setVisible(True)
             self.key_box.setVisible(True)
@@ -169,6 +173,8 @@ class FileSystem(QWidget):
             self.file_path_box.setVisible(False)
             self.browse_button.setVisible(False)
             self.from_yadisk_button.setVisible(False)
+            self.media_type_label.setVisible(False)
+            self.media_type_box.setVisible(False)
             self.key_box.clear()
         elif key_type == KeyType.new_binary:
             self.key_label.setVisible(False)
@@ -177,6 +183,8 @@ class FileSystem(QWidget):
             self.file_path_box.setVisible(True)
             self.browse_button.setVisible(True)
             self.from_yadisk_button.setVisible(False)
+            self.media_type_label.setVisible(False)
+            self.media_type_box.setVisible(False)
             self.file_path_box.clear()
         elif key_type == KeyType.existing_binary:
             self.key_label.setVisible(False)
@@ -186,6 +194,8 @@ class FileSystem(QWidget):
             self.browse_button.setVisible(True)
             self.from_yadisk_button.setVisible(False)
             self.file_path_box.clear()
+            self.media_type_label.setVisible(False)
+            self.media_type_box.setVisible(False)
         elif key_type == KeyType.new_media:
             self.key_label.setVisible(True)
             self.key_box.setVisible(True)
@@ -195,6 +205,8 @@ class FileSystem(QWidget):
             self.from_yadisk_button.setVisible(False)
             self.key_box.clear()
             self.file_path_box.clear()
+            self.media_type_label.setVisible(True)
+            self.media_type_box.setVisible(True)
         elif key_type == KeyType.existing_media:
             self.key_label.setVisible(True)
             self.key_box.setVisible(True)
@@ -205,6 +217,8 @@ class FileSystem(QWidget):
             self.from_yadisk_button_toggled(self.from_yadisk_button.isChecked())
             self.key_box.clear()
             self.file_path_box.clear()
+            self.media_type_label.setVisible(True)
+            self.media_type_box.setVisible(True)
     
     def from_yadisk_button_toggled(self, from_yadisk):
         if from_yadisk:
