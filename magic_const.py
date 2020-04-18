@@ -65,3 +65,10 @@ KEY_LENGTH = {
     SecurityAlgorithm.cast5: 16,
     SecurityAlgorithm.seed: 16
 }
+
+class MediaType(Enum):
+    """
+        Enumeration for media type
+    """
+    f5steganography = "f5-steganography"
+    fractals = "fractals"

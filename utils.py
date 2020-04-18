@@ -1,5 +1,10 @@
 #encoding: utf-8
+
 from urllib.parse import urlparse
+from yadisk.exceptions import YaDiskError
+
+import logging
+logger = logging.getLogger(__name__)
 
 def create_url(url, name=None):
     if name is None:
