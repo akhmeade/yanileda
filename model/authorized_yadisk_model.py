@@ -7,6 +7,7 @@ import time
 import magic_const
 import utils
 from utils import Result
+from pathlib import Path
 
 import logging
 logger = logging.getLogger(__name__)
@@ -17,6 +18,7 @@ class AuthorizedYadiskModel(IModel):
     def __init__(self):
         super().__init__()
         self.disk = yadisk.YaDisk(magic_const.APP_ID, magic_const.APP_SECRET)
+        self.media_folder = ""
 
     def get_verification_url(self):
         url = self.disk.get_code_url()
@@ -78,3 +80,28 @@ class AuthorizedYadiskModel(IModel):
         logger.info("download {} to {}".format(from_path, to_path))
         self.disk.download(from_path, to_path)
         return Result.success(True)
+    
+    def set_media_folder(self, path):
+        self.media_folder = path
+    
+    @utils.yadisk_error_handle
+    def download_media(self, media_name, dir_name):
+        # check media
+        media_path = Path(self.media_folder) / media_name
+        logger.info("Check path %s" % media_path.as_posix())
+        
+        if not self.disk.exists(media_path.as_posix()):
+            return Result.failed("Media path isn't found")
+        
+        temp_path = Path(dir_name) / media_name
+
+        download_result = self.download(media_path.as_posix(), temp_path.as_posix())
+
+        if download_result.is_ok():
+            if download_result.result():
+                return Result.success(temp_path.as_posix())
+            else:
+                return Result.failed("Something has gone wrong")
+        else:
+            return download_result
+

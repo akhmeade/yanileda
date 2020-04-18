@@ -271,6 +271,12 @@ class FileSystem(QWidget):
     
     def get_file_path(self):
         return self.file_path_box.text()
+    
+    def take_file_from_yadisk(self):
+        return self.from_yadisk_button.isChecked()
+    
+    def get_media_type(self):
+        return self.media_type_box.currentData()
 
     def browse_slot(self):
         self.browse_clicked.emit(self.get_key_type(), self.get_algorithm())

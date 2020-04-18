@@ -5,6 +5,9 @@ from .ipresenter import IPresenter
 import tempfile
 from pathlib import Path
 
+from magic_const import KeyType
+from utils import Result
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -99,30 +102,61 @@ class Presenter(IPresenter):
         temp_dir_path = Path(self.temp_dir.name)
         return (temp_dir_path / file_path.name).as_posix()
     
-    def download_from_auth_yadisk(self, from_path, to_path, encryption_data):
+    def check_media(self, crypto_data):
+        key_type = crypto_data["key_type"]
+        media_path = crypto_data["media_path"]
+        take_file_from_yadisk = crypto_data["take_file_from_yadisk"] 
+        if key_type == KeyType.new_media or key_type == KeyType.existing_media:
+            if take_file_from_yadisk:
+                result = self.yadisk_model.download_media(media_path, self.temp_dir.name)
+                return result
+
+            else:
+                return Result.success(media_path)
+        else:
+            return Result.success(media_path)
+
+    def download_from_auth_yadisk(self, from_path, to_path, crypto_data):
+        media_path = self.check_media(crypto_data)
+        if not self.check_result(media_path):
+            return
+        crypto_data["media_path"] = media_path.result()
+
         temp_filename = self.get_temp_path(to_path)
         download_result = self.yadisk_model.download(from_path, temp_filename)
         
         if not self.check_result(download_result):
             return
 
-        decrypt_result = self.security_model.decrypt(temp_filename, to_path, encryption_data)
+        decrypt_result = self.security_model.decrypt(temp_filename, to_path, crypto_data)
         if not self.check_result(decrypt_result):
             return
     
-    def download_from_bublic_yadisk(self, from_path, to_path, encryption_data):
+    def download_from_bublic_yadisk(self, from_path, to_path, crypto_data):
+        media_path = self.check_media(crypto_data)
+        if not self.check_result(media_path):
+            return
+        crypto_data["media_path"] = media_path.result()
+
         temp_filename = self.get_temp_path(to_path)
         download_result = self.bublic_yadisk_model.download(from_path, to_path)
         if not self.check_result(download_result):
             return
 
-        decrypt_result = self.security_model.decypt(temp_filename, to_path, encryption_data)
+        decrypt_result = self.security_model.decypt(temp_filename, to_path, crypto_data)
         if not self.check_result(decrypt_result):
             return
     
-    def upload_to_auth_yadisk(self, from_path, to_path, encryption_data):
+    def upload_to_auth_yadisk(self, from_path, to_path, crypto_data):
+        logger.info("Upload to yadisk_1 %s" % crypto_data)
+        media_path = self.check_media(crypto_data)
+        if not self.check_result(media_path):
+            return
+        crypto_data["media_path"] = media_path.result()
+        logger.info("Upload to yadisk_2 %s" % crypto_data)
+
         temp_filename = self.get_temp_path(from_path)
-        encrypt_result = self.security_model.encrypt(from_path, temp_filename, encryption_data)
+        encrypt_result = self.security_model.encrypt(from_path, temp_filename, crypto_data)
         
         if not self.check_result(encrypt_result):
             return
