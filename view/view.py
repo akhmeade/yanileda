@@ -153,6 +153,7 @@ class GuiView(QObject, IView):
     def upload_to_auth_yadisk(self, from_file, to_file, encryption_data):
         self.presenter.upload_to_auth_yadisk(from_file, to_file, encryption_data)
         self.update_auth_yadisk()
+        self.update_local()
     
     def update_local(self):
         local_folder = self.mainwindow.get_local_folder_name()

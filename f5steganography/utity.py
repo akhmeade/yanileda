@@ -12,6 +12,11 @@ from io import StringIO
 import optparse
 import logging
 
+from pathlib import Path
+
+from datetime import datetime
+
+logger = logging.getLogger(__name__)
 # parser = optparse.OptionParser(usage="Usage: %prog [options] [args]")
 # group = optparse.OptionGroup(parser, 'Jpeg f5 steganography encoder and decoder')
 
@@ -30,10 +35,19 @@ import logging
 # parser.add_option('-v', '--verbose', action='store_true')
 
 # options, args = parser.parse_args()
+def create_output_path(input_path):
+    input_path = Path(input_path)
+    name = input_path.stem
+    datetime_format = "%Y-%m-%d_%H-%M-%S"
+    time = datetime.now().strftime(datetime_format)
+    new_name = "{0}_{1}{2}".format(name, time, input_path.suffix)
+    new_path = (input_path.parent / new_name).as_posix()
+    return new_path
 
 def embed_into_image(path_to_image, data, password):
     image = Image.open(path_to_image)
-    output_path = "trash/output.png"
+    output_path = create_output_path(path_to_image)
+    logger.info("Image with key %s" % output_path)
     with open(output_path, "wb") as output:
         encoder = JpegEncoder(image, 80, output, comment=None)
         encoder.compress(data, password)
