@@ -45,6 +45,8 @@ class MainWindow(QMainWindow):
     local_algorithm_changed = pyqtSignal(SecurityAlgorithm, KeyType)
     yadisk_algorithm_changed = pyqtSignal(SecurityAlgorithm, KeyType)
 
+    set_media_folder = pyqtSignal(str)
+
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi("forms/mainwindow.ui", self)
@@ -88,6 +90,7 @@ class MainWindow(QMainWindow):
         file_system.move_clicked.connect(self.move_file_from_yadisk)
         file_system.browse_clicked.connect(self.yadisk_browse_clicked)
         file_system.algorithm_changed.connect(self.yadisk_algorithm_changed)
+        file_system.set_media_folder.connect(self.set_media_folder)
         
         self.yadisk_files.addTab(file_system, "YaDisk")
         self.yadisk_files.setCurrentWidget(file_system)

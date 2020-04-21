@@ -176,4 +176,7 @@ class Presenter(IPresenter):
     def get_yadisk_key(self, algorithm, key_type):
         key = self.get_key(algorithm, key_type)
         self.view.put_yadisk_key(key)
-            
+    
+    def set_media_folder(self, path):
+        result = self.yadisk_model.set_media_folder(path)
+        self.check_result(result)

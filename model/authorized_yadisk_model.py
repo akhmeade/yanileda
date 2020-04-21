@@ -81,8 +81,17 @@ class AuthorizedYadiskModel(IModel):
         self.disk.download(from_path, to_path)
         return Result.success(True)
     
+    @utils.yadisk_error_handle
     def set_media_folder(self, path):
+        logger.info("set media folder %s" % path)
+        if not self.disk.exists(path):
+            return Result.failed("Media path '%s' doesn't exists" % path)
+        
+        if not self.disk.is_dir(path):
+            Result.failed("Media path '%s' isn't directory" % path)
+        
         self.media_folder = path
+        return Result.success(True)
     
     @utils.yadisk_error_handle
     def download_media(self, media_name, dir_name):

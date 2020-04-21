@@ -62,6 +62,8 @@ class GuiView(QObject, IView):
         self.mainwindow.local_algorithm_changed.connect(self.on_local_algorithm_changed)
         self.mainwindow.yadisk_algorithm_changed.connect(self.on_yadisk_algorithm_changed)
 
+        self.mainwindow.set_media_folder.connect(self.on_set_media_folder)
+
     def set_presenter(self, presenter):
         self.presenter = presenter
 
@@ -203,3 +205,6 @@ class GuiView(QObject, IView):
     
     def put_yadisk_key(self, key):
         self.mainwindow.put_yadisk_key(key)
+    
+    def on_set_media_folder(self, path):
+        self.presenter.set_media_folder(path)

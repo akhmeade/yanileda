@@ -30,6 +30,7 @@ class FileSystem(QWidget):
     move_clicked = pyqtSignal()
     browse_clicked = pyqtSignal(KeyType, SecurityAlgorithm)
     algorithm_changed = pyqtSignal(SecurityAlgorithm, KeyType)
+    set_media_folder = pyqtSignal(str)
 
     def __init__(self, label_names, system_type, parent=None):
         """[summary]
@@ -141,8 +142,12 @@ class FileSystem(QWidget):
         row = selected.row()
         return row
 
-    def set_as_media_folder(self):
-        logger.info("set as media folder triggered")
+    def on_set_media_folder(self):
+        #logger.info("set as media folder triggered %s" % self.get_file_name())
+        path = Path(self.get_file_path()) / self.get_file_name()
+        path = self.correct_path(path)
+        logger.info("set media folder %s" % path)
+        self.set_media_folder.emit(path) 
 
     def show_context_menu(self, pos):
         row = self.get_selected_row()
@@ -150,7 +155,7 @@ class FileSystem(QWidget):
         if self.listdir_info[row - 1][0] == "dir":
             self.menu = QMenu(self)
             set_folder = QAction("Set as media folder")
-            set_folder.triggered.connect(self.set_as_media_folder)
+            set_folder.triggered.connect(self.on_set_media_folder)
             self.menu.addAction(set_folder)
             self.menu.exec_(self.listdir.mapToGlobal(pos))
     def key_type_changed(self):
