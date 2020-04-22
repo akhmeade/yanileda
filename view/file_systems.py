@@ -144,7 +144,7 @@ class FileSystem(QWidget):
 
     def on_set_media_folder(self):
         #logger.info("set as media folder triggered %s" % self.get_file_name())
-        path = Path(self.get_file_path()) / self.get_file_name()
+        path = Path(self.get_folder_path()) / self.get_file_name()
         path = self.correct_path(path)
         logger.info("set media folder %s" % path)
         self.set_media_folder.emit(path) 

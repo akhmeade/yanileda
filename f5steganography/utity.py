@@ -54,10 +54,13 @@ def embed_into_image(path_to_image, data, password):
     image.close()
 
 def extract_from_image(path_to_image, password):
+    logger.info("extract %s %s" % (path_to_image, password))
     output = StringIO()
     with open(path_to_image, 'rb') as image:
         decoder = JpegExtract(output, password)
-        decoder.extract(image.read())
+        image_readed = image.read()
+        logger.info("extraced image len %d" % len(image_readed))
+        decoder.extract(image_readed)
         result = output.getvalue()
     return result
 

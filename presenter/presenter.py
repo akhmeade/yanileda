@@ -109,6 +109,7 @@ class Presenter(IPresenter):
         if key_type == KeyType.new_media or key_type == KeyType.existing_media:
             if take_file_from_yadisk:
                 result = self.yadisk_model.download_media(media_path, self.temp_dir.name)
+                #result = self.yadisk_model.download_media(media_path, "D:/yanileda/trash")
                 return result
 
             else:
@@ -118,9 +119,11 @@ class Presenter(IPresenter):
 
     def download_from_auth_yadisk(self, from_path, to_path, crypto_data):
         media_path = self.check_media(crypto_data)
+        logger.info("download from yadisk %s %s %s" % (from_path, to_path, crypto_data))
         if not self.check_result(media_path):
             return
         crypto_data["media_path"] = media_path.result()
+        logger.info("download from yadisk %s" % crypto_data)
 
         temp_filename = self.get_temp_path(to_path)
         download_result = self.yadisk_model.download(from_path, temp_filename)

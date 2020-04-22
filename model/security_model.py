@@ -4,6 +4,9 @@ import base64
 import os
 
 import sys
+
+import shutil
+
 # sys.path.append(".")
 sys.path.append("f5steganography/")
 #print(sys.path)
@@ -32,17 +35,17 @@ from utils import Result
 import logging
 logger = logging.getLogger(__name__)
 
-class EchoObject:
-    block_size = 8
-    def encryptor(self):
-        return self
-    def decryptor(self):
-        return self
-    def update(self, text):
-        return text
-    @property
-    def algorithm(self):
-        return self
+# class EchoObject:
+#     block_size = 8
+#     def encryptor(self):
+#         return self
+#     def decryptor(self):
+#         return self
+#     def update(self, text):
+#         return text
+#     @property
+#     def algorithm(self):
+#         return self
 
 
 class SecurityModel:
@@ -96,6 +99,9 @@ class SecurityModel:
                 "limits" : "Binary file (*.key)"}
 
     def encrypt(self, from_path, to_path, encryption_data):
+        if encryption_data["algorithm"] == SecurityAlgorithm.none:
+            shutil.copyfile(from_path, to_path)
+            return Result.success(True)
         cipher = self.get_cipher(encryption_data)
         if not cipher.is_ok():
             return cipher
@@ -118,6 +124,10 @@ class SecurityModel:
         #self.update(encrypter, from_path, to_path, padder.padder())
     
     def decrypt(self, from_path, to_path, encryption_data):
+        if encryption_data["algorithm"] == SecurityAlgorithm.none:
+            shutil.copyfile(from_path, to_path)
+            return Result.success(True)
+
         cipher = self.get_cipher(encryption_data)
         if not cipher.is_ok():
             return cipher
@@ -159,19 +169,15 @@ class SecurityModel:
         media_type = crypto_data["media_type"]
 
         # get key from media if need it
-        if algorithm_type != SecurityAlgorithm.none:
-            key = self.get_key(algorithm_type, key_type, key, media_path, media_type)
-            if not key.is_ok():
-                return key
-            else:
-                key = key.result()
+        key = self.get_key(algorithm_type, key_type, key, media_path, media_type)
+        if not key.is_ok():
+            return key
+        else:
+            key = key.result()
 
         algorithm = self.get_algorithm(algorithm_type, key)
 
-        if algorithm is None:
-            cipher = EchoObject()
-        else:
-            cipher = Cipher(algorithm, mode=modes.ECB(), backend=default_backend())
+        cipher = Cipher(algorithm, mode=modes.ECB(), backend=default_backend())
             #print(cipher.algorithm.block_size)
             #print(cipher.block_size)
 
@@ -250,6 +256,7 @@ class SecurityModel:
             if media_type == MediaType.f5steganography:
                 key_key = extract_from_image(media_path, key.decode("utf-8"))
                 key_key = key_key.encode("utf-8")
+                logger.info("Key len %d" % len(key_key))
             
             elif media_type == MediaType.fractals:
                 key_size = magic_const.KEY_LENGTH[algorithm_type]
