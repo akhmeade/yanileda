@@ -1,8 +1,6 @@
 # encoding: utf-8
 
 import yadisk
-
-from .imodel import IModel
 import time
 import magic_const
 import utils
@@ -12,7 +10,7 @@ from pathlib import Path
 import logging
 logger = logging.getLogger(__name__)
 
-class AuthorizedYadiskModel(IModel):
+class AuthorizedYadiskModel:
     header = ("Type", "Name", "Last modified", "Size")
 
     def __init__(self):

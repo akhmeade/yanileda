@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-from .ipresenter import IPresenter
-
 import tempfile
 from pathlib import Path
 
@@ -12,9 +10,7 @@ from utils import Concurrent
 import logging
 logger = logging.getLogger(__name__)
 
-class Presenter(QObject):
-
-    show_bar = pyqtSignal()
+class Presenter:
 
     def __init__(self, view, yadisk_model, local_model, bublic_yadisk_model,
         security_model):
