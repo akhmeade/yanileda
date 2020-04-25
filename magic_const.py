@@ -3,10 +3,10 @@ from enum import Enum
 
 import logging
 
-LOGGING_CONFIG = {'level':logging.INFO,
-        'format' :'%(name)s \t %(levelname)s \t %(message)s',
-}
-        
+LOGGING_CONFIG = {'level': logging.INFO,
+                  'format': '%(name)s \t %(levelname)s \t %(message)s',
+                  }
+
 APP_ID = 'f82dd3ae4b2946a6a58b5bcca099bdc0'
 APP_SECRET = '71a0be967089402a817b372a857de2ca'
 
@@ -28,13 +28,14 @@ class KeyType(Enum):
     existing_binary = "Existing binary file"
     existing_media = "Existing media"
 
+
 LOCAL_FILE_SYSTEM_LABELS = {
     "message_label":  '''Choose encryption mode for uploading your file to the cloud:''',
     "algorithm_label": "Encryption algorithm:",
     "key_type_label": "Encryption key:",
     "load_button": "Upload file",
     "key_type": [KeyType.new_symbols, KeyType.new_binary, KeyType.new_media,
-         KeyType.existing_symbols, KeyType.existing_binary, KeyType.existing_media]
+                 KeyType.existing_symbols, KeyType.existing_binary, KeyType.existing_media]
 }
 
 YADISK_FILE_SYSTEM_LABELS = {
@@ -44,6 +45,7 @@ YADISK_FILE_SYSTEM_LABELS = {
     "load_button": "Download file",
     "key_type": [KeyType.existing_symbols, KeyType.existing_binary, KeyType.existing_media]
 }
+
 
 class SecurityAlgorithm(Enum):
     """
@@ -57,6 +59,7 @@ class SecurityAlgorithm(Enum):
     cast5 = "CAST5"
     seed = "SEED"
 
+
 KEY_LENGTH = {
     SecurityAlgorithm.aes: 32,
     SecurityAlgorithm.camellia: 32,
@@ -65,6 +68,7 @@ KEY_LENGTH = {
     SecurityAlgorithm.cast5: 16,
     SecurityAlgorithm.seed: 16
 }
+
 
 class MediaType(Enum):
     """

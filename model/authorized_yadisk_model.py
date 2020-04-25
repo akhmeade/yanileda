@@ -72,13 +72,13 @@ class AuthorizedYadiskModel:
         logger.info("upload {} to {}".format(from_path, to_path))
 
         self.disk.upload(from_path, to_path, overwrite=True)
-        return Result.success(True)
+        return Result.success()
 
     @utils.yadisk_error_handle
     def download(self, from_path, to_path):
         logger.info("download {} to {}".format(from_path, to_path))
         self.disk.download(from_path, to_path)
-        return Result.success(True)
+        return Result.success()
 
     @utils.yadisk_error_handle
     def set_media_folder(self, path):
@@ -90,7 +90,7 @@ class AuthorizedYadiskModel:
             Result.failed("Media path '%s' isn't directory" % path)
 
         self.media_folder = path
-        return Result.success(True)
+        return Result.success()
 
     @utils.yadisk_error_handle
     def download_media(self, media_name, dir_name):

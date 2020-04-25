@@ -111,7 +111,7 @@ class Presenter:
         key_type = crypto_data["key_type"]
         media_path = crypto_data["media_path"]
         take_file_from_yadisk = crypto_data["take_file_from_yadisk"]
-        if key_type == KeyType.new_media or key_type == KeyType.existing_media:
+        if key_type in (KeyType.new_media, KeyType.existing_media):
             if take_file_from_yadisk:
                 result = self.yadisk_model.download_media(
                     media_path, self.temp_dir.name)

@@ -91,4 +91,4 @@ class BublicYadiskModel:
     def download(self, from_path, to_path):
         if self.check_url(from_path):
             self.disk.download_public(from_path, to_path)
-            return Result.success(True)
+            return Result.success()
