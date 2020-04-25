@@ -1,5 +1,5 @@
 import math
-from util import create_array
+from .util import create_array
 
 class DCT(object):
     N = 8

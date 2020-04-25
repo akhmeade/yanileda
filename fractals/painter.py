@@ -1,7 +1,9 @@
 #coding: utf-8
+
 import turtle
 from .worm import Worm
 import re
+
 
 class Painter:
     def __init__(self):
@@ -21,7 +23,8 @@ class Painter:
     def fractal_elements(self, image):
         self.image = image
         self.values = []
-        #print("has")
+        # print("has")
+
 
 class SquarePainter(Painter):
     def __init__(self):
@@ -40,6 +43,7 @@ class SquarePainter(Painter):
             self.square()
             self.turtle.left(i)
 
+
 class TreePainter(Painter):
     def __init__(self):
         Painter.__init__(self)
@@ -49,23 +53,22 @@ class TreePainter(Painter):
             return
         self.turtle.forward(length)
         self.append_unique_values()
-        
+
         self.turtle.left(45)
         self.tree(length * 0.5, length / n)
-        
+
         self.turtle.left(20)
         self.tree(length * 0.5, length / n)
-        
+
         self.turtle.right(75)
         self.tree(length * 0.5, length / n)
-        
+
         self.turtle.right(20)
         self.tree(length * 0.5, length / n)
-        
+
         self.turtle.left(30)
         self.turtle.backward(length)
         self.append_unique_values()
-    
 
     def fractal_elements(self, image):
         Painter.fractal_elements(self, image)
@@ -73,6 +76,7 @@ class TreePainter(Painter):
         self.turtle.backward(30)
         self.append_unique_values()
         self.tree(200, 4)
+
 
 class KochPainter(Painter):
     def __init__(self):
@@ -89,13 +93,13 @@ class KochPainter(Painter):
     #     self.koch(length, depth - 1)
     #     self.turtle.right(60)
     #     self.koch(length, depth - 1)
-    
 
     # def fractal_elements(self, image):
     #     Painter.fractal_elements(self, image)
     #     self.turtle.left(90)
     #     #self.turtle.backward(300)
     #     self.koch(10, 6)
+
     def snowflake(self, length, depth):
         if depth == 0:
             self.turtle.forward(length)
@@ -103,16 +107,15 @@ class KochPainter(Painter):
             return
 
         length /= 3.0
-        self.snowflake(length, depth-1) 
-        self.turtle.left(60) 
-        
-        self.snowflake(length, depth-1) 
-        self.turtle.right(120)
-        
-        self.snowflake(length, depth-1) 
-        self.turtle.left(60) 
         self.snowflake(length, depth-1)
-    
+        self.turtle.left(60)
+
+        self.snowflake(length, depth-1)
+        self.turtle.right(120)
+
+        self.snowflake(length, depth-1)
+        self.turtle.left(60)
+        self.snowflake(length, depth-1)
 
     def fractal_elements(self, image):
         Painter.fractal_elements(self, image)
@@ -121,6 +124,7 @@ class KochPainter(Painter):
             self.snowflake(300, 4)
             self.turtle.right(120)
             self.append_unique_values()
+
 
 if __name__ == "__main__":
     # for p in (SquarePainter(), TreePainter(), KochPainter()):
@@ -134,10 +138,10 @@ if __name__ == "__main__":
     k = 0
     for i, (s1, s2) in enumerate(zip(a1, a2)):
         if s1[0] != "<":
- 
+
             nums1 = list(map(float, re.findall('\d+\.\d', s1)))
             nums2 = list(map(float, re.findall('\d+\.\d', s2)))
             if nums1 != nums2:
                 print(i, s1, s2, nums1, nums2)
-                k+=1
+                k += 1
     print(k)

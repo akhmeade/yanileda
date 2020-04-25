@@ -11,30 +11,31 @@ from .painter import KochPainter
 import logging
 import turtle
 logger = logging.getLogger(__name__)
-#turtle.tracer(False)
+# turtle.tracer(False)
+
 
 def generate_key(path_to_image, password, key_size):
     image = Image.open(path_to_image)
     width, height = image.size
     logger.info('%d x %d' % (width, height))
-    
+
     grey = image.convert('LA')
     pixels = list(grey.getdata())
 
     max_value = np.sum(pixels, axis=0) // len(pixels)
-    
+
     painters = [SquarePainter(), TreePainter(), KochPainter()]
 
     fractals_cnt = len(painters)
     fractal_num = max_value[0] % fractals_cnt
-    
+
     painter = painters[fractal_num]
     logger.info("Chosen painter: {}".format(painter))
-    painter.turtle.goto(width//2, height //2)
+    painter.turtle.goto(width//2, height // 2)
     painter.fractal_elements(grey)
     pixel_values = painter.values
 
-    #print(len(pixel_values))
+    # print(len(pixel_values))
 
     random = F5Random(password)
     permutation = Permutation(pixel_values, random)
@@ -44,14 +45,15 @@ def generate_key(path_to_image, password, key_size):
     #print(key1, len(key1))
     return key1
 
+
 if __name__ == "__main__":
-    
+
     logging.basicConfig(level=logging.INFO)
     print(generate_key("images/lena.png", "Adelina", 16))
-    #turtle.bgpic("images/lena.png")
-    #turtle.bye()
+    # turtle.bgpic("images/lena.png")
+    # turtle.bye()
     input()
-    
+
 # input_image = Imag
 # e.open("images/i1.jpg")
 

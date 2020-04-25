@@ -18,19 +18,20 @@ def get_type(name):
         #print(name, "file")
         return "file"
     else:
-        #print(name,"bad")
+        # print(name,"bad")
         return None
+
 
 def convert_date(timestamp):
     d = datetime.utcfromtimestamp(timestamp)
     formated_date = d.strftime(magic_const.DATETIME_FORMAT)
     return formated_date
 
+
 class LocalModel:
     header = ("Type", "Name", "Last modified", "Size")
 
-    
-    def get_listdir(self, path = None):
+    def get_listdir(self, path=None):
         if path is None:
             path = Path.cwd().as_posix()
         if not Path(path).is_dir():
@@ -38,14 +39,14 @@ class LocalModel:
 
         names = os.listdir(path)
         path = Path(path)
-        
+
         self.path = path
-        names.sort(key=lambda  x: (path / x).is_dir(), reverse=True)
+        names.sort(key=lambda x: (path / x).is_dir(), reverse=True)
         names = list(map(self.get_info, names))
         names.insert(0, self.header)
-        
+
         return names, path.as_posix()
-    
+
     def get_info(self, name):
         path = self.path
         file_type = get_type(path / name)

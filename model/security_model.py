@@ -1,38 +1,28 @@
 #coding: utf-8
-
 import base64
 import os
 
 import sys
 
-import shutil
-
-# sys.path.append(".")
-sys.path.append("f5steganography/")
-#print(sys.path)
-
+import logging
+from utils import Result
+from fractals import fractals
+from f5steganography.utity import extract_from_image
+from f5steganography.utity import embed_into_image
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.primitives.ciphers import modes
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import Cipher
+from cryptography.hazmat.primitives.ciphers import algorithms
+from magic_const import MediaType
+from magic_const import KeyType
+from magic_const import SecurityAlgorithm
 import magic_const
 
-from magic_const import SecurityAlgorithm
-from magic_const import KeyType
-from magic_const import MediaType
 
-from cryptography.hazmat.primitives.ciphers import algorithms
-from cryptography.hazmat.primitives.ciphers import Cipher
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.ciphers import modes
-from cryptography.hazmat.primitives import padding
+import shutil
 
-from f5steganography.utity import embed_into_image
-from f5steganography.utity import extract_from_image
-from fractals import fractals
 
-from utils import Result
-
-#from test.utity import embed_into_image
-#from test.utity import extract_from_image
-
-import logging
 logger = logging.getLogger(__name__)
 
 # class EchoObject:
@@ -55,13 +45,13 @@ class SecurityModel:
     def generate_key_by_length(self, length):
         """
         Generate key for encoding
-    
+
         Arguments:
             length {int} -- [length of key in BITS]
         """
         key = base64.urlsafe_b64encode(os.urandom(length))
         return key[:length]
-    
+
     def generate_key(self, alg_type):
         if alg_type == SecurityAlgorithm.none:
             return b""
@@ -75,28 +65,28 @@ class SecurityModel:
         # а если там надо путь указывать
         # {"action": "get_file_name", "limits": "jpg, png"}
         # и потом view решает что делать
-        
-        if  key_type == KeyType.new_symbols:
+
+        if key_type == KeyType.new_symbols:
             return {"action": "nothing"}
-                
+
         elif key_type == KeyType.existing_symbols:
             return {"action": "nothing"}
 
         elif key_type == KeyType.new_media:
             return {"action": "get_open_filename",
-                "limits" : "Images (*.png *.jpg)"}
-        
+                    "limits": "Images (*.png *.jpg)"}
+
         elif key_type == KeyType.existing_media:
             return {"action": "get_open_filename",
-                "limits" : "Images (*.png *.jpg)"}
-        
+                    "limits": "Images (*.png *.jpg)"}
+
         elif key_type == KeyType.new_binary:
-                return {"action": "get_save_filename",
-                "limits" : "Binary file (*.key)"}
-        
+            return {"action": "get_save_filename",
+                    "limits": "Binary file (*.key)"}
+
         elif key_type == KeyType.existing_binary:
             return {"action": "get_open_filename",
-                "limits" : "Binary file (*.key)"}
+                    "limits": "Binary file (*.key)"}
 
     def encrypt(self, from_path, to_path, encryption_data):
         if encryption_data["algorithm"] == SecurityAlgorithm.none:
@@ -122,7 +112,7 @@ class SecurityModel:
             file.write(crypted)
         return Result.success(True)
         #self.update(encrypter, from_path, to_path, padder.padder())
-    
+
     def decrypt(self, from_path, to_path, encryption_data):
         if encryption_data["algorithm"] == SecurityAlgorithm.none:
             shutil.copyfile(from_path, to_path)
@@ -144,7 +134,7 @@ class SecurityModel:
 
         padded_data = padder.update(crypted)
         padded_data += padder.finalize()
-                
+
         with open(to_path, "wb") as file:
             file.write(padded_data)
         return Result.success(True)
@@ -169,7 +159,8 @@ class SecurityModel:
         media_type = crypto_data["media_type"]
 
         # get key from media if need it
-        key = self.get_key(algorithm_type, key_type, key, media_path, media_type)
+        key = self.get_key(algorithm_type, key_type,
+                           key, media_path, media_type)
         if not key.is_ok():
             return key
         else:
@@ -178,11 +169,10 @@ class SecurityModel:
         algorithm = self.get_algorithm(algorithm_type, key)
 
         cipher = Cipher(algorithm, mode=modes.ECB(), backend=default_backend())
-            #print(cipher.algorithm.block_size)
-            #print(cipher.block_size)
+        # print(cipher.algorithm.block_size)
+        # print(cipher.block_size)
 
         return Result.success(cipher)
-
 
     def get_algorithm(self, algorithm, key):
         if algorithm == SecurityAlgorithm.none:
@@ -191,7 +181,7 @@ class SecurityModel:
             return algorithms.AES(key)
         elif algorithm == SecurityAlgorithm.camellia:
             return algorithms.Camellia(key)
-        #elif algorithm == SecurityAlgorithm.chacha20:
+        # elif algorithm == SecurityAlgorithm.chacha20:
         #    return algorithms.ChaCha20(key)
         elif algorithm == SecurityAlgorithm.triple_des:
             return algorithms.TripleDES(key)
@@ -208,21 +198,21 @@ class SecurityModel:
             if not key:
                 return Result.failed("Why have you deleted the key?")
             return Result.success(key)
-        
+
         elif key_type == KeyType.existing_symbols:
             if not key:
                 return Result.failed("Write down password")
             return Result.success(key)
-        
+
         elif key_type == KeyType.new_binary:
             if not media_path:
                 return Result.failed("Select file for key")
-            
+
             key = self.generate_key(algorithm_type)
             with open(media_path, "wb") as f:
                 f.write(key)
             return Result.success(key)
-        
+
         elif key_type == KeyType.existing_binary:
             if not media_path:
                 return Result.failed("Select file with key")
@@ -236,17 +226,18 @@ class SecurityModel:
                 return Result.failed("Write down password")
             if not media_path:
                 return Result.failed("Select media file")
-            
+
             if media_type == MediaType.f5steganography:
                 key_key = self.generate_key(algorithm_type)
                 embed_into_image(media_path, key_key.decode("utf-8"), key)
             elif media_type == MediaType.fractals:
                 key_size = magic_const.KEY_LENGTH[algorithm_type]
-                key_key = fractals.generate_key(media_path, key.decode("utf-8"), key_size)
+                key_key = fractals.generate_key(
+                    media_path, key.decode("utf-8"), key_size)
             else:
                 logger.error("Bad media type %s" % media_type)
             return Result.success(key_key)
-            
+
         elif key_type == KeyType.existing_media:
             if not key:
                 return Result.failed("Write down password")
@@ -257,15 +248,16 @@ class SecurityModel:
                 key_key = extract_from_image(media_path, key.decode("utf-8"))
                 key_key = key_key.encode("utf-8")
                 logger.info("Key len %d" % len(key_key))
-            
+
             elif media_type == MediaType.fractals:
                 key_size = magic_const.KEY_LENGTH[algorithm_type]
-                key_key = fractals.generate_key(media_path, key.decode("utf-8"), key_size)
+                key_key = fractals.generate_key(
+                    media_path, key.decode("utf-8"), key_size)
             else:
                 logger.error("Bad media type %s" % media_type)
-            
+
             return Result.success(key_key)
-    
+
     def get_key_for_presenter(self, algorithm, key_type):
         if key_type == KeyType.new_symbols:
             return self.generate_key(algorithm).decode("utf-8")

@@ -1,4 +1,4 @@
-# This Python file uses the following encoding: utf-8
+# encoding: utf-8
 
 from pathlib import Path
 
@@ -22,8 +22,9 @@ import resources
 
 import logging
 
-#logging.basicConfig(**magic_const.LOGGING_CONFIG)
+# logging.basicConfig(**magic_const.LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
+
 
 class FileSystem(QWidget):
     double_clicked = pyqtSignal(str)
@@ -34,18 +35,18 @@ class FileSystem(QWidget):
 
     def __init__(self, label_names, system_type, parent=None):
         """[summary]
-        
+
         Arguments:
             label_names {[type]} -- [description]
             system_type {str} -- [local/yadisk_auth/bublic]
-        
+
         Keyword Arguments:
             parent {[type]} -- [description] (default: {None})
         """
         QWidget.__init__(self, parent)
         uic.loadUi("forms/file_system.ui", self)
-        #self.file_system_name.setText(file_system_name)
-        #self.connect_to_actions()
+        # self.file_system_name.setText(file_system_name)
+        # self.connect_to_actions()
         self.model = None
         self.protocol = []
         self.system_type = system_type
@@ -61,7 +62,8 @@ class FileSystem(QWidget):
 
         if self.system_type == "yadisk_auth":
             self.listdir.setContextMenuPolicy(Qt.CustomContextMenu)
-            self.listdir.customContextMenuRequested.connect(self.show_context_menu)
+            self.listdir.customContextMenuRequested.connect(
+                self.show_context_menu)
         self.connect_to_actions()
         self.key_type_changed()
 
@@ -71,19 +73,21 @@ class FileSystem(QWidget):
         self.back_button.clicked.connect(self.get_previous_folder)
         self.load_button.clicked.connect(self.move_clicked)
         self.browse_button.clicked.connect(self.browse_slot)
-        self.from_yadisk_button.toggled.connect(self.from_yadisk_button_toggled)
+        self.from_yadisk_button.toggled.connect(
+            self.from_yadisk_button_toggled)
         self.key_type_box.currentIndexChanged.connect(self.key_type_changed)
         # TODO: create its own signal/slot
-        self.algorithms_box.currentIndexChanged.connect(self.on_algorithm_changed)
-    
+        self.algorithms_box.currentIndexChanged.connect(
+            self.on_algorithm_changed)
+
     def set_label_names(self, label_names):
         self.message_label.setText(label_names["message_label"])
         self.algorithm_label.setText(label_names["algorithm_label"])
         self.key_type_label.setText(label_names["key_type_label"])
         self.load_button.setText(label_names["load_button"])
-    
+
     def fill_combobox(self, combobox, items):
-        add_item = lambda item: combobox.addItem(item.value, item)
+        def add_item(item): return combobox.addItem(item.value, item)
         list(map(add_item, items))
 
     def show_listdir(self, listdir, path):
@@ -114,7 +118,7 @@ class FileSystem(QWidget):
                 self.model.setItem(n + 1, m, item)
         self.listdir.setModel(self.model)
         self.listdir.resizeColumnsToContents()
-    
+
     def correct_path(self, path):
         if path.as_posix() == "disk:":
             return magic_const.YADISK_PREFIX
@@ -130,9 +134,9 @@ class FileSystem(QWidget):
             path = directory.parent
         else:
             path = directory / name
-        
+
         self.double_clicked.emit(self.correct_path(path))
-    
+
     def get_selected_row(self):
         selected = self.listdir.selectedIndexes()
         if len(selected) < 1:
@@ -147,7 +151,7 @@ class FileSystem(QWidget):
         path = Path(self.get_folder_path()) / self.get_file_name()
         path = self.correct_path(path)
         logger.info("set media folder %s" % path)
-        self.set_media_folder.emit(path) 
+        self.set_media_folder.emit(path)
 
     def show_context_menu(self, pos):
         row = self.get_selected_row()
@@ -158,6 +162,7 @@ class FileSystem(QWidget):
             set_folder.triggered.connect(self.on_set_media_folder)
             self.menu.addAction(set_folder)
             self.menu.exec_(self.listdir.mapToGlobal(pos))
+
     def key_type_changed(self):
         key_type = self.get_key_type()
 
@@ -217,27 +222,27 @@ class FileSystem(QWidget):
             self.key_box.setVisible(True)
             self.path_label.setVisible(True)
             self.file_path_box.setVisible(True)
-            #self.browse_button.setVisible(True) processed in function below
+            # self.browse_button.setVisible(True) processed in function below
             self.from_yadisk_button.setVisible(True)
-            self.from_yadisk_button_toggled(self.from_yadisk_button.isChecked())
+            self.from_yadisk_button_toggled(
+                self.from_yadisk_button.isChecked())
             self.key_box.clear()
             self.file_path_box.clear()
             self.media_type_label.setVisible(True)
             self.media_type_box.setVisible(True)
-    
+
     def from_yadisk_button_toggled(self, from_yadisk):
         if from_yadisk:
             self.browse_button.setVisible(False)
         else:
             self.browse_button.setVisible(True)
-        
 
     def get_listdir(self):
         logger.info("Get listdir clicked %s" % self.system_type)
         path = self.path_box.text()
         path = Path(path)
         self.double_clicked.emit(self.correct_path(path))
-    
+
     def get_previous_folder(self):
         if len(self.protocol) < 2:
             return
@@ -251,7 +256,7 @@ class FileSystem(QWidget):
         # if previous == 'disk:':
         #     previous = magic_const.YADISK_PREFIX
         # self.double_clicked.emit(previous)
-    
+
     def get_folder_path(self):
         return self.path_box.text()
 
@@ -267,42 +272,43 @@ class FileSystem(QWidget):
 
     def get_algorithm(self):
         return self.algorithms_box.currentData()
-    
+
     def get_key_type(self):
         return self.key_type_box.currentData()
-    
+
     def get_key(self):
         return self.key_box.text()
-    
+
     def get_file_path(self):
         return self.file_path_box.text()
-    
+
     def take_file_from_yadisk(self):
         return self.from_yadisk_button.isChecked()
-    
+
     def get_media_type(self):
         return self.media_type_box.currentData()
 
     def browse_slot(self):
         self.browse_clicked.emit(self.get_key_type(), self.get_algorithm())
-    
+
     def put_key(self, result):
         self.key_box.setText(result)
-        
+
     def put_file_path(self, text):
         self.file_path_box.setText(text)
-    
+
     def set_load_button_enable(self, enabled):
         self.load_button.setEnabled(enabled)
-    
+
     def on_algorithm_changed(self):
         logger.info("Get key")
         self.algorithm_changed.emit(self.get_algorithm(), self.get_key_type())
 
+
 class BublicFileSystem(FileSystem):
     def __init__(self, system_type,  parent=None):
         FileSystem.__init__(self, system_type, parent)
-    
+
     def double_click_slot(self, index):
         row = index.row()
         url = self.model.item(row, 2).text()
@@ -315,5 +321,5 @@ class BublicFileSystem(FileSystem):
 #         if bitmask & 1:
 #             drives.append(letter)
 #         bitmask >>= 1
-        
+
 #     return drives

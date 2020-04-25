@@ -1,18 +1,17 @@
 from PIL import Image
 import math
-import operator
 import logging
 
-from util import PythonF5Random as F5Random
-from util import Permutation
-from util import BreakException
-from util import EmbedData
-from util import JPEG_NATURAL_ORDER
-from util import create_array
-from util import FilteredCollection
+from .util import PythonF5Random as F5Random
+from .util import Permutation
+from .util import BreakException
+from .util import EmbedData
+from .util import JPEG_NATURAL_ORDER
+from .util import create_array
+from .util import FilteredCollection
 
-from huffman import Huffman
-from DCT import DCT
+from .huffman import Huffman
+from .DCT import DCT
 
 logger = logging.getLogger('jpeg_encoder')
 

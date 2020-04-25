@@ -1,5 +1,5 @@
-from util import create_array
-from util import JPEG_NATURAL_ORDER
+from .util import create_array
+from .util import JPEG_NATURAL_ORDER
 
 class Huffman(object):
     BITS_DC_LUMINANCE   = [0x00, 0, 1, 5, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0x00]

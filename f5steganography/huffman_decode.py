@@ -1,5 +1,5 @@
-from util import EmbedData
-from util import create_array
+from .util import EmbedData
+from .util import create_array
 import logging
 
 logger = logging.getLogger('huffman_decode')
