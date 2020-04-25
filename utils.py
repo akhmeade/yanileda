@@ -2,6 +2,7 @@
 
 from urllib.parse import urlparse
 from yadisk.exceptions import YaDiskError
+from PyQt5.QtCore import QThread
 
 import logging
 logger = logging.getLogger(__name__)
@@ -66,3 +67,17 @@ class Result:
     
     def is_ok(self):
         return self._is_ok
+
+class Concurrent(QThread):
+    def __init__(self, function, *args):
+        super(Concurrent, self).__init__()
+        self.func = function
+        self.args = args
+        self.result = Result.failed("Interrupt process")
+    
+    def run(self):
+        logger.info("RUN CONCURRENT")
+        self.result = self.func(*self.args)
+
+    def get_result(self):
+        return self.result

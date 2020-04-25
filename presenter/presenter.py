@@ -7,11 +7,15 @@ from pathlib import Path
 
 from magic_const import KeyType
 from utils import Result
+from utils import Concurrent
 
 import logging
 logger = logging.getLogger(__name__)
 
-class Presenter(IPresenter):
+class Presenter(QObject):
+
+    show_bar = pyqtSignal()
+
     def __init__(self, view, yadisk_model, local_model, bublic_yadisk_model,
         security_model):
         super().__init__()
@@ -22,10 +26,11 @@ class Presenter(IPresenter):
         self.bublic_yadisk_model = bublic_yadisk_model
         self.security_model = security_model
 
-        self.get_local_listdir()
+        
 
         self.temp_dir = tempfile.TemporaryDirectory()
         logger.info("temp.dir: %s" % self.temp_dir.name)
+        self.get_local_listdir()
 
     def check_result(self, result):
         if result.is_ok():
@@ -38,18 +43,25 @@ class Presenter(IPresenter):
         url = self.yadisk_model.get_verification_url()
         self.view.set_verification_url(url)
 
+    def run_time_consuming(self, message, func, *args):
+        concurrent = Concurrent(func, *args)
+        concurrent.finished.connect(self.view.close_progress_dialog)
+        concurrent.start()
+        self.view.show_progress_dialog(message)
+        return concurrent.get_result()
+
     def verificate_auth(self, code):
-        self.view.show_progress_dialog("Code verification...")
-        is_verified = self.yadisk_model.set_verification_code(code)
-        self.view.close_progress_dialog()
+        is_verified = self.run_time_consuming("Code verification...",
+            self.yadisk_model.set_verification_code, code)
+        
         if not self.check_result(is_verified):
             return
-        
-        
+
         self.view.set_is_verified(is_verified.result())
         
         if is_verified.result():
             self.get_yadisk_listdir()
+
 
     def get_yadisk_listdir(self, path=None):
         yadisk_listdir = self.yadisk_model.get_listdir(path)
@@ -159,12 +171,17 @@ class Presenter(IPresenter):
         logger.info("Upload to yadisk_2 %s" % crypto_data)
 
         temp_filename = self.get_temp_path(from_path)
-        encrypt_result = self.security_model.encrypt(from_path, temp_filename, crypto_data)
+        encrypt_result = self.run_time_consuming("Encrypting...",
+            self.security_model.encrypt,
+            from_path, temp_filename, crypto_data)
         
         if not self.check_result(encrypt_result):
             return
         
-        upload_result = self.yadisk_model.upload(temp_filename, to_path)
+        upload_result = self.run_time_consuming("Uploading to YaDisk...",
+            self.yadisk_model.upload,
+            temp_filename, to_path)
+        #upload_result = self.yadisk_model.upload(temp_filename, to_path)
         if not self.check_result(upload_result):
             return
     

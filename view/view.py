@@ -11,23 +11,28 @@ from .connection_dialog import ConnectionDialog
 from .open_link_dialog import OpenLinkDialog
 
 import magic_const
-
+import time
 import logging
 logger = logging.getLogger(__name__)
 
-# class Progress(QObject):
-#     def do_work(self):
-#         logger.info("do work")
-#         self.progress = QProgressDialog()
-#         self.progress.setWindowTitle("Please, wait")
-#         self.progress.setLabelText("message")
-#         self.progress.setRange(0, 0)
-#         self.progress.setValue(0)
-#         self.progress.setCancelButton(None)
-#         self.progress.setWindowModality(Qt.WindowModal)
-#         #self.progress.show()
-#     def close(self):
-#         self.progress.close()
+class Progress(QThread):
+    # def __init__(self, parent):
+    #     super(QThread, self).__init__()
+    #     self.p = parent
+
+    def run(self):
+        logger.info("do work")
+        for i in range(100):
+            logger.info(i)
+            time.sleep(1)
+        self.progress = QProgressDialog()
+        self.progress.setWindowTitle("Please, wait")
+        self.progress.setLabelText("message")
+        self.progress.setRange(0, 0)
+        self.progress.setValue(0)
+        self.progress.setCancelButton(None)
+        self.progress.setWindowModality(Qt.WindowModal)
+        self.progress.exec_()
 
 class GuiView(QObject, IView):
     """
@@ -90,19 +95,23 @@ class GuiView(QObject, IView):
     #     self.progress.setRange(0,0)
     #     self.progress.setValue(0)
     #     self.progress.setCancelButton(None)
-        
+    
+
     def show_progress_dialog(self, message, value=0, minmax=None):
-        pass
-        # if minmax == None:
-        #     minmax = (0, 0)
-        # self.progress = QProgressDialog()
-        # self.progress.setWindowTitle("Please, wait")
-        # self.progress.setLabelText(message)
-        # self.progress.setRange(*minmax)
-        # self.progress.setValue(value)
-        # self.progress.setCancelButton(None)
-        # self.progress.setWindowModality(Qt.WindowModal)
-        # self.progress.show()
+        #self.progress = Progress(self.mainwindow)
+        #logger.info("Thread run")
+        #self.progress.start()
+        #logger.info("Progress bar is opened")
+        if minmax == None:
+            minmax = (0, 0)
+        self.progress = QProgressDialog()
+        self.progress.setWindowTitle("Please, wait")
+        self.progress.setLabelText(message)
+        self.progress.setRange(*minmax)
+        self.progress.setValue(value)
+        self.progress.setCancelButton(None)
+        self.progress.setWindowModality(Qt.WindowModal)
+        self.progress.exec_()
         
         # self.progress = Progress()
         
@@ -116,11 +125,15 @@ class GuiView(QObject, IView):
         # #self.thread.run()
         # logger.info("Progress bar is opened")
 
+
+
     def close_progress_dialog(self):
-        pass
-        #logger.info("Progress bar is closed")
+        #return
+        #return
+        #self.progress.terminate()
+        logger.info("Progress bar is closed")
         #self.thread.quit()
-        #self.progress.close()
+        self.progress.close()
 
     def set_is_verified(self, is_verified):
         if is_verified:
