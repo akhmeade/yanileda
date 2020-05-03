@@ -87,7 +87,7 @@ class AuthorizedYadiskModel:
             return Result.failed("Media path '%s' doesn't exists" % path)
 
         if not self.disk.is_dir(path):
-            Result.failed("Media path '%s' isn't directory" % path)
+            return Result.failed("Media path '%s' isn't directory" % path)
 
         self.media_folder = path
         return Result.success()
