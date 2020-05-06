@@ -5,3 +5,4 @@ my_venv
 *.autosave
 trash/
 *checkpoint.ipynb
+.idea
