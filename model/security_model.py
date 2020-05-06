@@ -25,30 +25,11 @@ import shutil
 
 logger = logging.getLogger(__name__)
 
-# class EchoObject:
-#     block_size = 8
-#     def encryptor(self):
-#         return self
-#     def decryptor(self):
-#         return self
-#     def update(self, text):
-#         return text
-#     @property
-#     def algorithm(self):
-#         return self
-
-
 class SecurityModel:
     def __init__(self):
         pass
 
     def generate_key_by_length(self, length):
-        """
-        Generate key for encoding
-
-        Arguments:
-            length {int} -- [length of key in BITS]
-        """
         key = base64.urlsafe_b64encode(os.urandom(length))
         return key[:length]
 

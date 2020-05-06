@@ -2,7 +2,6 @@
 
 import math
 
-
 class Worm:
     def __init__(self):
         self.x = 0.0

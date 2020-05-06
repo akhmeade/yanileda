@@ -74,10 +74,6 @@ class F5Random(object):
             ret_val += max_value
         return ret_val
 
-#          random = F5Random(self.password)
-#          permutation = Permutation(coeff_count, random)
-
-
 class PythonF5Random(F5Random):
     def __init__(self, password):
         random.seed(password)

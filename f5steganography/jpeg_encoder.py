@@ -1,7 +1,7 @@
 from PIL import Image
 import math
 import logging
-
+import numpy as np
 from .util import PythonF5Random as F5Random
 from .util import Permutation
 from .util import BreakException
@@ -97,6 +97,15 @@ class JpegEncoder(object):
 
         self.image_width, self.image_height = image.size
         self.out = out
+
+        self.dct = DCT(self.quality)
+        self.huf = Huffman(*image.size)
+
+    def __init__(self, image, quality, comment):
+        self.quality = quality
+        self.jpeg_obj = JpegInfo(image, comment)
+
+        self.image_width, self.image_height = image.size
 
         self.dct = DCT(self.quality)
         self.huf = Huffman(*image.size)
@@ -211,6 +220,40 @@ class JpegEncoder(object):
                             dct_array3 = self.dct.quantize_block(dct_array2, 
                                     self.jpeg_obj.qtable_number[comp])
                             coeff.extend(dct_array3[:64])
+        return coeff
+
+    def get_coeff(self, x_min_max):
+        dct_array1 = create_array(0.0, 8, 8)
+        dct_array2 = create_array(0.0, 8, 8)
+        dct_array3 = create_array(0, 64)
+
+        coeff = []
+        for r in range(min(self.jpeg_obj.block_height)):
+            for c in range(min(self.jpeg_obj.block_width)):
+                xpos = c * 8
+                ypos = r * 8
+                for comp in range(self.jpeg_obj.comp_num):
+                    indata = self.jpeg_obj.components[comp]
+                    maxa = self.image_height // 2 * self.jpeg_obj.vsamp_factor[comp] - 1
+                    maxb = self.image_width // 2 * self.jpeg_obj.hsamp_factor[comp] - 1
+
+                    for i in range(self.jpeg_obj.vsamp_factor[comp]):
+                        for j in range(self.jpeg_obj.hsamp_factor[comp]):
+                            ia = ypos * self.jpeg_obj.vsamp_factor[comp] + i * 8
+                            ib = xpos * self.jpeg_obj.hsamp_factor[comp] + j * 8
+
+                            for a in range(8):
+                                for b in range(8):
+                                    dct_array1[a][b] = indata[min(ia+a, maxa)][min(ib+b, maxb)]
+
+                            dct_array2 = self.dct.forward_dct(dct_array1)
+                            for sublist in dct_array2:
+                                for item in sublist:
+                                    if(item < x_min_max[0]):
+                                         x_min_max[0] = item
+                                    if(item > x_min_max[1]):
+                                         x_min_max[1] = item
+                            coeff.append(dct_array2[:64])
         return coeff
 
     def write_compressed_data(self):
