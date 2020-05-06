@@ -130,27 +130,28 @@ def write_key_to_file(filename, key):
     file1.write(''.join(str(e) for e in key))
     file1.close()
 
-password = generate_random_string(10)
-cnt = 0
-print(password)
-for filename in os.listdir("test_images"):
-    file_len = open("text_files2/dct_length2.txt", "w")
-    cnt = cnt + 1
-    if cnt == 18:
+if __name__ == "__main__":
+    password = generate_random_string(10)
+    cnt = 0
+    print(password)
+    for filename in os.listdir("test_images"):
+        file_len = open("text_files2/dct_length2.txt", "w")
         cnt = cnt + 1
-    txt_filename = "text_files2/dct_keys" + str(cnt)
-    init_vector = generate_initial_vector("test_images/" + filename, password)
-    print(filename, len(init_vector))
-    file_len.writelines(filename+";"+str(len(init_vector)))
-    res_key_128 = generate_result_key(init_vector,16)
-    write_key_to_file(txt_filename+"_128.txt", res_key_128)
-    res_key_256 = generate_result_key(init_vector,32)
-    write_key_to_file(txt_filename + "_256.txt", res_key_256)
-    res_key_512 = generate_result_key(init_vector,64)
-    write_key_to_file(txt_filename + "_512.txt", res_key_512)
-    res_key_1024 = generate_result_key(init_vector,128)
-    write_key_to_file(txt_filename + "_1024.txt", res_key_1024)
-    print(filename + "done ")
+        if cnt == 18:
+            cnt = cnt + 1
+        txt_filename = "text_files2/dct_keys" + str(cnt)
+        init_vector = generate_initial_vector("test_images/" + filename, password)
+        print(filename, len(init_vector))
+        file_len.writelines(filename+";"+str(len(init_vector)))
+        res_key_128 = generate_result_key(init_vector,16)
+        write_key_to_file(txt_filename+"_128.txt", res_key_128)
+        res_key_256 = generate_result_key(init_vector,32)
+        write_key_to_file(txt_filename + "_256.txt", res_key_256)
+        res_key_512 = generate_result_key(init_vector,64)
+        write_key_to_file(txt_filename + "_512.txt", res_key_512)
+        res_key_1024 = generate_result_key(init_vector,128)
+        write_key_to_file(txt_filename + "_1024.txt", res_key_1024)
+        print(filename + "done ")
 
 
 #res_key = generate_key("images/i1.jpg", "ofK1gftsjrmK", 32)

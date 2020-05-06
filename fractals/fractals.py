@@ -84,7 +84,10 @@ def generate_key(path_to_image, password, key_size):
     grey = image.convert('LA')
     pixels = list(grey.getdata())
     max_value = np.sum(pixels, axis=0) // len(pixels)
-    painters = [SquarePainter(), TreePainter(), KochPainter(), LSystemPainter(0), LSystemPainter(1), LSystemPainter(2), LSystemPainter(3),LSystemPainter(4), LSystemPainter(5), LSystemPainter(6)]
+    painters = [SquarePainter(), TreePainter(), KochPainter(),
+                LSystemPainter(0), LSystemPainter(1), LSystemPainter(2),
+                LSystemPainter(3),LSystemPainter(4), LSystemPainter(5),
+                LSystemPainter(6)]
     fractals_cnt = len(painters)
     fractal_num = max_value[0] % fractals_cnt
     print ("fractal num = ", str(fractal_num))
@@ -104,7 +107,9 @@ def generate_initial_vector (path_to_image, password):
     grey = image.convert('LA')
     pixels = list(grey.getdata())
     max_value = np.sum(pixels, axis=0) // len(pixels)
-    painters = [SquarePainter(), TreePainter(), KochPainter(), LSystemPainter(0), LSystemPainter(1), LSystemPainter(2), LSystemPainter(3),LSystemPainter(4), LSystemPainter(5), LSystemPainter(6)]
+    painters = [SquarePainter(), TreePainter(), KochPainter(), LSystemPainter(0),
+                LSystemPainter(1), LSystemPainter(2), LSystemPainter(3),
+                LSystemPainter(4), LSystemPainter(5), LSystemPainter(6)]
     fractals_cnt = len(painters)
     fractal_num = max_value[0] % fractals_cnt
     painter = painters[fractal_num]

@@ -76,3 +76,4 @@ class MediaType(Enum):
     """
     f5steganography = "f5-steganography"
     fractals = "fractals"
+    dct = "DCT"

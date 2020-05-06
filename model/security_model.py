@@ -9,6 +9,8 @@ from utils import Result
 from fractals import fractals
 from f5steganography.utity import extract_from_image
 from f5steganography.utity import embed_into_image
+from fractals import dct_algorithm
+
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import modes
 from cryptography.hazmat.backends import default_backend
@@ -215,6 +217,10 @@ class SecurityModel:
                 key_size = magic_const.KEY_LENGTH[algorithm_type]
                 key_key = fractals.generate_key(
                     media_path, key.decode("utf-8"), key_size)
+            elif media_type == MediaType.dct:
+                key_size = magic_const.KEY_LENGTH[algorithm_type]
+                key_key = dct_algorithm.generate_key(
+                    media_path, key.decode("utf-8"), key_size)
             else:
                 logger.error("Bad media type %s" % media_type)
             return Result.success(key_key)
@@ -233,6 +239,11 @@ class SecurityModel:
             elif media_type == MediaType.fractals:
                 key_size = magic_const.KEY_LENGTH[algorithm_type]
                 key_key = fractals.generate_key(
+                    media_path, key.decode("utf-8"), key_size)
+
+            elif media_type == MediaType.dct:
+                key_size = magic_const.KEY_LENGTH[algorithm_type]
+                key_key = dct_algorithm.generate_key(
                     media_path, key.decode("utf-8"), key_size)
             else:
                 logger.error("Bad media type %s" % media_type)

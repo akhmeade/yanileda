@@ -91,7 +91,7 @@ class JpegInfo(object):
         return self.comment
 
 class JpegEncoder(object):
-    def __init__(self, image, quality, out, comment):
+    def __init__(self, image, quality, out=None, comment=None):
         self.quality = quality
         self.jpeg_obj = JpegInfo(image, comment)
 
@@ -101,14 +101,14 @@ class JpegEncoder(object):
         self.dct = DCT(self.quality)
         self.huf = Huffman(*image.size)
 
-    def __init__(self, image, quality, comment):
-        self.quality = quality
-        self.jpeg_obj = JpegInfo(image, comment)
+    # def __init__(self, image, quality, comment):
+    #     self.quality = quality
+    #     self.jpeg_obj = JpegInfo(image, comment)
 
-        self.image_width, self.image_height = image.size
+    #     self.image_width, self.image_height = image.size
 
-        self.dct = DCT(self.quality)
-        self.huf = Huffman(*image.size)
+    #     self.dct = DCT(self.quality)
+    #     self.huf = Huffman(*image.size)
 
     def compress(self, embedded_data=None, password='abc123'):
         self.embedded_data = EmbedData(embedded_data) if embedded_data else None

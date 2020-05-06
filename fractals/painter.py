@@ -83,35 +83,11 @@ class Painter:
             if nval not in self.values:
                 self.values.append(nval)
 
-    def draw_l_system(self,instructions, angle, distance):
-        for cmd in instructions:
-            if cmd == 'F':
-                self.turtle.forward(distance)
-                self.append_unique_values()
-            elif cmd == '+':
-                self.turtle.right(angle)
-                self.append_unique_values()
-            elif cmd == '-':
-                self.turtle.left(angle)
-                self.append_unique_values()
-
     def fractal_elements(self, image):
         self.image = image
         self.values = []
         # print("has")
 
-    def fractal_elements(self, image):
-        self.image = image
-        self.values = []
-        # print("has")
-
-    def fractal_elements_l_system(self, image, curve_number):
-        self.image = image
-        self.values = []
-        l_system = L_Systems(curve_number)
-        my_painter = create_l_system(l_system.iterations, l_system.axiom, l_system.rules)
-        self.draw_l_system(self.turtle, my_painter, l_system.angle, l_system.length)
-        # print("has")
 
 class LSystemPainter(Painter):
     def __init__(self, curve_number):
