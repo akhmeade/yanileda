@@ -203,15 +203,19 @@ class SerpinskyPainter(Painter):
                 self.turtle.left(120)
         else:
             self.draw_sierpinski(length / 2, depth - 1)
-            self.turtle.fd(length / 2)
+            self.turtle.forward(length / 2)
+            self.append_unique_values()
             self.draw_sierpinski(length / 2, depth - 1)
-            self.turtle.bk(length / 2)
+            self.turtle.backward(length / 2)
+            self.append_unique_values()
             self.turtle.left(60)
-            self.turtle.fd(length / 2)
+            self.turtle.forward(length / 2)
+            self.append_unique_values()
             self.turtle.right(60)
             self.draw_sierpinski(length / 2, depth - 1)
             self.turtle.left(60)
-            self.turtle.bk(length / 2)
+            self.turtle.backward(length / 2)
+            self.append_unique_values()
             self.turtle.right(60)
 
     def fractal_elements(self, image):
