@@ -6,3 +6,6 @@ my_venv
 trash/
 *checkpoint.ipynb
 .idea
+build/
+dist/
+*.spec
