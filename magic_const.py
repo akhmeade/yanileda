@@ -4,7 +4,10 @@ from enum import Enum
 import logging
 
 LOGGING_CONFIG = {'level': logging.INFO,
-                  'format': '%(name)s \t %(levelname)s \t %(message)s',
+                  'format': '%(asctime)s -- %(name)s \t %(levelname)s \t %(message)s',
+                  'filename': "logs.log",
+                  "filemode": "a",
+                  'datefmt': '%Y/%m/%d %H:%M:%S'
                   }
 
 APP_ID = 'f82dd3ae4b2946a6a58b5bcca099bdc0'
