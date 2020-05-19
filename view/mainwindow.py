@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QProgressDialog
+from PyQt5.QtGui import QIcon
 
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
@@ -17,6 +18,7 @@ from PyQt5.QtCore import pyqtSignal
 from .file_systems import FileSystem
 from .file_systems import BublicFileSystem
 
+import resources
 import magic_const
 from magic_const import KeyType
 from magic_const import SecurityAlgorithm
@@ -47,6 +49,7 @@ class MainWindow(QMainWindow):
 
     set_media_folder = pyqtSignal(str)
 
+    
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi("forms/mainwindow.ui", self)
@@ -61,6 +64,9 @@ class MainWindow(QMainWindow):
         self.connect_to_actions()
         self.show_status("Not connected")
         self.local_files.show()
+
+        self.icon = QIcon(":/img/images/icon.png")
+        self.setWindowIcon(self.icon)
     
     def connect_to_actions(self):
         self.connect_to_yadisk_action.triggered.connect(self.connect_to_yadisk)
